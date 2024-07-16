@@ -1,48 +1,54 @@
-<app-wave class="z-0"></app-wave>
-<div
-  class="container-fluid vh-100 d-flex flex-column align-items-center justify-content-center bg-light z-n1"
->
-  <app-dollar-sign-svgs class="z-0"></app-dollar-sign-svgs>
-  <form [formGroup]="loginForm" (ngSubmit)="login()" class="z-3">
-    <div class="d-flex justify-content-center align-items-center">
-      <div class="row col-11 col-md-9 col-lg-7 col-xl-5">
-        <h1 class="fs-1 fw-bolder text-start">Login</h1>
-        <h5 class="fs-6 text-muted mb-4">Please sign in to continue</h5>
-        <div class="mb-0">
-          <input
-            class="email w-100 shadow-none"
-            id="email"
-            type="email"
-            formControlName="email"
-            placeholder="Email"
-          />
-        </div>
-        <div class="mb-4 position-relative">
-          <input
-            class="password w-100"
-            id="password"
-            type="password"
-            formControlName="password"
-            placeholder="Password"
-          />
-        </div>
-        <button
-          type="submit"
-          class="col-4 offset-8 btn btn-warning text-white mb-3"
-        >
-          Login
-          <i class="bi bi-arrow-right"></i>
-        </button>
-        <div class="text-end">
-          <a
-            role="button"
-            (click)="navigateToRegister()"
-            class="text-decoration-none hyperlink"
-            >Sign Up</a
+<div *ngIf="isLoading; else loginFormTemplate">
+  <app-loader></app-loader>
+</div>
+
+<ng-template #loginFormTemplate>
+  <app-wave class="z-0"></app-wave>
+  <div
+    class="container-fluid vh-100 d-flex flex-column align-items-center justify-content-center bg-light z-n1"
+  >
+    <app-dollar-sign-svgs class="z-0"></app-dollar-sign-svgs>
+    <form [formGroup]="loginForm" (ngSubmit)="login()" class="z-3">
+      <div class="d-flex justify-content-center align-items-center">
+        <div class="row col-11 col-md-9 col-lg-7 col-xl-5">
+          <h1 class="fs-1 fw-bolder text-start">Login</h1>
+          <h5 class="fs-6 text-muted mb-4">Please sign in to continue</h5>
+          <div class="mb-0">
+            <input
+              class="email w-100 shadow-none"
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="Email"
+            />
+          </div>
+          <div class="mb-4 position-relative">
+            <input
+              class="password w-100"
+              id="password"
+              type="password"
+              formControlName="password"
+              placeholder="Password"
+            />
+          </div>
+          <button
+            type="submit"
+            class="col-4 offset-8 btn btn-warning text-white mb-3"
           >
+            Login
+            <i class="bi bi-arrow-right"></i>
+          </button>
+          <div class="text-end">
+            <a
+              role="button"
+              (click)="navigateToRegister()"
+              class="text-decoration-none hyperlink"
+              >Sign Up</a
+            >
+          </div>
         </div>
       </div>
-    </div>
-  </form>
-</div>
-<app-wave [wave]="'bottom'" class="z-0"></app-wave>
+    </form>
+  </div>
+  <app-wave [wave]="'bottom'" class="z-0"></app-wave>
+</ng-template>

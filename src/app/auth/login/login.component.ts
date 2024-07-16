@@ -4,15 +4,25 @@ import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
 import { DollarSignSvgsComponent } from '../../components/dollar-sign-svgs/dollar-sign-svgs.component';
 import { WaveComponent } from '../../components/wave/wave.component';
+import { PlatformService } from '../../services/platform/platform.service';
+import { LoaderComponent } from '../../components/loader/loader.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, DollarSignSvgsComponent, WaveComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    DollarSignSvgsComponent,
+    WaveComponent,
+    LoaderComponent,
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.sass',
 })
 export class LoginComponent {
+  isLoading = true;
   loginForm = this.fb.nonNullable.group({
     email: [''],
     password: [''],
@@ -23,7 +33,12 @@ export class LoginComponent {
     private fb: FormBuilder,
     private auth: AuthService,
     private router: Router,
-  ) {}
+    private platformService: PlatformService,
+  ) {
+    if (this.platformService.isBrowser()) {
+      this.isLoading = false;
+    }
+  }
 
   login() {
     const rawForm = this.loginForm.getRawValue();
