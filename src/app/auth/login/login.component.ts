@@ -2,12 +2,13 @@ import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
-import {DollarSignSvgsComponent} from "../../components/dollar-sign-svgs/dollar-sign-svgs.component";
+import { DollarSignSvgsComponent } from '../../components/dollar-sign-svgs/dollar-sign-svgs.component';
+import { WaveComponent } from '../../components/wave/wave.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, DollarSignSvgsComponent],
+  imports: [ReactiveFormsModule, DollarSignSvgsComponent, WaveComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.sass',
 })
@@ -32,5 +33,9 @@ export class LoginComponent {
         this.error = error.code;
       },
     });
+  }
+
+  navigateToRegister() {
+    this.router.navigateByUrl('/register');
   }
 }

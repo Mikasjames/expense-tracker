@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DollarSignSvgsComponent } from './dollar-sign-svgs.component';
+import { WaveComponent } from './wave.component';
 
-describe('DollarSignSvgsComponent', () => {
-  let component: DollarSignSvgsComponent;
-  let fixture: ComponentFixture<DollarSignSvgsComponent>;
+describe('WaveComponent', () => {
+  let component: WaveComponent;
+  let fixture: ComponentFixture<WaveComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DollarSignSvgsComponent],
+      imports: [WaveComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DollarSignSvgsComponent);
+    fixture = TestBed.createComponent(WaveComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

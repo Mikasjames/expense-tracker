@@ -4,16 +4,26 @@
 @import 'bootstrap/scss/bootstrap'
 @import 'bootstrap-icons/font/bootstrap-icons.css'
 
+$primary: #fd7e14
+$primary-color: white
+
 .btn
   border-radius: 25px
   padding: 10px
+  background-color: $primary
+  border-color: $primary
+  color: $primary-color
 
-.wave-top, .wave-bottom
-  position: absolute
-  width: 100%
+input
+  border: 1px solid #ccc
+  box-shadow: none
+  padding: 10px
 
-.wave-top
-  top: 0
+input:focus
+  border: 1px solid #ccc
+  box-shadow: none
+  outline: none
 
-.wave-bottom
-  bottom: 0
+.hyperlink
+  color: $primary
+  text-decoration: none
