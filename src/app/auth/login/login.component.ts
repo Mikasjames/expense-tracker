@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
+import {DollarSignSvgsComponent} from "../../components/dollar-sign-svgs/dollar-sign-svgs.component";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, DollarSignSvgsComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.sass',
 })
