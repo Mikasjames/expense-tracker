@@ -41,7 +41,7 @@ class PublicOnlyGuardService {
       take(1),
       map((user) => {
         if (user) {
-          this.router.navigate(['/']);
+          this.router.navigate(['/dashboard']);
           return false;
         } else {
           return true;
