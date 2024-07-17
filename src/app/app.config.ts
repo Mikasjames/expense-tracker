@@ -21,9 +21,11 @@ import {
   provideRemoteConfig,
 } from '@angular/fire/remote-config';
 import { environment } from '../environments/environment';
+import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    { provide: FIREBASE_OPTIONS, useValue: environment.firebaseConfig },
     provideRouter(routes),
     provideClientHydration(),
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
