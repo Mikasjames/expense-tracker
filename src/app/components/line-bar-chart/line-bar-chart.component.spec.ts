@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LineBarChartComponent } from "./line-bar-chart.component";
+import { LineBarChartComponent } from './line-bar-chart.component';
 
-describe("LineChartComponent", () => {
+describe('LineChartComponent', () => {
   let component: LineBarChartComponent;
   let fixture: ComponentFixture<LineBarChartComponent>;
 
@@ -16,7 +16,7 @@ describe("LineChartComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

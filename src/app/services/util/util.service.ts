@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
 import {
-  GroupedData, GroupedPointsByTags,
-  LineBarData, Money,
+  GroupedData,
+  GroupedPointsByTags,
+  LineBarData,
+  Money,
   Point,
   SortedByDayLineBarData,
-  TitleValue
-} from "../../models/chart.interface";
+  TitleValue,
+} from '../../models/chart.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UtilService {
-
   constructor() {}
 
   moneyToLineBarData(moneyData: Money[]): LineBarData[] {
@@ -19,7 +20,7 @@ export class UtilService {
       return {
         tag: item.tags[0],
         value: [item.date, item.amount],
-        title: item.title ?? "",
+        title: item.title ?? '',
       };
     });
   }
@@ -31,18 +32,18 @@ export class UtilService {
 
   milliToDate(milli: number): string {
     return new Date(milli)
-      .toLocaleDateString("en-CA", { month: "short", day: "2-digit" })
-      .split("T")[0];
+      .toLocaleDateString('en-CA', { month: 'short', day: '2-digit' })
+      .split('T')[0];
   }
 
   dateToMonthDateYearDay(date: string, showDay: boolean = true) {
     const options: Intl.DateTimeFormatOptions = {
-      weekday: "short",
-      year: "numeric",
-      month: "long",
-      day: showDay ? "numeric" : undefined,
+      weekday: 'short',
+      year: 'numeric',
+      month: 'long',
+      day: showDay ? 'numeric' : undefined,
     };
-    return new Date(date).toLocaleDateString("en-US", options);
+    return new Date(date).toLocaleDateString('en-US', options);
   }
 
   groupLineBarDataByDay(data: LineBarData[]): SortedByDayLineBarData[] {
@@ -50,34 +51,39 @@ export class UtilService {
 
     data.forEach((item: LineBarData) => {
       const date: Date = new Date(item.value[0]);
-      const yearMonthDay = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+      const yearMonthDay = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
 
       if (!groupedData[yearMonthDay]) {
         groupedData[yearMonthDay] = [];
       }
       groupedData[yearMonthDay].push({
-        "tag": item.tag,
-        "value": item.value[1],
-        "title": item.title,
+        tag: item.tag,
+        value: item.value[1],
+        title: item.title,
       });
     });
 
-    return Object.entries(groupedData).map(([yearMonthDay, points]): SortedByDayLineBarData => {
-      const typedPoints = points as Point[];
-      const [year, month, day] = yearMonthDay.split("-");
-      const dayInMilliseconds = new Date(
-        parseInt(year),
-        parseInt(month) - 1,
-        parseInt(day),
-      ).getTime();
-      return {
-        value: [
-          dayInMilliseconds,
-          typedPoints.reduce((acc: number, item: TitleValue) => acc + Number(item.value), 0),
-        ],
-        points: typedPoints,
-      };
-    });
+    return Object.entries(groupedData).map(
+      ([yearMonthDay, points]): SortedByDayLineBarData => {
+        const typedPoints = points as Point[];
+        const [year, month, day] = yearMonthDay.split('-');
+        const dayInMilliseconds = new Date(
+          parseInt(year),
+          parseInt(month) - 1,
+          parseInt(day),
+        ).getTime();
+        return {
+          value: [
+            dayInMilliseconds,
+            typedPoints.reduce(
+              (acc: number, item: TitleValue) => acc + Number(item.value),
+              0,
+            ),
+          ],
+          points: typedPoints,
+        };
+      },
+    );
   }
 
   groupBarDataByMonth(data: any): any {
@@ -85,7 +91,7 @@ export class UtilService {
 
     data.forEach((item: any) => {
       const date: Date = new Date(item[0]);
-      const yearMonth = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}`;
+      const yearMonth = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
 
       if (!groupedData[yearMonth]) {
         groupedData[yearMonth] = 0;
@@ -94,29 +100,40 @@ export class UtilService {
     });
 
     return Object.entries(groupedData).map(([yearMonth, accumulatedValue]) => {
-      const [year, month] = yearMonth.split("-");
-      const monthInMilliseconds = new Date(parseInt(year), parseInt(month) - 1).getTime();
+      const [year, month] = yearMonth.split('-');
+      const monthInMilliseconds = new Date(
+        parseInt(year),
+        parseInt(month) - 1,
+      ).getTime();
       return [monthInMilliseconds, accumulatedValue];
     });
   }
 
-  groupPointsByTags(points: Point[]): { [key: number]: { tag: number; points: TitleValue[] } } {
-    return points.reduce((acc: { [key: number]: { tag: number; points: TitleValue[] } }, item) => {
-      if (!acc[item.tag]) {
-        acc[item.tag] = {
-          tag: item.tag,
-          points: [],
-        };
-      }
-      acc[item.tag].points.push({
-        title: item.title,
-        value: item.value,
-      });
-      return acc;
-    }, {});
+  groupPointsByTags(points: Point[]): {
+    [key: number]: { tag: number; points: TitleValue[] };
+  } {
+    return points.reduce(
+      (acc: { [key: number]: { tag: number; points: TitleValue[] } }, item) => {
+        if (!acc[item.tag]) {
+          acc[item.tag] = {
+            tag: item.tag,
+            points: [],
+          };
+        }
+        acc[item.tag].points.push({
+          title: item.title,
+          value: item.value,
+        });
+        return acc;
+      },
+      {},
+    );
   }
 
-  formatTooltipBySortedPoints(sortedPointsByTags: GroupedPointsByTags, isIncome = false): string {
+  formatTooltipBySortedPoints(
+    sortedPointsByTags: GroupedPointsByTags,
+    isIncome = false,
+  ): string {
     // return Object.values(sortedPointsByTags)
     //   .map((tag: { tag: number; points: TitleValue[] }) => {
     //     const tagName = isIncome
@@ -128,6 +145,6 @@ export class UtilService {
     //     return `<small><pr><code>${tagName}</code></pr></small><br/>${pointsString}`;
     //   })
     //   .join("<br/>");
-    return "";
+    return '';
   }
 }

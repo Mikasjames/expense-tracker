@@ -1,28 +1,28 @@
-import { Component, Input } from "@angular/core";
-import { NgxEchartsDirective } from "ngx-echarts";
-import { EChartsOption } from "echarts";
+import { Component, Input } from '@angular/core';
+import { NgxEchartsDirective } from 'ngx-echarts';
+import { EChartsOption } from 'echarts';
 import {
   GroupedPointsByTags,
   LineBarData,
   Point,
   SortedByDayLineBarData,
-} from "../../models/chart.interface";
-import { UtilService } from "../../services/util/util.service";
-import { CustomSeriesOption } from "echarts";
-import { TitleCasePipe } from "@angular/common";
+} from '../../models/chart.interface';
+import { UtilService } from '../../services/util/util.service';
+import { CustomSeriesOption } from 'echarts';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
-  selector: "app-line-bar-chart",
+  selector: 'app-line-bar-chart',
   standalone: true,
   imports: [NgxEchartsDirective, TitleCasePipe],
-  templateUrl: "./line-bar-chart.component.html",
-  styleUrl: "./line-bar-chart.component.scss",
+  templateUrl: './line-bar-chart.component.html',
+  styleUrl: './line-bar-chart.component.scss',
 })
 export class LineBarChartComponent {
   @Input() data: LineBarData[] = [];
-  @Input() title: string = "";
+  @Input() title: string = '';
   @Input() isIncome: boolean = false;
-  @Input() type = "line";
+  @Input() type = 'line';
   percentChange = 0;
   updateOptions: EChartsOption = {};
   isLoading = false;
@@ -38,17 +38,18 @@ export class LineBarChartComponent {
   }
 
   toggleChartType() {
-    if (this.type === "line") {
-      this.type = "bar";
+    if (this.type === 'line') {
+      this.type = 'bar';
     } else {
-      this.type = "line";
+      this.type = 'line';
     }
     this.loadData();
   }
 
   loadData(): void {
     this.isLoading = true;
-    const sortedData: SortedByDayLineBarData[] = this.utilService.groupLineBarDataByDay(this.data);
+    const sortedData: SortedByDayLineBarData[] =
+      this.utilService.groupLineBarDataByDay(this.data);
     this.percentChange = this.calculatePercentChange(this.data);
     this.updateOptions = {
       series: [
@@ -56,7 +57,7 @@ export class LineBarChartComponent {
           data: sortedData,
           type: this.type,
           itemStyle: {
-            color: "#c23531",
+            color: '#c23531',
           },
         },
       ] as CustomSeriesOption,
@@ -73,12 +74,11 @@ export class LineBarChartComponent {
 
   options: EChartsOption = {
     tooltip: {
-      trigger: "axis",
+      trigger: 'axis',
       formatter: (params: any) => {
         params = params[0];
-        const sortedPointsByTags: GroupedPointsByTags = this.utilService.groupPointsByTags(
-          params.data.points as Point[],
-        );
+        const sortedPointsByTags: GroupedPointsByTags =
+          this.utilService.groupPointsByTags(params.data.points as Point[]);
         const date = this.utilService.dateToMonthDateYearDay(params.value[0]);
         const result = this.utilService.formatTooltipBySortedPoints(
           sortedPointsByTags,
@@ -86,7 +86,7 @@ export class LineBarChartComponent {
         );
         return (
           `<small>${date}</small><br/>${result}<br/>` +
-          `${params.data.points.length > 1 ? `<small>Total: ₱${params.value[1]}</small>` : ""}`
+          `${params.data.points.length > 1 ? `<small>Total: ₱${params.value[1]}</small>` : ''}`
         );
       },
       axisPointer: {
@@ -94,7 +94,7 @@ export class LineBarChartComponent {
       },
     },
     xAxis: {
-      type: "category",
+      type: 'category',
       splitLine: {
         show: false,
       },
@@ -105,43 +105,44 @@ export class LineBarChartComponent {
       },
     },
     yAxis: {
-      type: "value",
-      boundaryGap: [0, "100%"],
+      type: 'value',
+      boundaryGap: [0, '100%'],
       splitLine: {
         show: true,
       },
     },
     series: [
       {
-        name: "Mock Data",
+        name: 'Mock Data',
         type: this.type,
         showSymbol: true,
         data: [],
         itemStyle: {
-          color: "#c23531",
+          color: '#c23531',
         },
       },
     ] as CustomSeriesOption,
   };
 
   get arrowIconClass() {
-    return this.percentChange > 0 ? "w-3 h-3 ms-1" : "w-3 h-3 ms-1 rotate-180";
+    return this.percentChange > 0 ? 'w-3 h-3 ms-1' : 'w-3 h-3 ms-1 rotate-180';
   }
 
   get percentChangeClass() {
-    const baseClasses = "flex items-center px-2.5 py-0.5 text-base font-semibold text-center";
-    let colorClasses = "text-gray-500 dark:text-gray-500";
+    const baseClasses =
+      'flex items-center px-2.5 py-0.5 text-base font-semibold text-center';
+    let colorClasses = 'text-gray-500 dark:text-gray-500';
 
     if (this.percentChange !== 0) {
       const isPositiveChange = this.percentChange > 0;
       if (this.isIncome) {
         colorClasses = isPositiveChange
-          ? "text-green-500 dark:text-green-500"
-          : "text-red-500 dark:text-red-500";
+          ? 'text-green-500 dark:text-green-500'
+          : 'text-red-500 dark:text-red-500';
       } else {
         colorClasses = isPositiveChange
-          ? "text-red-500 dark:text-red-500"
-          : "text-green-500 dark:text-green-500";
+          ? 'text-red-500 dark:text-red-500'
+          : 'text-green-500 dark:text-green-500';
       }
     }
 

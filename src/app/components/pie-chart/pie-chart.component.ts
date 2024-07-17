@@ -1,18 +1,18 @@
-import { Component, Input } from "@angular/core";
-import { NgxEchartsDirective } from "ngx-echarts";
-import { EChartsOption } from "echarts";
-import { PieData } from "../../models/chart.interface";
+import { Component, Input } from '@angular/core';
+import { NgxEchartsDirective } from 'ngx-echarts';
+import { EChartsOption } from 'echarts';
+import { PieData } from '../../models/chart.interface';
 
 @Component({
-  selector: "app-pie-chart",
+  selector: 'app-pie-chart',
   standalone: true,
   imports: [NgxEchartsDirective],
-  templateUrl: "./pie-chart.component.html",
-  styleUrl: "./pie-chart.component.scss",
+  templateUrl: './pie-chart.component.html',
+  styleUrl: './pie-chart.component.scss',
 })
 export class PieChartComponent {
   @Input() data: PieData[] = [];
-  @Input() title: string = "";
+  @Input() title: string = '';
   updateOptions: EChartsOption = {};
 
   ngOnInit(): void {
@@ -33,7 +33,7 @@ export class PieChartComponent {
 
   options: EChartsOption = {
     tooltip: {
-      trigger: "item",
+      trigger: 'item',
     },
     visualMap: {
       show: false,
@@ -45,12 +45,12 @@ export class PieChartComponent {
     },
     series: [
       {
-        name: "Access From",
-        type: "pie",
-        radius: "55%",
-        center: ["50%", "50%"],
+        name: 'Access From',
+        type: 'pie',
+        radius: '55%',
+        center: ['50%', '50%'],
         data: [],
-        roseType: "radius",
+        roseType: 'radius',
         label: {
           fontSize: 13,
         },
@@ -60,10 +60,10 @@ export class PieChartComponent {
           length2: 5,
         },
         itemStyle: {
-          color: "#c23531",
+          color: '#c23531',
         },
-        animationType: "scale",
-        animationEasing: "elasticOut",
+        animationType: 'scale',
+        animationEasing: 'elasticOut',
         animationDelay: function (idx) {
           return Math.random() * 200;
         },
