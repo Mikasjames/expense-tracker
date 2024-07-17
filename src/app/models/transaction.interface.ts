@@ -1,7 +1,4 @@
-// Transaction model
-interface Transaction {
-  id: string;
-  userId: string;
+export interface TransactionForm {
   amount: number;
   type: 'income' | 'expense';
   description: string;
@@ -9,8 +6,12 @@ interface Transaction {
   tagIds: string[];
 }
 
-// Tag model
-interface Tag {
+export interface Transaction extends TransactionForm {
+  id: string;
+  userId: string;
+}
+
+export interface Tag {
   id: string;
   userId: string;
   name: string;
