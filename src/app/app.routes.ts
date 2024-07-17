@@ -4,12 +4,14 @@ import { RegisterComponent } from './auth/register/register.component';
 import { AuthGuard, PublicOnlyGuard } from './services/auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DashboardPageComponent } from './dashboard/dashboard-page/dashboard-page.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 
 const dashboardChildRoutes: Routes = [
   { path: '', component: DashboardPageComponent },
 ];
 
 export const routes: Routes = [
+  { path: '', component: LandingPageComponent, canActivate: [PublicOnlyGuard] },
   { path: 'login', component: LoginComponent, canActivate: [PublicOnlyGuard] },
   {
     path: 'register',
