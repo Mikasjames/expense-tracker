@@ -7,6 +7,8 @@
       [class]="
         item.icon === 'flex-grow-spacer' ? 'flex-grow-spacer' : 'sidebar-item'
       "
+      [ngbTooltip]="item.label"
+      placement="right"
     >
       <i [class]="item.icon"></i>
     </div>
