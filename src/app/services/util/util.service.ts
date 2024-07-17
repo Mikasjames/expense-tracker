@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
-  GroupedData,
+  GroupedData, GroupedPointsByTags,
   LineBarData, Money,
   Point,
   SortedByDayLineBarData,
@@ -116,17 +116,18 @@ export class UtilService {
     }, {});
   }
 
-  // formatTooltipBySortedPoints(sortedPointsByTags: GroupedPointsByTags, isIncome = false): string {
-  //   return Object.values(sortedPointsByTags)
-  //     .map((tag: { tag: number; points: TitleValue[] }) => {
-  //       const tagName = isIncome
-  //         ? this.dataService.getIncomeTagNameFromId(tag.tag)
-  //         : this.dataService.getTagNameFromId(tag.tag);
-  //       const pointsString = tag.points
-  //         .map((point: TitleValue) => `${point.title}: ₱${point.value}`)
-  //         .join("<br/>");
-  //       return `<small><pr><code>${tagName}</code></pr></small><br/>${pointsString}`;
-  //     })
-  //     .join("<br/>");
-  // }
+  formatTooltipBySortedPoints(sortedPointsByTags: GroupedPointsByTags, isIncome = false): string {
+    // return Object.values(sortedPointsByTags)
+    //   .map((tag: { tag: number; points: TitleValue[] }) => {
+    //     const tagName = isIncome
+    //       ? this.dataService.getIncomeTagNameFromId(tag.tag)
+    //       : this.dataService.getTagNameFromId(tag.tag);
+    //     const pointsString = tag.points
+    //       .map((point: TitleValue) => `${point.title}: ₱${point.value}`)
+    //       .join("<br/>");
+    //     return `<small><pr><code>${tagName}</code></pr></small><br/>${pointsString}`;
+    //   })
+    //   .join("<br/>");
+    return "";
+  }
 }
