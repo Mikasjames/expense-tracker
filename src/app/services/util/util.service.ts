@@ -110,10 +110,10 @@ export class UtilService {
   }
 
   groupPointsByTags(points: Point[]): {
-    [key: number]: { tag: number; points: TitleValue[] };
+    [key: string]: { tag: string; points: TitleValue[] };
   } {
     return points.reduce(
-      (acc: { [key: number]: { tag: number; points: TitleValue[] } }, item) => {
+      (acc: { [key: string]: { tag: string; points: TitleValue[] } }, item) => {
         if (!acc[item.tag]) {
           acc[item.tag] = {
             tag: item.tag,
@@ -135,7 +135,7 @@ export class UtilService {
     isIncome = false,
   ): string {
     // return Object.values(sortedPointsByTags)
-    //   .map((tag: { tag: number; points: TitleValue[] }) => {
+    //   .map((tag: { tag: string; points: TitleValue[] }) => {
     //     const tagName = isIncome
     //       ? this.dataService.getIncomeTagNameFromId(tag.tag)
     //       : this.dataService.getTagNameFromId(tag.tag);

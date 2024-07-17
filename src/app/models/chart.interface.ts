@@ -4,7 +4,7 @@ export interface PieData {
 }
 
 export interface LineBarData {
-  tag: number;
+  tag: string;
   value: [string, number];
   title: string;
 }
@@ -19,7 +19,7 @@ export interface GroupedData {
 }
 
 export interface GroupedPointsByTags {
-  [key: number]: { tag: number; points: TitleValue[] };
+  [key: string]: { tag: string; points: TitleValue[] };
 }
 
 export interface Image {
@@ -44,17 +44,18 @@ export interface Money {
   created_on: string;
   updated_on: string;
   user: number;
-  tags: number[];
+  tags: string[];
 }
 
 export interface Tag {
-  id: number;
+  id: string;
   name: string;
   user: number;
+  type: 'income' | 'expense' | 'both';
 }
 
 export interface Point extends TitleValue {
-  tag: number;
+  tag: string;
 }
 
 export interface TitleValue {

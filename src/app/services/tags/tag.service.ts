@@ -19,6 +19,10 @@ export class TagService {
   private userId: string | null = null;
   private tagsSubject = new BehaviorSubject<Tag[]>([]);
   tags$ = this.tagsSubject.asObservable();
+  private incomeTags = new BehaviorSubject<Tag[]>([]);
+  incomeTags$ = this.incomeTags.asObservable();
+  private expenseTags = new BehaviorSubject<Tag[]>([]);
+  expenseTags$ = this.expenseTags.asObservable();
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -39,6 +43,11 @@ export class TagService {
       .subscribe((tags) => {
         this.tagsSubject.next(tags);
       });
+  }
+
+  separateTagsByType(tags: Tag[]): void {
+    this.incomeTags.next(tags.filter((tag) => tag.type === 'income'));
+    this.expenseTags.next(tags.filter((tag) => tag.type === 'expense'));
   }
 
   getTags(): Observable<Tag[]> {
