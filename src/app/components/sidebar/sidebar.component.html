@@ -1,0 +1,14 @@
+<!--<button (click)="logout() ">Logout</button>-->
+
+<div class="sidebar">
+  <ng-container *ngFor="let item of sidebarItems">
+    <div
+      (click)="item.action()"
+      [class]="
+        item.icon === 'flex-grow-spacer' ? 'flex-grow-spacer' : 'sidebar-item'
+      "
+    >
+      <i [class]="item.icon"></i>
+    </div>
+  </ng-container>
+</div>
