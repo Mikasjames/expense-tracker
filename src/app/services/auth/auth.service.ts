@@ -8,6 +8,7 @@ import {
 } from '@angular/fire/auth';
 import { from, Observable } from 'rxjs';
 import { UserInterface } from '../../models/user.interface';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,10 @@ export class AuthService {
   user$ = user(this.firebaseAuth);
   currentUserSig = signal<UserInterface | null | undefined>(undefined);
 
-  constructor(private firebaseAuth: Auth) {}
+  constructor(
+    private firebaseAuth: Auth,
+    private router: Router,
+  ) {}
 
   register(
     email: string,
@@ -44,6 +48,9 @@ export class AuthService {
   }
 
   logout() {
-    this.firebaseAuth.signOut();
+    this.firebaseAuth.signOut().then(() => {
+      this.currentUserSig.set(null);
+      this.router.navigateByUrl('/login');
+    });
   }
 }
