@@ -27,10 +27,33 @@ export class DashboardPageComponent {
     { title: 'Expense', value: 0, percentChange: 0 },
     { title: 'Net', value: 0, percentChange: 0 },
   ];
-  constructor(private authService: AuthService) {
+  income: Transaction[] = [];
+  expenses: Transaction[] = [];
+  constructor(
+    private authService: AuthService,
+    private transactionService: TransactionService,
+  ) {
     const user = this.authService.currentUserSig();
     if (user) {
       this.userInfo = user;
+      this.transactionService.incomeTransactions$.subscribe(
+        (transactions) => {
+          this.income = transactions;
+          console.log('Income Transactions:', transactions);
+        },
+        (error) => {
+          console.error('Error fetching income transactions:', error);
+        },
+      );
+      this.transactionService.expenseTransactions$.subscribe(
+        (transactions) => {
+          this.expenses = transactions;
+          console.log('Expense Transactions:', transactions);
+        },
+        (error) => {
+          console.error('Error fetching expense transactions:', error);
+        },
+      );
     }
   }
 }

@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TransactionForm } from '../../models/transaction.interface';
+import { TransactionService } from '../../services/transactions/transaction.service';
 
 @Component({
   selector: 'app-transaction-form',
@@ -32,6 +33,7 @@ export class TransactionFormComponent {
   constructor(
     private ngbModal: NgbModal,
     private fb: FormBuilder,
+    private transactionService: TransactionService,
   ) {}
 
   openModal(transactionType: 'income' | 'expense') {
@@ -60,7 +62,14 @@ export class TransactionFormComponent {
         tagIds: formValue.tagIds ?? [],
       };
 
-      console.log(transaction);
+      this.transactionService.addTransaction(transaction).subscribe({
+        next: () => {
+          console.log('Transaction added successfully');
+        },
+        error: (error) => {
+          console.error('Error adding transaction', error);
+        },
+      });
       this.closeModal();
     } else {
       // Handle invalid form
