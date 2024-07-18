@@ -6,11 +6,17 @@ import { Transaction } from '../../models/transaction.interface';
 import { CommonModule } from '@angular/common';
 import { LineBarChartComponent } from '../../components/line-bar-chart/line-bar-chart.component';
 import { StatCardComponent } from '../../components/stat-card/stat-card.component';
+import { TransactionFormComponent } from '../../components/transaction-form/transaction-form.component';
 
 @Component({
   selector: 'app-dashboard-page',
   standalone: true,
-  imports: [CommonModule, LineBarChartComponent, StatCardComponent],
+  imports: [
+    CommonModule,
+    LineBarChartComponent,
+    StatCardComponent,
+    TransactionFormComponent,
+  ],
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.sass',
 })
