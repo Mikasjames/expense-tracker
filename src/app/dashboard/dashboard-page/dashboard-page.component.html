@@ -1,7 +1,19 @@
 <div class="container-fluid">
   <div class="mt-2">
     <div class="row col-6">
-      <h1 class="text-start fw-bold">Dashboard</h1>
+      <div class="d-flex justify-content-between align-items-center">
+        <h1 class="text-start fw-bold">Dashboard</h1>
+        <div class="btn-group me-4">
+          <button type="button" class="btn btn-success btn-sm">
+            <i class="bi bi-plus-circle-fill"></i>
+            Income
+          </button>
+          <button type="button" class="btn btn-danger btn-sm">
+            Expense
+            <i class="bi bi-dash-circle-fill"></i>
+          </button>
+        </div>
+      </div>
       <div class="row my-2 h-50">
         <div *ngFor="let statCard of statCards" class="col-md-4 mb-2">
           <app-stat-card
