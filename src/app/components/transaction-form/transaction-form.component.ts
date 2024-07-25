@@ -9,11 +9,12 @@ import {
 import { CommonModule } from '@angular/common';
 import { TransactionForm } from '../../models/transaction.interface';
 import { TransactionService } from '../../services/transactions/transaction.service';
+import { TagInputComponent } from '../tag-input/tag-input.component';
 
 @Component({
   selector: 'app-transaction-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, TagInputComponent],
   templateUrl: './transaction-form.component.html',
   styleUrl: './transaction-form.component.sass',
 })
@@ -49,6 +50,7 @@ export class TransactionFormComponent {
 
   closeModal() {
     this.ngbModal.dismissAll();
+    this.transactionForm.reset();
   }
 
   onSubmit() {
