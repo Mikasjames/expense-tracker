@@ -8,6 +8,7 @@ import { LineBarChartComponent } from '../../components/line-bar-chart/line-bar-
 import { StatCardComponent } from '../../components/stat-card/stat-card.component';
 import { TransactionFormComponent } from '../../components/transaction-form/transaction-form.component';
 import { LineBarData } from '../../models/chart.interface';
+import { LoaderComponent } from '../../components/loader/loader.component';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -17,6 +18,7 @@ import { LineBarData } from '../../models/chart.interface';
     LineBarChartComponent,
     StatCardComponent,
     TransactionFormComponent,
+    LoaderComponent,
   ],
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.sass',

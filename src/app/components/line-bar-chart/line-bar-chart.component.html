@@ -41,7 +41,12 @@
       </div>
     </div>
     <div>
-      <div echarts [options]="options" class="demo-chart"></div>
+      <div
+        echarts
+        [options]="options"
+        [style.height]="height"
+        class="demo-chart"
+      ></div>
     </div>
   </div>
 }
