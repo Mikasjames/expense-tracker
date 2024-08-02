@@ -77,7 +77,6 @@ export class TransactionFormComponent {
         date: new Date(formValue.date ?? new Date()), // Convert date string to Date object
         tagIds: formValue.tagIds ?? [],
       };
-      console.log('Transaction:', transaction);
       this.transactionService.addTransaction(transaction).subscribe({
         next: () => {
           console.log('Transaction added successfully');

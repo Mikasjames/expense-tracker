@@ -8,7 +8,6 @@ import { LineBarChartComponent } from '../../components/line-bar-chart/line-bar-
 import { StatCardComponent } from '../../components/stat-card/stat-card.component';
 import { TransactionFormComponent } from '../../components/transaction-form/transaction-form.component';
 import { LineBarData } from '../../models/chart.interface';
-import { TagService } from '../../services/tags/tag.service';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -37,7 +36,6 @@ export class DashboardPageComponent {
   constructor(
     private authService: AuthService,
     private transactionService: TransactionService,
-    private tagService: TagService,
   ) {
     const user = this.authService.currentUserSig();
     if (user) {
@@ -54,10 +52,10 @@ export class DashboardPageComponent {
     this.transactionService.expenseTransactions$.subscribe(
       (transactions) => {
         this.expenses = transactions;
-        this.expenseLineBarData = this.convertTransactionsToLineBarData(
-          transactions,
-          'expense',
-        );
+        this.expenseLineBarData =
+          this.convertTransactionsToLineBarData(transactions);
+        this.statCards[1].value = this.aggregateTransactions(transactions);
+        this.calculateNetIncome();
       },
       (error) => {
         console.error('Error fetching expense transactions:', error);
@@ -69,10 +67,10 @@ export class DashboardPageComponent {
     this.transactionService.incomeTransactions$.subscribe(
       (transactions) => {
         this.income = transactions;
-        this.incomeLineBarData = this.convertTransactionsToLineBarData(
-          transactions,
-          'income',
-        );
+        this.incomeLineBarData =
+          this.convertTransactionsToLineBarData(transactions);
+        this.statCards[0].value = this.aggregateTransactions(transactions);
+        this.calculateNetIncome();
       },
       (error) => {
         console.error('Error fetching income transactions:', error);
@@ -80,10 +78,18 @@ export class DashboardPageComponent {
     );
   }
 
-  convertTransactionsToLineBarData(
-    transactions: Transaction[],
-    transactionType: 'expense' | 'income',
-  ): LineBarData[] {
+  calculateNetIncome() {
+    this.statCards[2].value = this.statCards[0].value - this.statCards[1].value;
+  }
+
+  aggregateTransactions(transactions: Transaction[]): number {
+    return transactions.reduce(
+      (acc, transaction) => acc + transaction.amount,
+      0,
+    );
+  }
+
+  convertTransactionsToLineBarData(transactions: Transaction[]): LineBarData[] {
     return transactions.map((transaction) => {
       return {
         tag: transaction.tagIds[0],

@@ -2,9 +2,9 @@
   <div class="bg-white rounded">
     <div class="d-flex">
       <div class="col-6 d-flex flex-column justify-content-start">
-        <h3 class="fw-bold">Total Profit</h3>
+        <h3 class="fw-bold">{{ title }}</h3>
         <p class="text-muted">
-          Stonks this week:
+          {{ percentChangeMessage }}
           <span
             [class]="percentChangeClass"
             class="fw-semibold text-start ms-2"
@@ -41,11 +41,7 @@
       </div>
     </div>
     <div>
-      <div
-        echarts
-        [options]="options"
-        class="demo-chart"
-      ></div>
+      <div echarts [options]="options" class="demo-chart"></div>
     </div>
   </div>
 }

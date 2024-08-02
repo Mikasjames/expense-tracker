@@ -20,8 +20,9 @@ import { TitleCasePipe } from '@angular/common';
 })
 export class LineBarChartComponent {
   @Input() data: LineBarData[] = [];
-  @Input() title: string = '';
-  @Input() isIncome: boolean = false;
+  @Input() title = '';
+  @Input() percentChangeMessage = 'Recent change:';
+  @Input() isIncome = false;
   @Input() type = 'line';
   percentChange = 0;
   isLoading = false;
