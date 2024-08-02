@@ -8,12 +8,13 @@ import {
   SortedByDayLineBarData,
   TitleValue,
 } from '../../models/chart.interface';
+import { TagService } from '../tags/tag.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UtilService {
-  constructor() {}
+  constructor(private tagService: TagService) {}
 
   moneyToLineBarData(moneyData: Money[]): LineBarData[] {
     return moneyData.map((item: Money): LineBarData => {
@@ -134,17 +135,17 @@ export class UtilService {
     sortedPointsByTags: GroupedPointsByTags,
     isIncome = false,
   ): string {
-    // return Object.values(sortedPointsByTags)
-    //   .map((tag: { tag: string; points: TitleValue[] }) => {
-    //     const tagName = isIncome
-    //       ? this.dataService.getIncomeTagNameFromId(tag.tag)
-    //       : this.dataService.getTagNameFromId(tag.tag);
-    //     const pointsString = tag.points
-    //       .map((point: TitleValue) => `${point.title}: ₱${point.value}`)
-    //       .join("<br/>");
-    //     return `<small><pr><code>${tagName}</code></pr></small><br/>${pointsString}`;
-    //   })
-    //   .join("<br/>");
-    return '';
+    return Object.values(sortedPointsByTags)
+      .map((tag: { tag: string; points: TitleValue[] }) => {
+        const tagName = this.tagService.getTagFromId(
+          tag.tag,
+          isIncome ? 'income' : 'expense',
+        ).name;
+        const pointsString = tag.points
+          .map((point: TitleValue) => `${point.title}: ₱${point.value}`)
+          .join('<br/>');
+        return `<small><pr><code>${tagName}</code></pr></small><br/>${pointsString}`;
+      })
+      .join('<br/>');
   }
 }

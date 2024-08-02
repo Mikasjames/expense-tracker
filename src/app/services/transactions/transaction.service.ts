@@ -17,6 +17,9 @@ import {
   collection,
   collectionData,
   Firestore,
+  orderBy,
+  query,
+  Timestamp,
 } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 
@@ -83,9 +86,20 @@ export class TransactionService {
       this.fs,
       `transactions/${this.userId}/${transactionType}`,
     );
-    return collectionData(transactionsCollection, {
+    const q = query(transactionsCollection, orderBy('date'));
+    return collectionData(q, {
       idField: 'id',
-    }) as Observable<Transaction[]>;
+    }).pipe(
+      map((transactions: any[]) =>
+        transactions.map((transaction) => ({
+          ...transaction,
+          date:
+            transaction.date instanceof Timestamp
+              ? transaction.date.toDate()
+              : transaction.date,
+        })),
+      ),
+    ) as Observable<Transaction[]>;
   }
 
   getIncomeTransactions(): Observable<Transaction[]> {

@@ -42,9 +42,12 @@ export class DashboardPageComponent {
     const user = this.authService.currentUserSig();
     if (user) {
       this.userInfo = user;
-      this.loadIncomeTransactions();
-      this.loadExpenseTransactions();
     }
+  }
+
+  ngOnInit() {
+    this.loadExpenseTransactions();
+    this.loadIncomeTransactions();
   }
 
   loadExpenseTransactions() {
@@ -55,7 +58,6 @@ export class DashboardPageComponent {
           transactions,
           'expense',
         );
-        console.log('Expense Transactions:', transactions);
       },
       (error) => {
         console.error('Error fetching expense transactions:', error);
@@ -71,7 +73,6 @@ export class DashboardPageComponent {
           transactions,
           'income',
         );
-        console.log('Income Transactions:', transactions);
       },
       (error) => {
         console.error('Error fetching income transactions:', error);
@@ -85,11 +86,8 @@ export class DashboardPageComponent {
   ): LineBarData[] {
     return transactions.map((transaction) => {
       return {
-        tag: this.tagService.getTagFromId(
-          transaction.tagIds[0],
-          transactionType,
-        ).name,
-        value: [transaction.date, transaction.amount],
+        tag: transaction.tagIds[0],
+        value: [transaction.date.getTime(), transaction.amount],
         title: transaction.description,
       };
     });

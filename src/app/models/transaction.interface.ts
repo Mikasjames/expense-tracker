@@ -2,7 +2,7 @@ export interface TransactionForm {
   amount: number;
   type: 'income' | 'expense';
   description: string;
-  date: string;
+  date: Date;
   tagIds: string[];
 }
 

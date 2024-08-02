@@ -5,7 +5,7 @@ export interface PieData {
 
 export interface LineBarData {
   tag: string;
-  value: [string, number];
+  value: [number, number];
   title: string;
 }
 
@@ -39,7 +39,7 @@ export interface Money {
   id: number;
   title: string;
   amount: number;
-  date: string;
+  date: number;
   notes: string;
   created_on: string;
   updated_on: string;

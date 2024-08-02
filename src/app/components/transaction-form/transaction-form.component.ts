@@ -26,7 +26,7 @@ export class TransactionFormComponent {
     amount: [null, [Validators.required, Validators.min(0.01)]],
     type: ['income' as 'income' | 'expense', Validators.required],
     description: ['', Validators.required],
-    date: [new Date().toUTCString(), Validators.required],
+    date: [new Date(), Validators.required],
     tagIds: [[] as string[]],
   });
   transactionType: 'income' | 'expense' = 'income';
@@ -74,9 +74,10 @@ export class TransactionFormComponent {
         amount: formValue.amount ?? 0, // Provide a default value
         type: formValue.type as 'income' | 'expense',
         description: formValue.description ?? '',
-        date: formValue.date ?? new Date().toUTCString(),
+        date: new Date(formValue.date ?? new Date()), // Convert date string to Date object
         tagIds: formValue.tagIds ?? [],
       };
+      console.log('Transaction:', transaction);
       this.transactionService.addTransaction(transaction).subscribe({
         next: () => {
           console.log('Transaction added successfully');
