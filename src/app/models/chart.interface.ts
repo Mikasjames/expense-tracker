@@ -47,11 +47,13 @@ export interface Money {
   tags: string[];
 }
 
-export interface Tag {
+export interface Tag extends TagForm {
   id: string;
+}
+
+export interface TagForm {
   name: string;
-  user: number;
-  type: 'income' | 'expense' | 'both';
+  type: 'income' | 'expense';
 }
 
 export interface Point extends TitleValue {
