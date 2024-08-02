@@ -27,7 +27,7 @@ export class TransactionFormComponent {
     type: ['income' as 'income' | 'expense', Validators.required],
     description: ['', Validators.required],
     date: [new Date(), Validators.required],
-    tagIds: [[]],
+    tagIds: [[] as string[]],
   });
   transactionType: 'income' | 'expense' = 'income';
 
@@ -53,6 +53,20 @@ export class TransactionFormComponent {
     this.transactionForm.reset();
   }
 
+  updateTransactionTag(tagId: string | null) {
+    console.log('Tag ID:', tagId);
+    if (!tagId) {
+      this.transactionForm.get('tagIds')?.setValue([]);
+      return;
+    }
+    const tagIds = this.transactionForm.get('tagIds')?.value as string[] | null;
+    if (!tagIds) return;
+    const updatedTagIds = tagIds.includes(tagId)
+      ? tagIds.filter((id) => id !== tagId)
+      : [...tagIds, tagId];
+    this.transactionForm.get('tagIds')?.setValue(updatedTagIds);
+  }
+
   onSubmit() {
     if (this.transactionForm.valid) {
       const formValue = this.transactionForm.value;
@@ -63,7 +77,6 @@ export class TransactionFormComponent {
         date: formValue.date ?? new Date(),
         tagIds: formValue.tagIds ?? [],
       };
-
       this.transactionService.addTransaction(transaction).subscribe({
         next: () => {
           console.log('Transaction added successfully');
