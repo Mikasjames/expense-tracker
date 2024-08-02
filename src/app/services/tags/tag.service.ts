@@ -52,7 +52,7 @@ export class TagService {
     const tags =
       type === 'income' ? this.incomeTags.value : this.expenseTags.value;
     const tag = tags.find((tag) => tag.id === tagId);
-    return tag || { id: '', name: '', type: 'income' };
+    return tag || { id: '', name: '', type: type };
   }
 
   separateTagsByType(tags: Tag[]): void {
