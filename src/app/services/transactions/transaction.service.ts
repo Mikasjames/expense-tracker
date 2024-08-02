@@ -36,7 +36,6 @@ export class TransactionService {
   ) {
     this.afAuth.authState
       .pipe(
-        tap((user) => console.log('Auth State User:', user)),
         switchMap((user) => {
           if (user) {
             this.userId = user.uid;
@@ -49,11 +48,6 @@ export class TransactionService {
       )
       .subscribe({
         next: ({ incomeTransactions, expenseTransactions }) => {
-          console.log(
-            'Fetched transactions:',
-            incomeTransactions,
-            expenseTransactions,
-          );
           this.incomeTransactionsSubject.next(incomeTransactions);
           this.expenseTransactionsSubject.next(expenseTransactions);
         },
