@@ -24,7 +24,6 @@ export class LineBarChartComponent {
   @Input() isIncome: boolean = false;
   @Input() type = 'line';
   percentChange = 0;
-  updateOptions: EChartsOption = {};
   isLoading = false;
 
   constructor(private utilService: UtilService) {}
@@ -51,7 +50,8 @@ export class LineBarChartComponent {
     const sortedData: SortedByDayLineBarData[] =
       this.utilService.groupLineBarDataByDay(this.data);
     this.percentChange = this.calculatePercentChange(this.data);
-    this.updateOptions = {
+    this.options = {
+      ...this.options,
       series: [
         {
           data: sortedData,
@@ -129,23 +129,17 @@ export class LineBarChartComponent {
   }
 
   get percentChangeClass() {
-    const baseClasses =
-      'flex items-center px-2.5 py-0.5 text-base font-semibold text-center';
-    let colorClasses = 'text-gray-500 dark:text-gray-500';
+    let colorClasses = '';
 
     if (this.percentChange !== 0) {
       const isPositiveChange = this.percentChange > 0;
       if (this.isIncome) {
-        colorClasses = isPositiveChange
-          ? 'text-green-500 dark:text-green-500'
-          : 'text-red-500 dark:text-red-500';
+        colorClasses = isPositiveChange ? 'text-success' : 'text-danger';
       } else {
-        colorClasses = isPositiveChange
-          ? 'text-red-500 dark:text-red-500'
-          : 'text-green-500 dark:text-green-500';
+        colorClasses = isPositiveChange ? 'text-danger' : 'text-success';
       }
     }
 
-    return `${baseClasses} ${colorClasses}`;
+    return `${colorClasses}`;
   }
 }
