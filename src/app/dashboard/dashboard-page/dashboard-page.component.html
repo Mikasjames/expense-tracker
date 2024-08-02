@@ -14,7 +14,10 @@
           ></app-stat-card>
         </div>
       </div>
-      <app-line-bar-chart></app-line-bar-chart>
+      <app-line-bar-chart
+        [data]="expenseLineBarData"
+        [isIncome]="false"
+      ></app-line-bar-chart>
     </div>
     <div class="row col-6">
       <div class="d-flex justify-content-center align-items-center"></div>
