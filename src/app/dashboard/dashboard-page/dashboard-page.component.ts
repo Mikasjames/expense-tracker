@@ -34,6 +34,7 @@ export class DashboardPageComponent {
   ];
   income: Transaction[] = [];
   expenses: Transaction[] = [];
+  allTransactions: Transaction[] = [];
   incomeLineBarData: LineBarData[] = [];
   expenseLineBarData: LineBarData[] = [];
 
@@ -48,6 +49,7 @@ export class DashboardPageComponent {
   }
 
   ngOnInit() {
+    this.allTransactions = [];
     this.loadExpenseTransactions();
     this.loadIncomeTransactions();
   }
@@ -60,6 +62,7 @@ export class DashboardPageComponent {
           this.convertTransactionsToLineBarData(transactions);
         this.statCards[1].value = this.aggregateTransactions(transactions);
         this.calculateNetIncome();
+        this.allTransactions = this.combineAndSortTransactions(this.income, this.expenses);
       },
       (error) => {
         console.error('Error fetching expense transactions:', error);
@@ -75,11 +78,18 @@ export class DashboardPageComponent {
           this.convertTransactionsToLineBarData(transactions);
         this.statCards[0].value = this.aggregateTransactions(transactions);
         this.calculateNetIncome();
+        this.allTransactions = this.combineAndSortTransactions(this.income, this.expenses);
       },
       (error) => {
         console.error('Error fetching income transactions:', error);
       },
     );
+  }
+
+  combineAndSortTransactions(income: Transaction[], expenses: Transaction[]): Transaction[] {
+    const combinedTransactions = [...income, ...expenses];
+    combinedTransactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    return combinedTransactions;
   }
 
   calculateNetIncome() {

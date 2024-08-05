@@ -29,7 +29,9 @@
         [data]="incomeLineBarData"
         [isIncome]="true"
       ></app-line-bar-chart>
-      <app-transaction-table></app-transaction-table>
+      <app-transaction-table
+        [transactions]="allTransactions"
+      ></app-transaction-table>
     </div>
   </div>
 </div>
