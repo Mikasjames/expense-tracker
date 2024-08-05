@@ -11,7 +11,10 @@
           <app-transaction-form class="me-4"></app-transaction-form>
         </div>
         <div class="row mb-3">
-          <div *ngFor="let statCard of statCards" class="col-md-4 mb-2">
+          <div
+            *ngFor="let statCard of statCards"
+            class="col-6 col-md-4 mb-2 mx-auto mx-md-0"
+          >
             <app-stat-card
               [title]="statCard.title"
               [value]="statCard.value"
