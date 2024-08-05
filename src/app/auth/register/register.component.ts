@@ -4,11 +4,17 @@ import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
 import { WaveComponent } from '../../components/wave/wave.component';
 import { DollarSignSvgsComponent } from '../../components/dollar-sign-svgs/dollar-sign-svgs.component';
+import { PlatformButtonsComponent } from '../../components/platform-buttons/platform-buttons.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, WaveComponent, DollarSignSvgsComponent],
+  imports: [
+    ReactiveFormsModule,
+    WaveComponent,
+    DollarSignSvgsComponent,
+    PlatformButtonsComponent,
+  ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.sass',
 })
