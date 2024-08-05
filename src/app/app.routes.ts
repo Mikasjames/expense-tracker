@@ -11,7 +11,7 @@ const dashboardChildRoutes: Routes = [
 ];
 
 export const routes: Routes = [
-  { path: '', component: LandingPageComponent, canActivate: [AuthGuard] },
+  { path: '', component: LandingPageComponent, canActivate: [PublicOnlyGuard] },
   { path: 'login', component: LoginComponent, canActivate: [PublicOnlyGuard] },
   {
     path: 'register',
