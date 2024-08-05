@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
-import { SidebarContent } from '../../models/util.interface';
+import { ToolBarContent } from '../../models/util.interface';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
@@ -13,7 +13,7 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
   styleUrl: './sidebar.component.sass',
 })
 export class SidebarComponent {
-  @Input() sidebarItems: SidebarContent[] = [
+  @Input() sidebarItems: ToolBarContent[] = [
     {
       label: 'Dashboard',
       icon: 'bi bi-house',
