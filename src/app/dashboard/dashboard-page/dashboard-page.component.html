@@ -23,11 +23,13 @@
     </div>
     <div class="row col-12 col-lg-6 mt-3 mt-lg-0 mx-lg-2">
       <app-line-bar-chart
+        class="mb-3"
         title="Total Income"
         percentChangeMessage="Previous gains:"
         [data]="incomeLineBarData"
         [isIncome]="true"
       ></app-line-bar-chart>
+      <app-transaction-table></app-transaction-table>
     </div>
   </div>
 </div>
