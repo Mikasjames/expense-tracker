@@ -28,9 +28,9 @@ import { TransactionTableComponent } from '../../components/transaction-table/tr
 export class DashboardPageComponent {
   userInfo = {} as UserInterface;
   statCards = [
-    { title: 'Income', value: 0, percentChange: 0 },
-    { title: 'Expense', value: 0, percentChange: 0 },
-    { title: 'Net', value: 0, percentChange: 0 },
+    { title: 'Income', value: 0, percentChange: 0, isIncome: true },
+    { title: 'Expense', value: 0, percentChange: 0, isIncome: false },
+    { title: 'Net', value: 0, percentChange: 0, isIncome: true },
   ];
   income: Transaction[] = [];
   expenses: Transaction[] = [];
@@ -60,8 +60,7 @@ export class DashboardPageComponent {
         this.expenses = transactions;
         this.expenseLineBarData =
           this.convertTransactionsToLineBarData(transactions);
-        this.statCards[1].value = this.aggregateTransactions(transactions);
-        this.calculateNetIncome();
+        this.calculateStatcardData(transactions, 1);
         this.allTransactions = this.combineAndSortTransactions(
           this.income,
           this.expenses,
@@ -79,8 +78,7 @@ export class DashboardPageComponent {
         this.income = transactions;
         this.incomeLineBarData =
           this.convertTransactionsToLineBarData(transactions);
-        this.statCards[0].value = this.aggregateTransactions(transactions);
-        this.calculateNetIncome();
+        this.calculateStatcardData(transactions, 0);
         this.allTransactions = this.combineAndSortTransactions(
           this.income,
           this.expenses,
@@ -90,6 +88,15 @@ export class DashboardPageComponent {
         console.error('Error fetching income transactions:', error);
       },
     );
+  }
+
+  calculateStatcardData(transactions: Transaction[], index: number) {
+    this.statCards[index].value = this.aggregateTransactions(transactions);
+    this.statCards[index].percentChange = this.calculatePercentChange(
+      transactions.slice(-1)[0].amount,
+      transactions[0].amount,
+    );
+    this.calculateNetIncome();
   }
 
   combineAndSortTransactions(
@@ -105,6 +112,14 @@ export class DashboardPageComponent {
 
   calculateNetIncome() {
     this.statCards[2].value = this.statCards[0].value - this.statCards[1].value;
+    const firstIncome = this.income[0].amount;
+    const firstExpense = this.expenses[0].amount;
+    const lastIncome = this.income.slice(-1)[0].amount;
+    const lastExpense = this.expenses.slice(-1)[0].amount;
+    this.statCards[2].percentChange = this.calculatePercentChange(
+      lastIncome - lastExpense,
+      firstIncome - firstExpense,
+    );
   }
 
   aggregateTransactions(transactions: Transaction[]): number {
@@ -112,6 +127,10 @@ export class DashboardPageComponent {
       (acc, transaction) => acc + transaction.amount,
       0,
     );
+  }
+
+  calculatePercentChange(current: number, previous: number): number {
+    return ((current - previous) / previous) * 100;
   }
 
   convertTransactionsToLineBarData(transactions: Transaction[]): LineBarData[] {
