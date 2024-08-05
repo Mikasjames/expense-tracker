@@ -5,10 +5,13 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
   user,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
 } from '@angular/fire/auth';
 import { from, Observable } from 'rxjs';
 import { UserInterface } from '../../models/user.interface';
 import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +23,7 @@ export class AuthService {
   constructor(
     private firebaseAuth: Auth,
     private router: Router,
+    private fireAuth: AngularFireAuth,
   ) {}
 
   register(
@@ -52,5 +56,29 @@ export class AuthService {
       this.currentUserSig.set(null);
       this.router.navigateByUrl('/login');
     });
+  }
+
+  googleSignIn() {
+    return this.fireAuth.signInWithPopup(new GoogleAuthProvider()).then(
+      (res) => {
+        this.router.navigate(['/dashboard']);
+        localStorage.setItem('token', JSON.stringify(res.user?.uid));
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+  }
+
+  facebookSignIn() {
+    return this.fireAuth.signInWithPopup(new FacebookAuthProvider()).then(
+      (res) => {
+        this.router.navigate(['/dashboard']);
+        localStorage.setItem('token', JSON.stringify(res.user?.uid));
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
   }
 }

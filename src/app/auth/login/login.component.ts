@@ -8,6 +8,7 @@ import { PlatformService } from '../../services/platform/platform.service';
 import { LoaderComponent } from '../../components/loader/loader.component';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
+import { PlatformButtonsComponent } from '../../components/platform-buttons/platform-buttons.component';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +19,7 @@ import { HttpErrorResponse } from '@angular/common/http';
     DollarSignSvgsComponent,
     WaveComponent,
     LoaderComponent,
+    PlatformButtonsComponent,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.sass',
