@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="mt-2 d-flex">
-    <div class="row col-6">
+    <div class="row col-12 col-md-6">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h1 class="text-start fw-bold">Dashboard</h1>
         <app-transaction-form class="me-4"></app-transaction-form>
@@ -21,7 +21,7 @@
         [isIncome]="false"
       ></app-line-bar-chart>
     </div>
-    <div class="row col-6 mx-2">
+    <div class="row col-12 col-md-6 mx-md-2">
       <app-line-bar-chart
         title="Total Income"
         percentChangeMessage="Previous gains:"
