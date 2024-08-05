@@ -24,7 +24,7 @@ export class LineBarChartComponent {
   @Input() percentChangeMessage = 'Recent change:';
   @Input() isIncome = false;
   @Input() type = 'line';
-  @Input() height = '300px';
+  @Input() height = '200px';
   percentChange = 0;
   isLoading = false;
 
@@ -105,12 +105,14 @@ export class LineBarChartComponent {
           return this.utilService.milliToDate(Number(value));
         },
       },
+      show: false,
     },
     yAxis: {
       type: 'value',
       splitLine: {
         show: false,
       },
+      show: false,
     },
     series: [
       {
