@@ -67,6 +67,10 @@ export class LineBarChartComponent {
     this.isLoading = false;
   }
 
+  get toggleChartTypeSymbol() {
+    return this.type === 'bar' ? 'bi bi-bar-chart-fill' : 'bi bi-graph-up';
+  }
+
   calculatePercentChange(data: LineBarData[]): number {
     if (data.length < 2) return 0;
     const first = data[0].value[1];
