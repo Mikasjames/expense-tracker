@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './topbar.component.sass',
 })
 export class TopbarComponent {
-  showSidebar = false;
+  @Input() showSidebar = false;
   @Input() topbarItems: ToolBarContent[] = [
     {
       label: 'Show Options',

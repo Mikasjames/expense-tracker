@@ -2,11 +2,25 @@
   <aside class="d-none d-md-block">
     <app-sidebar></app-sidebar>
   </aside>
+  <aside
+    *ngIf="showSidebar"
+    (click)="preventCloseOnClick()"
+    class="d-md-none sidebar-transition"
+    style="z-index: 1002"
+  >
+    <app-sidebar></app-sidebar>
+  </aside>
   <header class="d-md-none">
-    <app-topbar></app-topbar>
+    <app-topbar
+      [showSidebar]="showSidebar"
+      (toggleSidebar)="toggleSidebar($event); preventCloseOnClick()"
+    ></app-topbar>
   </header>
 
-  <main class="main-content ms-md-5 ps-md-4 ps-xl-5">
+  <main
+    class="main-content ms-md-5 ps-md-4 ps-xl-5"
+    [ngClass]="{ 'dim-content': showSidebar }"
+  >
     <router-outlet></router-outlet>
   </main>
 </div>
