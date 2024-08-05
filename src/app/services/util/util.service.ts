@@ -16,6 +16,20 @@ import { TagService } from '../tags/tag.service';
 export class UtilService {
   constructor(private tagService: TagService) {}
 
+  formatDateToDayMonthYearWeekday(date: Date) {
+    const options: Intl.DateTimeFormatOptions = {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      weekday: 'short',
+    };
+    const formattedDate = date.toLocaleDateString('en-GB', options);
+    const [weekday, day, month, year] = formattedDate
+      .replace(',', '')
+      .split(' ');
+    return `${month} ${day} ${year} (${weekday})`;
+  }
+
   moneyToLineBarData(moneyData: Money[]): LineBarData[] {
     return moneyData.map((item: Money): LineBarData => {
       return {
