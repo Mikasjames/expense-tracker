@@ -1,0 +1,14 @@
+<div class="topbar">
+  <ng-container *ngFor="let item of topbarItems">
+    <div
+      (click)="item.action()"
+      [class]="
+        item.icon === 'flex-grow-spacer' ? 'flex-grow-spacer' : 'topbar-item'
+      "
+      [ngbTooltip]="item.label"
+      placement="bottom"
+    >
+      <i [class]="item.icon"></i>
+    </div>
+  </ng-container>
+</div>
