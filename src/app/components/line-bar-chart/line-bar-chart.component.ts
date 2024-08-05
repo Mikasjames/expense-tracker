@@ -24,7 +24,7 @@ export class LineBarChartComponent {
   @Input() percentChangeMessage = 'Recent change:';
   @Input() isIncome = false;
   @Input() type = 'line';
-  @Input() height = '200px';
+  @Input() height = '150px';
   percentChange = 0;
   isLoading = false;
 
@@ -110,6 +110,12 @@ export class LineBarChartComponent {
         },
       },
       show: false,
+    },
+    grid: {
+      bottom: '5%',
+      top: '5%',
+      left: 0,
+      right: 0,
     },
     yAxis: {
       type: 'value',
