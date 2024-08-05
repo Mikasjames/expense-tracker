@@ -10,6 +10,7 @@ import { TransactionFormComponent } from '../../components/transaction-form/tran
 import { LineBarData } from '../../models/chart.interface';
 import { LoaderComponent } from '../../components/loader/loader.component';
 import { TransactionTableComponent } from '../../components/transaction-table/transaction-table.component';
+import { combineLatest, finalize, tap } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -37,6 +38,7 @@ export class DashboardPageComponent {
   allTransactions: Transaction[] = [];
   incomeLineBarData: LineBarData[] = [];
   expenseLineBarData: LineBarData[] = [];
+  isLoading = true;
 
   constructor(
     private authService: AuthService,
@@ -50,43 +52,51 @@ export class DashboardPageComponent {
 
   ngOnInit() {
     this.allTransactions = [];
-    this.loadExpenseTransactions();
-    this.loadIncomeTransactions();
+    combineLatest([
+      this.transactionService.expenseTransactions$,
+      this.transactionService.incomeTransactions$,
+    ])
+      .pipe(
+        tap(() => {
+          setTimeout(() => {
+            this.isLoading = false;
+          }, 1000);
+        }),
+      )
+      .subscribe(
+        ([expenseTransactions, incomeTransactions]) => {
+          this.handleExpenseTransactions(expenseTransactions);
+          this.handleIncomeTransactions(incomeTransactions);
+        },
+        (error) => {
+          console.error('Error fetching transactions:', error);
+        },
+      );
   }
 
-  loadExpenseTransactions() {
-    this.transactionService.expenseTransactions$.subscribe(
-      (transactions) => {
-        this.expenses = transactions;
-        this.expenseLineBarData =
-          this.convertTransactionsToLineBarData(transactions);
-        this.calculateStatcardData(transactions, 1);
-        this.allTransactions = this.combineAndSortTransactions(
-          this.income,
-          this.expenses,
-        );
-      },
-      (error) => {
-        console.error('Error fetching expense transactions:', error);
-      },
+  handleExpenseTransactions(transactions: Transaction[]) {
+    if (transactions.length === 0) return;
+    console.log('transactions:', transactions);
+    this.expenses = transactions;
+    this.expenseLineBarData =
+      this.convertTransactionsToLineBarData(transactions);
+    this.calculateStatcardData(transactions, 1);
+    this.allTransactions = this.combineAndSortTransactions(
+      this.income,
+      this.expenses,
     );
   }
 
-  loadIncomeTransactions() {
-    this.transactionService.incomeTransactions$.subscribe(
-      (transactions) => {
-        this.income = transactions;
-        this.incomeLineBarData =
-          this.convertTransactionsToLineBarData(transactions);
-        this.calculateStatcardData(transactions, 0);
-        this.allTransactions = this.combineAndSortTransactions(
-          this.income,
-          this.expenses,
-        );
-      },
-      (error) => {
-        console.error('Error fetching income transactions:', error);
-      },
+  handleIncomeTransactions(transactions: Transaction[]) {
+    if (transactions.length === 0) return;
+    console.log('transactions:', transactions);
+    this.income = transactions;
+    this.incomeLineBarData =
+      this.convertTransactionsToLineBarData(transactions);
+    this.calculateStatcardData(transactions, 0);
+    this.allTransactions = this.combineAndSortTransactions(
+      this.income,
+      this.expenses,
     );
   }
 
@@ -111,6 +121,7 @@ export class DashboardPageComponent {
   }
 
   calculateNetIncome() {
+    if (this.income.length === 0 || this.expenses.length === 0) return;
     this.statCards[2].value = this.statCards[0].value - this.statCards[1].value;
     const firstIncome = this.income[0].amount;
     const firstExpense = this.expenses[0].amount;
