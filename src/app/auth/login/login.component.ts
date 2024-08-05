@@ -7,6 +7,7 @@ import { WaveComponent } from '../../components/wave/wave.component';
 import { PlatformService } from '../../services/platform/platform.service';
 import { LoaderComponent } from '../../components/loader/loader.component';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -45,8 +46,9 @@ export class LoginComponent {
     const rawForm = this.loginForm.getRawValue();
     this.auth.login(rawForm.email, rawForm.password).subscribe({
       next: () => this.router.navigateByUrl('/dashboard'),
-      error: (error) => {
-        this.error = error.code;
+      error: (error: HttpErrorResponse) => {
+        this.error = error.message;
+        this.isLoading = false;
       },
       complete: () => {
         this.isLoading = false;
