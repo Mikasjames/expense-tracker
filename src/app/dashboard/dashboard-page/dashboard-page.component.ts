@@ -62,7 +62,10 @@ export class DashboardPageComponent {
           this.convertTransactionsToLineBarData(transactions);
         this.statCards[1].value = this.aggregateTransactions(transactions);
         this.calculateNetIncome();
-        this.allTransactions = this.combineAndSortTransactions(this.income, this.expenses);
+        this.allTransactions = this.combineAndSortTransactions(
+          this.income,
+          this.expenses,
+        );
       },
       (error) => {
         console.error('Error fetching expense transactions:', error);
@@ -78,7 +81,10 @@ export class DashboardPageComponent {
           this.convertTransactionsToLineBarData(transactions);
         this.statCards[0].value = this.aggregateTransactions(transactions);
         this.calculateNetIncome();
-        this.allTransactions = this.combineAndSortTransactions(this.income, this.expenses);
+        this.allTransactions = this.combineAndSortTransactions(
+          this.income,
+          this.expenses,
+        );
       },
       (error) => {
         console.error('Error fetching income transactions:', error);
@@ -86,9 +92,14 @@ export class DashboardPageComponent {
     );
   }
 
-  combineAndSortTransactions(income: Transaction[], expenses: Transaction[]): Transaction[] {
+  combineAndSortTransactions(
+    income: Transaction[],
+    expenses: Transaction[],
+  ): Transaction[] {
     const combinedTransactions = [...income, ...expenses];
-    combinedTransactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    combinedTransactions.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    );
     return combinedTransactions;
   }
 
