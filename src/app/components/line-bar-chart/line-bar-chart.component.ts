@@ -80,6 +80,7 @@ export class LineBarChartComponent {
 
   options: EChartsOption = {
     tooltip: {
+      confine: true,
       trigger: 'axis',
       formatter: (params: any) => {
         params = params[0];
