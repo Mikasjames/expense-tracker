@@ -14,5 +14,13 @@
   [rowData]="rowData"
   [columnDefs]="colDefs"
   [gridOptions]="gridOptions"
+  (rowDoubleClicked)="onRowDoubleClicked($event)"
   (gridReady)="onGridReady($event)"
 />
+
+<ng-template #modalTemplate>
+  <app-transaction-form
+    [transactionType]="transactionType"
+    [selectedTransaction]="selectedTransaction"
+  ></app-transaction-form>
+</ng-template>

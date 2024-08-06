@@ -1,25 +1,35 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
   ColDef,
   GridOptions,
   GridApi,
   GridReadyEvent,
+  RowDoubleClickedEvent,
 } from 'ag-grid-community';
 import { Transaction } from '../../models/transaction.interface';
 import { UtilService } from '../../services/util/util.service';
 import { TagService } from '../../services/tags/tag.service';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { TransactionService } from '../../services/transactions/transaction.service';
+import { TransactionFormComponent } from '../transaction-form/transaction-form.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-transaction-table',
   standalone: true,
-  imports: [AgGridAngular, CommonModule, ReactiveFormsModule],
+  imports: [
+    AgGridAngular,
+    CommonModule,
+    ReactiveFormsModule,
+    TransactionFormComponent,
+  ],
   templateUrl: './transaction-table.component.html',
   styleUrl: './transaction-table.component.css',
 })
 export class TransactionTableComponent {
+  @ViewChild('modalTemplate') modalTemplate!: TransactionFormComponent;
   private gridApi!: GridApi;
   @Input() transactions: Transaction[] = [];
   @Input() showFilter = false;
@@ -41,10 +51,14 @@ export class TransactionTableComponent {
         : { backgroundColor: oddRow ? '#fce4e4' : '#fdf0f0' };
     },
   };
+  selectedTransaction: Transaction | null = null;
+  transactionType: 'income' | 'expense' = 'income';
 
   constructor(
     private utilService: UtilService,
     private tagService: TagService,
+    private transactionService: TransactionService,
+    private ngbModal: NgbModal,
   ) {}
 
   onGridReady(params: GridReadyEvent) {
@@ -58,8 +72,20 @@ export class TransactionTableComponent {
     });
   }
 
+  onRowDoubleClicked(event: RowDoubleClickedEvent<TransactionRowData>) {
+    if (event.data) {
+      const selectedTransaction = this.transactionService.getTransactionFromId(
+        event.data.id,
+        event.data.type === 'income' ? 'income' : 'expense',
+      );
+      this.selectedTransaction = selectedTransaction ?? null;
+      this.openModal(selectedTransaction ? selectedTransaction.type : 'income');
+    }
+  }
+
   transactionToRowData(transaction: Transaction[]): TransactionRowData[] {
     return transaction.map((transaction) => ({
+      id: transaction.id,
       date: this.utilService.formatDateToDayMonthYearWeekday(transaction.date),
       description: transaction.description,
       category: transaction.tagIds[0],
@@ -71,9 +97,18 @@ export class TransactionTableComponent {
   filterTable(text: string) {
     this.gridApi.setGridOption('quickFilterText', text);
   }
+
+  openModal(transactionType: 'income' | 'expense') {
+    this.transactionType = transactionType;
+    this.ngbModal.open(this.modalTemplate, {
+      centered: true,
+      fullscreen: 'sm',
+    });
+  }
 }
 
 interface TransactionRowData {
+  id: string;
   date: string;
   description: string;
   category: string;
