@@ -63,7 +63,6 @@ export class TransactionFormComponent implements OnInit {
         tagIds: [],
       });
     }
-    console.log(this.transactionForm.value);
   }
 
   formatDate(date: Date): string {
@@ -100,21 +99,22 @@ export class TransactionFormComponent implements OnInit {
         amount: formValue.amount ?? 0,
         type: formValue.type as 'income' | 'expense',
         description: formValue.description ?? '',
-        date: this.parseDate(formValue.date ?? ''), // Parse the date string to Date
+        date: this.parseDate(formValue.date ?? ''),
         tagIds: formValue.tagIds ?? [],
       };
 
       if (this.selectedTransaction) {
         // Update existing transaction
-        console.log('Updating transaction:', transaction);
-        // this.transactionService.updateTransaction(this.selectedTransaction.id, transaction).subscribe({
-        //   next: () => {
-        //     console.log('Transaction updated successfully');
-        //   },
-        //   error: (error) => {
-        //     console.error('Error updating transaction', error);
-        //   },
-        // });
+        this.transactionService
+          .updateTransaction(this.selectedTransaction.id, transaction)
+          .subscribe({
+            next: () => {
+              console.log('Transaction updated successfully');
+            },
+            error: (error) => {
+              console.error('Error updating transaction', error);
+            },
+          });
       } else {
         // Add new transaction
         this.transactionService.addTransaction(transaction).subscribe({

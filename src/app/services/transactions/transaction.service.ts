@@ -16,10 +16,12 @@ import {
   addDoc,
   collection,
   collectionData,
+  doc,
   Firestore,
   orderBy,
   query,
   Timestamp,
+  updateDoc,
 } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 
@@ -123,6 +125,19 @@ export class TransactionService {
       collection(this.fs, `transactions/${this.userId}/${transaction.type}`),
       transaction,
     );
+    return of(promise);
+  }
+
+  updateTransaction(id: string, transaction: TransactionForm) {
+    const docRef = doc(
+      this.fs,
+      `transactions/${this.userId}/${transaction.type}`,
+      id,
+    );
+    const promise = updateDoc(docRef, {
+      ...transaction,
+      date: Timestamp.fromDate(transaction.date),
+    });
     return of(promise);
   }
 }
