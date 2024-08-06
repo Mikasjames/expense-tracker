@@ -11,6 +11,7 @@ import { LineBarData } from '../../models/chart.interface';
 import { LoaderComponent } from '../../components/loader/loader.component';
 import { TransactionTableComponent } from '../../components/transaction-table/transaction-table.component';
 import { combineLatest, finalize, tap } from 'rxjs';
+import { TransactionFormButtonsComponent } from '../../components/transaction-form-buttons/transaction-form-buttons.component';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -22,6 +23,7 @@ import { combineLatest, finalize, tap } from 'rxjs';
     TransactionFormComponent,
     LoaderComponent,
     TransactionTableComponent,
+    TransactionFormButtonsComponent,
   ],
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.sass',
