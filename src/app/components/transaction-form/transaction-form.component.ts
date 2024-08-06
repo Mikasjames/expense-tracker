@@ -1,13 +1,11 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, SimpleChanges, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {
-  FormBuilder,
-  FormControl,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { TransactionForm } from '../../models/transaction.interface';
+import {
+  Transaction,
+  TransactionForm,
+} from '../../models/transaction.interface';
 import { TransactionService } from '../../services/transactions/transaction.service';
 import { TagInputComponent } from '../tag-input/tag-input.component';
 
@@ -18,18 +16,16 @@ import { TagInputComponent } from '../tag-input/tag-input.component';
   templateUrl: './transaction-form.component.html',
   styleUrl: './transaction-form.component.sass',
 })
-export class TransactionFormComponent {
-  @ViewChild('transactionModal', { static: true }) transactionModal:
-    | TemplateRef<unknown>
-    | undefined;
+export class TransactionFormComponent implements OnInit {
   transactionForm = this.fb.group({
-    amount: [null, [Validators.required, Validators.min(0.01)]],
+    amount: [0, [Validators.required, Validators.min(0.01)]],
     type: ['income' as 'income' | 'expense', Validators.required],
     description: ['', Validators.required],
-    date: [new Date(), Validators.required],
+    date: ['', Validators.required], // Changed to string
     tagIds: [[] as string[]],
   });
-  transactionType: 'income' | 'expense' = 'income';
+  @Input() transactionType: 'income' | 'expense' = 'income';
+  @Input() selectedTransaction: Transaction | null = null;
 
   constructor(
     private ngbModal: NgbModal,
@@ -37,15 +33,45 @@ export class TransactionFormComponent {
     private transactionService: TransactionService,
   ) {}
 
-  openModal(transactionType: 'income' | 'expense') {
-    this.ngbModal.open(this.transactionModal, {
-      centered: true,
-      fullscreen: 'sm',
-    });
-    (this.transactionForm.get('type') as FormControl<string>).setValue(
-      transactionType,
-    );
-    this.transactionType = transactionType;
+  ngOnInit() {
+    this.initializeForm();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes && changes['transactionType']) {
+      this.transactionType = changes['transactionType'].currentValue;
+      this.transactionForm.get('type')?.setValue(this.transactionType);
+    }
+    if (changes && changes['selectedTransaction']) {
+      this.selectedTransaction = changes['selectedTransaction'].currentValue;
+      this.initializeForm();
+    }
+  }
+
+  initializeForm() {
+    if (this.selectedTransaction) {
+      this.transactionForm.patchValue({
+        ...this.selectedTransaction,
+        date: this.formatDate(new Date(this.selectedTransaction.date)),
+      });
+    } else {
+      this.transactionForm.patchValue({
+        amount: null,
+        type: this.transactionType,
+        description: '',
+        date: this.formatDate(new Date()),
+        tagIds: [],
+      });
+    }
+    console.log(this.transactionForm.value);
+  }
+
+  formatDate(date: Date): string {
+    return date.toISOString().split('T')[0];
+  }
+
+  parseDate(dateString: string): Date {
+    return new Date(dateString);
   }
 
   closeModal() {
@@ -71,24 +97,42 @@ export class TransactionFormComponent {
     if (this.transactionForm.valid) {
       const formValue = this.transactionForm.value;
       const transaction: TransactionForm = {
-        amount: formValue.amount ?? 0, // Provide a default value
+        amount: formValue.amount ?? 0,
         type: formValue.type as 'income' | 'expense',
         description: formValue.description ?? '',
-        date: new Date(formValue.date ?? new Date()), // Convert date string to Date object
+        date: this.parseDate(formValue.date ?? ''), // Parse the date string to Date
         tagIds: formValue.tagIds ?? [],
       };
-      this.transactionService.addTransaction(transaction).subscribe({
-        next: () => {
-          console.log('Transaction added successfully');
-        },
-        error: (error) => {
-          console.error('Error adding transaction', error);
-        },
-      });
+
+      if (this.selectedTransaction) {
+        // Update existing transaction
+        console.log('Updating transaction:', transaction);
+        // this.transactionService.updateTransaction(this.selectedTransaction.id, transaction).subscribe({
+        //   next: () => {
+        //     console.log('Transaction updated successfully');
+        //   },
+        //   error: (error) => {
+        //     console.error('Error updating transaction', error);
+        //   },
+        // });
+      } else {
+        // Add new transaction
+        this.transactionService.addTransaction(transaction).subscribe({
+          next: () => {
+            console.log('Transaction added successfully');
+          },
+          error: (error) => {
+            console.error('Error adding transaction', error);
+          },
+        });
+      }
       this.closeModal();
     } else {
-      // Handle invalid form
       console.error('Form is invalid');
     }
+  }
+
+  get isPost() {
+    return this.selectedTransaction === null;
   }
 }

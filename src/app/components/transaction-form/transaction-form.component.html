@@ -1,103 +1,82 @@
-<div class="btn-group">
-  <button
-    (click)="openModal('income')"
-    type="button"
-    class="btn btn-success btn-sm"
-  >
-    <i class="bi bi-plus-circle-fill"></i>
-  </button>
-  <button
-    (click)="openModal('expense')"
-    type="button"
-    class="btn btn-danger btn-sm"
-  >
-    <i class="bi bi-dash-circle-fill"></i>
-  </button>
-</div>
-
-<ng-template #transactionModal>
-  <div
-    class="modal-content d-flex align-items-center justify-content-center p-4"
-  >
-    <div class="user-select-none w-100">
-      <i role="button" (click)="closeModal()" class="bi bi-x-lg float-end"></i>
-      <h4 class="modal-title fw-bold" id="modal-title">
-        {{ transactionType | titlecase }}
-      </h4>
-      <p class="text-muted">Enter your {{ transactionType }} details below.</p>
-      <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" class="p-3">
-        <div class="form-row mb-3">
-          <label for="amount" class="form-label">Amount</label>
-          <input
-            type="number"
-            class="form-control"
-            id="amount"
-            formControlName="amount"
-            placeholder="Enter amount"
-          />
-          <div
-            *ngIf="
-              transactionForm.controls['amount'].invalid &&
-              transactionForm.controls['amount'].touched
-            "
-            class="text-danger"
-          >
-            Amount is required and must be greater than 0.
-          </div>
+<div class="modal-content d-flex align-items-center justify-content-center p-4">
+  <div class="user-select-none w-100">
+    <i role="button" (click)="closeModal()" class="bi bi-x-lg float-end"></i>
+    <h4 class="modal-title fw-bold" id="modal-title">
+      {{ transactionType | titlecase }}
+    </h4>
+    <p class="text-muted">Enter your {{ transactionType }} details below.</p>
+    <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" class="p-3">
+      <div class="form-row mb-3">
+        <label for="amount" class="form-label">Amount</label>
+        <input
+          type="number"
+          class="form-control"
+          id="amount"
+          formControlName="amount"
+          placeholder="Enter amount"
+        />
+        <div
+          *ngIf="
+            transactionForm.controls['amount'].invalid &&
+            transactionForm.controls['amount'].touched
+          "
+          class="text-danger"
+        >
+          Amount is required and must be greater than 0.
         </div>
-        <div class="form-row mb-3">
-          <label for="description" class="form-label">Description</label>
-          <textarea
-            class="form-control"
-            id="description"
-            formControlName="description"
-            placeholder="Enter description"
-            rows="3"
-          ></textarea>
-          <div
-            *ngIf="
-              transactionForm.controls['description'].invalid &&
-              transactionForm.controls['description'].touched
-            "
-            class="text-danger"
-          >
-            Description is required.
-          </div>
+      </div>
+      <div class="form-row mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea
+          class="form-control"
+          id="description"
+          formControlName="description"
+          placeholder="Enter description"
+          rows="3"
+        ></textarea>
+        <div
+          *ngIf="
+            transactionForm.controls['description'].invalid &&
+            transactionForm.controls['description'].touched
+          "
+          class="text-danger"
+        >
+          Description is required.
         </div>
-        <div class="form-row mb-3">
-          <label for="date" class="form-label">Date</label>
-          <input
-            type="date"
-            class="form-control"
-            id="date"
-            formControlName="date"
-          />
-          <div
-            *ngIf="
-              transactionForm.controls['date'].invalid &&
-              transactionForm.controls['date'].touched
-            "
-            class="text-danger"
-          >
-            Date is required.
-          </div>
+      </div>
+      <div class="form-row mb-3">
+        <label for="date" class="form-label">Date</label>
+        <input
+          type="date"
+          class="form-control"
+          id="date"
+          formControlName="date"
+        />
+        <div
+          *ngIf="
+            transactionForm.controls['date'].invalid &&
+            transactionForm.controls['date'].touched
+          "
+          class="text-danger"
+        >
+          Date is required.
         </div>
-        <div class="form-row mb-3">
-          <app-tag-input
-            [type]="transactionType"
-            (tagAdded)="updateTransactionTag($event)"
-          ></app-tag-input>
-        </div>
-        <div class="d-flex justify-content-end">
-          <button
-            type="submit"
-            class="btn btn-warning"
-            [disabled]="transactionForm.invalid"
-          >
-            Submit
-          </button>
-        </div>
-      </form>
-    </div>
+      </div>
+      <div class="form-row mb-3">
+        <app-tag-input
+          [type]="transactionType"
+          (tagAdded)="updateTransactionTag($event)"
+        ></app-tag-input>
+      </div>
+      <div class="d-flex justify-content-end">
+        <button
+          type="submit"
+          class="btn btn-warning"
+          [disabled]="transactionForm.invalid"
+        >
+          {{ isPost ? "Submit" : "Update" }}
+        </button>
+      </div>
+    </form>
   </div>
-</ng-template>
+</div>
