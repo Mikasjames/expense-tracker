@@ -156,7 +156,10 @@ export class UtilService {
           isIncome ? 'income' : 'expense',
         ).name;
         const pointsString = tag.points
-          .map((point: TitleValue) => `${point.title}: ₱${point.value}`)
+          .map(
+            (point: TitleValue) =>
+              `${point.title}: ₱${point.value.toLocaleString()}`,
+          )
           .join('<br/>');
         return `<small><pr><code>${tagName}</code></pr></small><br/>${pointsString}`;
       })

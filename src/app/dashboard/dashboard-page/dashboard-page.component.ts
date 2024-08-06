@@ -136,9 +136,8 @@ export class DashboardPageComponent {
   }
 
   aggregateTransactions(transactions: Transaction[]): number {
-    return transactions.reduce(
-      (acc, transaction) => acc + transaction.amount,
-      0,
+    return Math.round(
+      transactions.reduce((acc, transaction) => acc + transaction.amount, 0),
     );
   }
 
@@ -151,7 +150,7 @@ export class DashboardPageComponent {
       return {
         tag: transaction.tagIds[0],
         value: [transaction.date.getTime(), transaction.amount],
-        title: transaction.description,
+        title: transaction.title,
       };
     });
   }

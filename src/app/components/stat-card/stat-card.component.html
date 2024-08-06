@@ -1,6 +1,6 @@
 <div class="bg-light border border-primary rounded-4 p-4">
   <h3 class="text-muted small">{{ title }}</h3>
-  <p class="h2 fw-bold">{{ value }}</p>
+  <p class="h2 fw-bold">{{ value.toLocaleString() }}</p>
   <p [class]="percentChangeClass" class="small mb-0">
     {{ roundedPercentChange }}%
   </p>
