@@ -24,19 +24,19 @@
           </div>
         </div>
         <app-line-bar-chart
-          title="Total Outs"
-          percentChangeMessage="Previous dip:"
-          [data]="expenseLineBarData"
-          [isIncome]="false"
-        ></app-line-bar-chart>
-      </div>
-      <div class="row col-12 col-lg-6 mt-3 mt-lg-0 mx-lg-2">
-        <app-line-bar-chart
           class="mb-3"
           title="Total Ins"
           percentChangeMessage="Previous gains:"
           [data]="incomeLineBarData"
           [isIncome]="true"
+        ></app-line-bar-chart>
+      </div>
+      <div class="row col-12 col-lg-6 mt-3 mt-lg-0 mx-lg-2">
+        <app-line-bar-chart
+          title="Total Outs"
+          percentChangeMessage="Previous dip:"
+          [data]="expenseLineBarData"
+          [isIncome]="false"
         ></app-line-bar-chart>
         <app-transaction-table
           [transactions]="allTransactions"
