@@ -1,19 +1,29 @@
 import { Component, Input } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef, RowClassRules, GridOptions } from 'ag-grid-community';
+import {
+  ColDef,
+  GridOptions,
+  GridApi,
+  GridReadyEvent,
+} from 'ag-grid-community';
 import { Transaction } from '../../models/transaction.interface';
 import { UtilService } from '../../services/util/util.service';
 import { TagService } from '../../services/tags/tag.service';
+import { CommonModule } from '@angular/common';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-transaction-table',
   standalone: true,
-  imports: [AgGridAngular],
+  imports: [AgGridAngular, CommonModule, ReactiveFormsModule],
   templateUrl: './transaction-table.component.html',
   styleUrl: './transaction-table.component.css',
 })
 export class TransactionTableComponent {
+  private gridApi!: GridApi;
   @Input() transactions: Transaction[] = [];
+  @Input() showFilter = false;
+  filterText = new FormControl('');
   rowData: TransactionRowData[] = [];
   colDefs: ColDef[] = [
     { field: 'description' },
@@ -37,8 +47,15 @@ export class TransactionTableComponent {
     private tagService: TagService,
   ) {}
 
+  onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+  }
+
   ngOnChanges() {
     this.rowData = this.transactionToRowData(this.transactions);
+    this.filterText.valueChanges.subscribe((value) => {
+      this.filterTable(value ?? '');
+    });
   }
 
   transactionToRowData(transaction: Transaction[]): TransactionRowData[] {
@@ -49,6 +66,10 @@ export class TransactionTableComponent {
       amount: transaction.amount,
       type: transaction.type,
     }));
+  }
+
+  filterTable(text: string) {
+    this.gridApi.setGridOption('quickFilterText', text);
   }
 }
 

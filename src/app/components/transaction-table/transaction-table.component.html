@@ -1,7 +1,18 @@
+<div *ngIf="showFilter">
+  <input
+    type="text"
+    class="filter-box mb-2"
+    id="filter-text-box"
+    placeholder="Filter..."
+    [formControl]="filterText"
+  />
+</div>
+
 <ag-grid-angular
   class="ag-theme-alpine"
   style="height: 300px"
   [rowData]="rowData"
   [columnDefs]="colDefs"
   [gridOptions]="gridOptions"
+  (gridReady)="onGridReady($event)"
 />
