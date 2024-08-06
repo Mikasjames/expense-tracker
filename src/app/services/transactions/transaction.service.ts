@@ -60,6 +60,14 @@ export class TransactionService {
       });
   }
 
+  getTransactionFromId(transactionId: string, type: 'income' | 'expense') {
+    return (
+      type === 'income'
+        ? this.incomeTransactionsSubject
+        : this.expenseTransactionsSubject
+    ).value.find((transaction) => transaction.id === transactionId);
+  }
+
   getAllTransactions(): Observable<{
     incomeTransactions: Transaction[];
     expenseTransactions: Transaction[];
