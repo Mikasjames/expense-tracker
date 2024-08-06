@@ -38,11 +38,15 @@ export class TransactionTableComponent {
   filterText = new FormControl('');
   rowData: TransactionRowData[] = [];
   colDefs: ColDef[] = [
-    { field: 'description' },
-    { field: 'amount' },
+    { field: 'title' },
+    {
+      field: 'amount',
+      valueFormatter: (params) => `${params.value.toLocaleString()}`,
+    },
     { field: 'date' },
-    { field: 'type' },
     { field: 'category' },
+    { field: 'description' },
+    { field: 'type' },
   ];
   gridOptions: GridOptions = {
     getRowStyle: (params) => {
@@ -96,6 +100,7 @@ export class TransactionTableComponent {
         .pipe(
           map((tag) => ({
             id: transaction.id,
+            title: transaction.title,
             date: this.utilService.formatDateToDayMonthYearWeekday(
               transaction.date,
             ),
@@ -125,6 +130,7 @@ export class TransactionTableComponent {
 
 interface TransactionRowData {
   id: string;
+  title: string;
   date: string;
   description: string;
   category: string;

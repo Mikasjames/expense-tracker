@@ -25,9 +25,10 @@ import { TagInputComponent } from '../tag-input/tag-input.component';
 export class TransactionFormComponent implements OnInit {
   @ViewChild('deleteConfirmationModal') deleteConfirmationModal!: NgbModal;
   transactionForm = this.fb.group({
-    amount: [0, [Validators.required, Validators.min(0.01)]],
+    title: ['', Validators.required],
+    amount: [0, [Validators.required, Validators.min(0)]],
     type: ['income' as 'income' | 'expense', Validators.required],
-    description: ['', Validators.required],
+    description: [''],
     date: ['', Validators.required], // Changed to string
     tagIds: [[] as string[]],
   });
@@ -130,6 +131,7 @@ export class TransactionFormComponent implements OnInit {
     if (this.transactionForm.valid) {
       const formValue = this.transactionForm.value;
       const transaction: TransactionForm = {
+        title: formValue.title ?? '',
         amount: formValue.amount ?? 0,
         type: formValue.type as 'income' | 'expense',
         description: formValue.description ?? '',

@@ -7,6 +7,25 @@
     <p class="text-muted">Enter your {{ transactionType }} details below.</p>
     <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" class="p-3">
       <div class="form-row mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input
+          type="text"
+          class="form-control"
+          id="title"
+          formControlName="title"
+          placeholder="Enter title"
+        />
+        <div
+          *ngIf="
+            transactionForm.controls['title'].invalid &&
+            transactionForm.controls['title'].touched
+          "
+          class="text-danger"
+        >
+          Title is required.
+        </div>
+      </div>
+      <div class="form-row mb-3">
         <label for="amount" class="form-label">Amount</label>
         <input
           type="number"
@@ -22,7 +41,7 @@
           "
           class="text-danger"
         >
-          Amount is required and must be greater than 0.
+          Amount is required and must be greater than or equal to 0.
         </div>
       </div>
       <div class="form-row mb-3">
@@ -34,15 +53,6 @@
           placeholder="Enter description"
           rows="3"
         ></textarea>
-        <div
-          *ngIf="
-            transactionForm.controls['description'].invalid &&
-            transactionForm.controls['description'].touched
-          "
-          class="text-danger"
-        >
-          Description is required.
-        </div>
       </div>
       <div class="form-row mb-3">
         <label for="date" class="form-label">Date</label>
@@ -79,7 +89,7 @@
         </button>
       </div>
     </form>
-    <div class="modal-footer d-flex justify-content-center">
+    <div *ngIf="!isPost" class="modal-footer d-flex justify-content-center">
       <span role="button" (click)="deleteConfirmation()" class="text-danger">
         <i class="bi bi-trash"></i>
         Delete Transaction

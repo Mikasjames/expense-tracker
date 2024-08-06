@@ -1,4 +1,5 @@
 export interface TransactionForm {
+  title: string;
   amount: number;
   type: 'income' | 'expense';
   description: string;
