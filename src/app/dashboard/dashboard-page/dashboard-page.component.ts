@@ -31,9 +31,9 @@ import { TransactionFormButtonsComponent } from '../../components/transaction-fo
 export class DashboardPageComponent {
   userInfo = {} as UserInterface;
   statCards = [
-    { title: 'Income', value: 0, percentChange: 0, isIncome: true },
-    { title: 'Expense', value: 0, percentChange: 0, isIncome: false },
-    { title: 'Net', value: 0, percentChange: 0, isIncome: true },
+    { title: 'In', value: 0, percentChange: 0, isIncome: true },
+    { title: 'Out', value: 0, percentChange: 0, isIncome: false },
+    { title: 'On Hand', value: 0, percentChange: 0, isIncome: true },
   ];
   income: Transaction[] = [];
   expenses: Transaction[] = [];
