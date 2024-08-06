@@ -1,6 +1,6 @@
 {
-  "name": "Expense Tracker",
-  "short_name": "ET",
+  "name": "In-N-Outify",
+  "short_name": "In-N-Outify",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",
