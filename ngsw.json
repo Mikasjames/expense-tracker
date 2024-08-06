@@ -1,0 +1,79 @@
+{
+  "configVersion": 1,
+  "timestamp": 1722929537417,
+  "index": "https://mikasjames.github.io/expense-tracker/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "https://mikasjames.github.io/expense-tracker/chunk-CC4FQ6XH.js",
+        "https://mikasjames.github.io/expense-tracker/chunk-FO65GQC2.js",
+        "https://mikasjames.github.io/expense-tracker/chunk-K74VG7TY.js",
+        "https://mikasjames.github.io/expense-tracker/chunk-Z535KTGD.js",
+        "https://mikasjames.github.io/expense-tracker/favicon.ico",
+        "https://mikasjames.github.io/expense-tracker/index.html",
+        "https://mikasjames.github.io/expense-tracker/main-LQ3EKZBU.js",
+        "https://mikasjames.github.io/expense-tracker/manifest.webmanifest",
+        "https://mikasjames.github.io/expense-tracker/polyfills-GTEVC5Y5.js",
+        "https://mikasjames.github.io/expense-tracker/styles-PZEILVZS.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "https://mikasjames.github.io/expense-tracker/assets/icons/icon512_maskable.png",
+        "https://mikasjames.github.io/expense-tracker/assets/icons/icon512_rounded.png",
+        "https://mikasjames.github.io/expense-tracker/media/bootstrap-icons-OCU552PF.woff",
+        "https://mikasjames.github.io/expense-tracker/media/bootstrap-icons-X6UQXWUS.woff2"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "https://mikasjames.github.io/expense-tracker/assets/icons/icon512_maskable.png": "ae9d03ad5a82803b13fcdc5a15d83f1f4b7c33a6",
+    "https://mikasjames.github.io/expense-tracker/assets/icons/icon512_rounded.png": "aaf3ad29fffcf35322e542042522d9b32aabc28a",
+    "https://mikasjames.github.io/expense-tracker/chunk-CC4FQ6XH.js": "51846fcf3b15a1bdf6815a0bdfeece59cf3ca215",
+    "https://mikasjames.github.io/expense-tracker/chunk-FO65GQC2.js": "ea91cdb7f8688931d27da89cd1df28abcda4780c",
+    "https://mikasjames.github.io/expense-tracker/chunk-K74VG7TY.js": "d94e3a3600b4a5d57164d80b4504fa1438216aa7",
+    "https://mikasjames.github.io/expense-tracker/chunk-Z535KTGD.js": "191f6551f56400edb09e07890f774a730f5ed691",
+    "https://mikasjames.github.io/expense-tracker/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
+    "https://mikasjames.github.io/expense-tracker/index.html": "abeb165712d469e455cb9bb6bf0124cc8933865d",
+    "https://mikasjames.github.io/expense-tracker/main-LQ3EKZBU.js": "df43826d2e290a4083cf85bd3627ba5198eaae21",
+    "https://mikasjames.github.io/expense-tracker/manifest.webmanifest": "b7a62048baaf45d895f206fdc75c2afe63e21fbd",
+    "https://mikasjames.github.io/expense-tracker/media/bootstrap-icons-OCU552PF.woff": "d5831fd39baf13aff7626e483b9a089730f18604",
+    "https://mikasjames.github.io/expense-tracker/media/bootstrap-icons-X6UQXWUS.woff2": "020c3c6f9280a315e8425d7f92e15bcd0cdda1b2",
+    "https://mikasjames.github.io/expense-tracker/polyfills-GTEVC5Y5.js": "5edc7aa14a6eccd1ac02fa19901db7032d7cd1be",
+    "https://mikasjames.github.io/expense-tracker/styles-PZEILVZS.css": "c059c570d8a97180d2f143d83a429ed3e71902b8"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
