@@ -48,7 +48,16 @@ export class TagService {
       });
   }
 
-  getTagFromId(tagId: string, type: 'income' | 'expense'): Tag {
+  getTagFromId(tagId: string, type: 'income' | 'expense') {
+    return (type === 'income' ? this.incomeTags$ : this.expenseTags$).pipe(
+      switchMap((tags) => {
+        const tag = tags.find((tag) => tag.id === tagId);
+        return of(tag || { id: '', name: '', type: type });
+      }),
+    );
+  }
+
+  synchronousGetTagFromId(tagId: string, type: 'income' | 'expense') {
     const tags =
       type === 'income' ? this.incomeTags.value : this.expenseTags.value;
     const tag = tags.find((tag) => tag.id === tagId);

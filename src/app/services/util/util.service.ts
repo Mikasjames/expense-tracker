@@ -151,7 +151,7 @@ export class UtilService {
   ): string {
     return Object.values(sortedPointsByTags)
       .map((tag: { tag: string; points: TitleValue[] }) => {
-        const tagName = this.tagService.getTagFromId(
+        const tagName = this.tagService.synchronousGetTagFromId(
           tag.tag,
           isIncome ? 'income' : 'expense',
         ).name;

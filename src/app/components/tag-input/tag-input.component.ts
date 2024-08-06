@@ -42,7 +42,9 @@ export class TagInputComponent implements OnInit {
       this.type === 'income' ? this.incomeTags : this.expenseTags;
     if (this.tagId === null) return;
     this.removeTagFromSuggestions(this.tagId);
-    this.selectedTag = this.tagService.getTagFromId(this.tagId, this.type);
+    this.tagService.getTagFromId(this.tagId, this.type).subscribe((tag) => {
+      this.selectedTag = tag;
+    });
   }
 
   filterSuggestions(query: string) {
@@ -69,6 +71,10 @@ export class TagInputComponent implements OnInit {
         console.log('Tag added successfully');
         this.tagAdded.emit(tagId);
         this.tagForm.setValue('');
+        this.selectedTag = this.tagService.synchronousGetTagFromId(
+          tagId,
+          this.type,
+        );
         this.removeTagFromSuggestions(tagId);
       },
       (error) => {

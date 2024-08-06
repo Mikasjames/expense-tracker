@@ -64,6 +64,7 @@
       </div>
       <div class="form-row mb-3">
         <app-tag-input
+          [tagId]="selectedTransaction?.tagIds?.[0] || null"
           [type]="transactionType"
           (tagAdded)="updateTransactionTag($event)"
         ></app-tag-input>

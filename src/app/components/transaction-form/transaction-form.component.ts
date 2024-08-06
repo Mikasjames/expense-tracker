@@ -123,12 +123,7 @@ export class TransactionFormComponent implements OnInit {
       this.transactionForm.get('tagIds')?.setValue([]);
       return;
     }
-    const tagIds = this.transactionForm.get('tagIds')?.value as string[] | null;
-    if (!tagIds) return;
-    const updatedTagIds = tagIds.includes(tagId)
-      ? tagIds.filter((id) => id !== tagId)
-      : [...tagIds, tagId];
-    this.transactionForm.get('tagIds')?.setValue(updatedTagIds);
+    this.transactionForm.get('tagIds')?.setValue([tagId]);
   }
 
   onSubmit() {

@@ -15,6 +15,8 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { TransactionService } from '../../services/transactions/transaction.service';
 import { TransactionFormComponent } from '../transaction-form/transaction-form.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-transaction-table',
@@ -66,9 +68,11 @@ export class TransactionTableComponent {
   }
 
   ngOnChanges() {
-    this.rowData = this.transactionToRowData(this.transactions);
-    this.filterText.valueChanges.subscribe((value) => {
-      this.filterTable(value ?? '');
+    this.transactionToRowData(this.transactions).subscribe((rowData) => {
+      this.rowData = rowData;
+      this.filterText.valueChanges.subscribe((value) => {
+        this.filterTable(value ?? '');
+      });
     });
   }
 
@@ -83,15 +87,27 @@ export class TransactionTableComponent {
     }
   }
 
-  transactionToRowData(transaction: Transaction[]): TransactionRowData[] {
-    return transaction.map((transaction) => ({
-      id: transaction.id,
-      date: this.utilService.formatDateToDayMonthYearWeekday(transaction.date),
-      description: transaction.description,
-      category: transaction.tagIds[0],
-      amount: transaction.amount,
-      type: transaction.type,
-    }));
+  transactionToRowData(
+    transactions: Transaction[],
+  ): Observable<TransactionRowData[]> {
+    const rowDataObservables = transactions.map((transaction) =>
+      this.tagService
+        .getTagFromId(transaction.tagIds[0], transaction.type)
+        .pipe(
+          map((tag) => ({
+            id: transaction.id,
+            date: this.utilService.formatDateToDayMonthYearWeekday(
+              transaction.date,
+            ),
+            description: transaction.description,
+            category: tag.name,
+            amount: transaction.amount,
+            type: transaction.type,
+          })),
+        ),
+    );
+
+    return combineLatest(rowDataObservables);
   }
 
   filterTable(text: string) {
