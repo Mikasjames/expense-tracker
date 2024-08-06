@@ -15,7 +15,7 @@ export class TopbarComponent {
   @Input() showSidebar = false;
   @Input() topbarItems: ToolBarContent[] = [
     {
-      label: 'Show Options',
+      label: '',
       icon: 'bi bi-three-dots-vertical',
       action: () => {
         this.showSidebar = !this.showSidebar;
