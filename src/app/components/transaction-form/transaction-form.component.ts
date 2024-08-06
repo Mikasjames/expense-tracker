@@ -1,5 +1,11 @@
-import { Component, Input, SimpleChanges, OnInit } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {
+  Component,
+  Input,
+  SimpleChanges,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import {
@@ -17,6 +23,7 @@ import { TagInputComponent } from '../tag-input/tag-input.component';
   styleUrl: './transaction-form.component.sass',
 })
 export class TransactionFormComponent implements OnInit {
+  @ViewChild('deleteConfirmationModal') deleteConfirmationModal!: NgbModal;
   transactionForm = this.fb.group({
     amount: [0, [Validators.required, Validators.min(0.01)]],
     type: ['income' as 'income' | 'expense', Validators.required],
@@ -26,6 +33,7 @@ export class TransactionFormComponent implements OnInit {
   });
   @Input() transactionType: 'income' | 'expense' = 'income';
   @Input() selectedTransaction: Transaction | null = null;
+  deleteConfirmationModalReference!: NgbModalRef;
 
   constructor(
     private ngbModal: NgbModal,
@@ -67,6 +75,37 @@ export class TransactionFormComponent implements OnInit {
 
   formatDate(date: Date): string {
     return date.toISOString().split('T')[0];
+  }
+
+  deleteConfirmation() {
+    this.deleteConfirmationModalReference = this.ngbModal.open(
+      this.deleteConfirmationModal,
+      {
+        centered: true,
+        backdrop: true,
+        size: 'sm',
+      },
+    );
+  }
+
+  closeDeleteConfirmation() {
+    this.deleteConfirmationModalReference.close();
+  }
+
+  deleteTransaction() {
+    if (this.selectedTransaction) {
+      this.transactionService
+        .deleteTransaction(this.selectedTransaction)
+        .subscribe({
+          next: () => {
+            console.log('Transaction deleted successfully');
+          },
+          error: (error) => {
+            console.error('Error deleting transaction', error);
+          },
+        });
+    }
+    this.closeModal();
   }
 
   parseDate(dateString: string): Date {

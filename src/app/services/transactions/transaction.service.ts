@@ -16,6 +16,7 @@ import {
   addDoc,
   collection,
   collectionData,
+  deleteDoc,
   doc,
   Firestore,
   orderBy,
@@ -139,5 +140,14 @@ export class TransactionService {
       date: Timestamp.fromDate(transaction.date),
     });
     return of(promise);
+  }
+
+  deleteTransaction(transaction: Transaction) {
+    const docRef = doc(
+      this.fs,
+      `transactions/${this.userId}/${transaction.type}`,
+      transaction.id,
+    );
+    return of(deleteDoc(docRef));
   }
 }

@@ -2,7 +2,7 @@
   <div class="user-select-none w-100">
     <i role="button" (click)="closeModal()" class="bi bi-x-lg float-end"></i>
     <h4 class="modal-title fw-bold" id="modal-title">
-      {{ transactionType | titlecase }}
+      {{ (isPost ? transactionType : "Update Transaction") | titlecase }}
     </h4>
     <p class="text-muted">Enter your {{ transactionType }} details below.</p>
     <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" class="p-3">
@@ -78,5 +78,45 @@
         </button>
       </div>
     </form>
+    <div class="modal-footer d-flex justify-content-center">
+      <span role="button" (click)="deleteConfirmation()" class="text-danger">
+        <i class="bi bi-trash"></i>
+        Delete Transaction
+      </span>
+    </div>
   </div>
 </div>
+
+<ng-template #deleteConfirmationModal>
+  <div
+    class="modal-content d-flex align-items-center justify-content-center p-4"
+  >
+    <div class="user-select-none w-100">
+      <i
+        role="button"
+        (click)="closeDeleteConfirmation()"
+        class="bi bi-x-lg float-end"
+      ></i>
+      <h4 class="modal-title fw-bold">Delete Confirmation</h4>
+      <p class="text-muted mb-3">
+        Are you sure you want to delete this transaction?
+      </p>
+      <div class="d-flex justify-content-center">
+        <button
+          type="button"
+          class="bg-danger text-white border-0 rounded-3 col-5"
+          (click)="deleteTransaction()"
+        >
+          Delete
+        </button>
+        <button
+          type="button"
+          class="col-5 bg-white rounded-3 offset-2 border-1"
+          (click)="closeDeleteConfirmation()"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
