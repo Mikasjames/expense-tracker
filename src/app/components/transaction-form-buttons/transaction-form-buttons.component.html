@@ -1,0 +1,22 @@
+<div class="btn-group">
+  <button
+    (click)="openModal('income')"
+    type="button"
+    class="btn btn-success btn-sm"
+  >
+    <i class="bi bi-plus-circle-fill"></i>
+  </button>
+  <button
+    (click)="openModal('expense')"
+    type="button"
+    class="btn btn-danger btn-sm"
+  >
+    <i class="bi bi-dash-circle-fill"></i>
+  </button>
+</div>
+
+<ng-template #modalTemplate>
+  <app-transaction-form
+    [transactionType]="transactionType"
+  ></app-transaction-form>
+</ng-template>
