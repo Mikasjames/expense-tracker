@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1722988472680,
+  "timestamp": 1723003830330,
   "index": "https://mikasjames.github.io/expense-tracker/index.html",
   "assetGroups": [
     {
@@ -17,10 +17,10 @@
         "https://mikasjames.github.io/expense-tracker/chunk-Z535KTGD.js",
         "https://mikasjames.github.io/expense-tracker/favicon.ico",
         "https://mikasjames.github.io/expense-tracker/index.html",
-        "https://mikasjames.github.io/expense-tracker/main-NYXK5VB6.js",
+        "https://mikasjames.github.io/expense-tracker/main-MTI3LPVN.js",
         "https://mikasjames.github.io/expense-tracker/manifest.webmanifest",
         "https://mikasjames.github.io/expense-tracker/polyfills-GTEVC5Y5.js",
-        "https://mikasjames.github.io/expense-tracker/styles-PZEILVZS.css"
+        "https://mikasjames.github.io/expense-tracker/styles-AGPKHCE2.css"
       ],
       "patterns": []
     },
@@ -49,13 +49,13 @@
     "https://mikasjames.github.io/expense-tracker/chunk-K74VG7TY.js": "d94e3a3600b4a5d57164d80b4504fa1438216aa7",
     "https://mikasjames.github.io/expense-tracker/chunk-Z535KTGD.js": "191f6551f56400edb09e07890f774a730f5ed691",
     "https://mikasjames.github.io/expense-tracker/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
-    "https://mikasjames.github.io/expense-tracker/index.html": "9aba1a9d0d4ae050375cc8c439a3942b92444b08",
-    "https://mikasjames.github.io/expense-tracker/main-NYXK5VB6.js": "eea8d64aa73bc47d37a254f309c09e14012b90f1",
+    "https://mikasjames.github.io/expense-tracker/index.html": "f870db5b6b4fb6b27ab34ca2c231ea096be8f81d",
+    "https://mikasjames.github.io/expense-tracker/main-MTI3LPVN.js": "d849140d514f238c925da360aba85b9e7dfd60e7",
     "https://mikasjames.github.io/expense-tracker/manifest.webmanifest": "f0c98285d836f65e28d05ef8497bb2219c4f4de4",
     "https://mikasjames.github.io/expense-tracker/media/bootstrap-icons-OCU552PF.woff": "d5831fd39baf13aff7626e483b9a089730f18604",
     "https://mikasjames.github.io/expense-tracker/media/bootstrap-icons-X6UQXWUS.woff2": "020c3c6f9280a315e8425d7f92e15bcd0cdda1b2",
     "https://mikasjames.github.io/expense-tracker/polyfills-GTEVC5Y5.js": "5edc7aa14a6eccd1ac02fa19901db7032d7cd1be",
-    "https://mikasjames.github.io/expense-tracker/styles-PZEILVZS.css": "c059c570d8a97180d2f143d83a429ed3e71902b8"
+    "https://mikasjames.github.io/expense-tracker/styles-AGPKHCE2.css": "b6f35a2da43e7b1bfbdd6c19424b97b238c7b13b"
   },
   "navigationUrls": [
     {
