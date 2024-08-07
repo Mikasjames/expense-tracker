@@ -12,6 +12,8 @@ import { LoaderComponent } from '../../components/loader/loader.component';
 import { TransactionTableComponent } from '../../components/transaction-table/transaction-table.component';
 import { combineLatest, finalize, tap } from 'rxjs';
 import { TransactionFormButtonsComponent } from '../../components/transaction-form-buttons/transaction-form-buttons.component';
+import { DateSelectorComponent } from '../../components/date-selector/date-selector.component';
+import { DateSelectorService } from '../../services/date-selector/date-selector.service';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -24,6 +26,7 @@ import { TransactionFormButtonsComponent } from '../../components/transaction-fo
     LoaderComponent,
     TransactionTableComponent,
     TransactionFormButtonsComponent,
+    DateSelectorComponent,
   ],
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.sass',
@@ -38,18 +41,35 @@ export class DashboardPageComponent {
   income: Transaction[] = [];
   expenses: Transaction[] = [];
   allTransactions: Transaction[] = [];
+  filteredIncome: Transaction[] = [];
+  filteredExpenses: Transaction[] = [];
   incomeLineBarData: LineBarData[] = [];
   expenseLineBarData: LineBarData[] = [];
+  from: Date | null = null;
+  to: Date | null = null;
   isLoading = true;
 
   constructor(
     private authService: AuthService,
     private transactionService: TransactionService,
+    private dateSelectorService: DateSelectorService,
   ) {
     const user = this.authService.currentUserSig();
     if (user) {
       this.userInfo = user;
     }
+    this.dateSelectorService.dateRange$.subscribe((dateRange) => {
+      if (dateRange && dateRange.from && dateRange.to) {
+        this.from = dateRange.from;
+        this.to = dateRange.to;
+        this.to.setHours(23, 59, 59, 999);
+      } else {
+        this.from = null;
+        this.to = null;
+      }
+      this.handleExpenseTransactions(this.expenses);
+      this.handleIncomeTransactions(this.income);
+    });
   }
 
   ngOnInit() {
@@ -78,31 +98,54 @@ export class DashboardPageComponent {
 
   handleExpenseTransactions(transactions: Transaction[]) {
     if (transactions.length === 0) return;
-    console.log('transactions:', transactions);
     this.expenses = transactions;
+    if (this.from && this.to) {
+      transactions = transactions.filter((transaction) => {
+        return (
+          new Date(transaction.date) >= this.from! &&
+          new Date(transaction.date) <= this.to!
+        );
+      });
+    }
+    this.filteredExpenses = transactions;
+    console.log('transactions:', transactions);
     this.expenseLineBarData =
       this.convertTransactionsToLineBarData(transactions);
     this.calculateStatcardData(transactions, 1);
     this.allTransactions = this.combineAndSortTransactions(
-      this.income,
-      this.expenses,
+      this.filteredIncome,
+      this.filteredExpenses,
     );
   }
 
   handleIncomeTransactions(transactions: Transaction[]) {
     if (transactions.length === 0) return;
-    console.log('transactions:', transactions);
     this.income = transactions;
+    if (this.from && this.to) {
+      transactions = transactions.filter((transaction) => {
+        return (
+          new Date(transaction.date) >= this.from! &&
+          new Date(transaction.date) <= this.to!
+        );
+      });
+    }
+    this.filteredIncome = transactions;
+    console.log('transactions:', transactions);
     this.incomeLineBarData =
       this.convertTransactionsToLineBarData(transactions);
     this.calculateStatcardData(transactions, 0);
     this.allTransactions = this.combineAndSortTransactions(
-      this.income,
-      this.expenses,
+      this.filteredIncome,
+      this.filteredExpenses,
     );
   }
 
   calculateStatcardData(transactions: Transaction[], index: number) {
+    if (transactions.length === 0) {
+      this.statCards[index].value = 0;
+      this.statCards[index].percentChange = 0;
+      return;
+    }
     this.statCards[index].value = this.aggregateTransactions(transactions);
     this.statCards[index].percentChange = this.calculatePercentChange(
       transactions.slice(-1)[0].amount,
