@@ -17,6 +17,7 @@ export class DateSelectorComponent {
   hoveredDate: NgbDate | null = null;
   fromDate: NgbDate | null = null;
   toDate: NgbDate | null = null;
+  startDate: NgbDate = this.calendar.getToday();
 
   constructor(
     private calendar: NgbCalendar,
@@ -30,6 +31,7 @@ export class DateSelectorComponent {
         this.fromDate = null;
         this.toDate = null;
       }
+      this.updateStartDate();
     });
   }
 
@@ -87,5 +89,13 @@ export class DateSelectorComponent {
       this.isInside(date) ||
       this.isHovered(date)
     );
+  }
+
+  updateStartDate() {
+    if (this.fromDate) {
+      this.startDate = this.fromDate;
+    } else {
+      this.startDate = this.calendar.getToday();
+    }
   }
 }
