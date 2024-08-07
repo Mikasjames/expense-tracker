@@ -60,6 +60,66 @@ export class DateSelectorComponent {
     }
   }
 
+  selectRange(range: string) {
+    const today = new Date();
+    let fromDate: Date;
+    let toDate: Date;
+
+    switch (range) {
+      case 'thisWeek':
+        fromDate = this.getStartOfWeek(today);
+        toDate = new Date(fromDate);
+        toDate.setDate(fromDate.getDate() + 6);
+        break;
+      case 'lastWeek':
+        const startOfThisWeek = this.getStartOfWeek(today);
+        toDate = new Date(startOfThisWeek);
+        toDate.setDate(startOfThisWeek.getDate() - 1);
+        fromDate = new Date(toDate);
+        fromDate.setDate(toDate.getDate() - 6);
+        break;
+      case 'thisMonth':
+        fromDate = new Date(today.getFullYear(), today.getMonth(), 1);
+        toDate = this.getLastDayOfCurrentMonth();
+        break;
+      case 'lastMonth':
+        fromDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+        toDate = new Date(today.getFullYear(), today.getMonth(), 0);
+        break;
+      case 'thisYear':
+        fromDate = new Date(today.getFullYear(), 0, 1);
+        toDate = this.getLastDayOfCurrentYear();
+        break;
+      case 'lastYear':
+        fromDate = new Date(today.getFullYear() - 1, 0, 1);
+        toDate = new Date(today.getFullYear() - 1, 11, 31);
+        break;
+      default:
+        return;
+    }
+
+    this.fromDate = this.convertDateToNgbDate(fromDate);
+    this.toDate = this.convertDateToNgbDate(toDate);
+    this.dateSelectorService.setDateRange({ from: fromDate, to: toDate });
+    this.updateStartDate();
+  }
+
+  getStartOfWeek(date: Date): Date {
+    const day = date.getDay();
+    const diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is Sunday
+    return new Date(date.setDate(diff));
+  }
+
+  getLastDayOfCurrentMonth(): Date {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  }
+
+  getLastDayOfCurrentYear(): Date {
+    const now = new Date();
+    return new Date(now.getFullYear(), 11, 31);
+  }
+
   convertNgbDateToDate(ngbDate: NgbDate): Date {
     return new Date(ngbDate.year, ngbDate.month - 1, ngbDate.day);
   }

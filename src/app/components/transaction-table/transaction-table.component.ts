@@ -72,6 +72,9 @@ export class TransactionTableComponent {
   }
 
   ngOnChanges() {
+    if (this.transactions.length === 0) {
+      this.rowData = [];
+    }
     this.transactionToRowData(this.transactions).subscribe((rowData) => {
       this.rowData = rowData;
       this.filterText.valueChanges.subscribe((value) => {
