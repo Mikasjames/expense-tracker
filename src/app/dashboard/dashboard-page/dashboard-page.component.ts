@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { UserInterface } from '../../models/user.interface';
 import { TransactionService } from '../../services/transactions/transaction.service';
@@ -10,10 +10,11 @@ import { TransactionFormComponent } from '../../components/transaction-form/tran
 import { LineBarData } from '../../models/chart.interface';
 import { LoaderComponent } from '../../components/loader/loader.component';
 import { TransactionTableComponent } from '../../components/transaction-table/transaction-table.component';
-import { combineLatest, finalize, tap } from 'rxjs';
+import { combineLatest, finalize, Subject, takeUntil, tap } from 'rxjs';
 import { TransactionFormButtonsComponent } from '../../components/transaction-form-buttons/transaction-form-buttons.component';
 import { DateSelectorComponent } from '../../components/date-selector/date-selector.component';
 import { DateSelectorService } from '../../services/date-selector/date-selector.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -31,116 +32,85 @@ import { DateSelectorService } from '../../services/date-selector/date-selector.
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.sass',
 })
-export class DashboardPageComponent {
-  userInfo = {} as UserInterface;
+export class DashboardPageComponent implements OnInit, OnDestroy {
+  userInfo: UserInterface;
   statCards = [
     { title: 'In', value: 0, percentChange: 0, isIncome: true },
     { title: 'Out', value: 0, percentChange: 0, isIncome: false },
     { title: 'On Hand', value: 0, percentChange: 0, isIncome: true },
   ];
-  income: Transaction[] = [];
-  expenses: Transaction[] = [];
   allTransactions: Transaction[] = [];
-  filteredIncome: Transaction[] = [];
-  filteredExpenses: Transaction[] = [];
   incomeLineBarData: LineBarData[] = [];
   expenseLineBarData: LineBarData[] = [];
-  from: Date | null = null;
-  to: Date | null = null;
   isLoading = true;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private authService: AuthService,
     private transactionService: TransactionService,
     private dateSelectorService: DateSelectorService,
   ) {
-    const user = this.authService.currentUserSig();
-    if (user) {
-      this.userInfo = user;
-    }
-    this.dateSelectorService.dateRange$.subscribe((dateRange) => {
-      if (dateRange && dateRange.from && dateRange.to) {
-        this.from = dateRange.from;
-        this.to = dateRange.to;
-        this.to.setHours(23, 59, 59, 999);
-      } else {
-        this.from = null;
-        this.to = null;
-      }
-      this.handleExpenseTransactions(this.expenses);
-      this.handleIncomeTransactions(this.income);
-    });
+    this.userInfo = this.authService.currentUserSig() || ({} as UserInterface);
   }
 
   ngOnInit() {
-    this.allTransactions = [];
+    this.initializeData();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private initializeData() {
     combineLatest([
       this.transactionService.expenseTransactions$,
       this.transactionService.incomeTransactions$,
+      this.dateSelectorService.dateRange$,
     ])
       .pipe(
-        tap(() => {
-          setTimeout(() => {
-            this.isLoading = false;
-          }, 1000);
-        }),
+        takeUntil(this.destroy$),
+        map(([expenses, income, dateRange]) => ({
+          expenses: this.filterTransactionsByDateRange(expenses, dateRange),
+          income: this.filterTransactionsByDateRange(income, dateRange),
+        })),
       )
       .subscribe(
-        ([expenseTransactions, incomeTransactions]) => {
-          this.handleExpenseTransactions(expenseTransactions);
-          this.handleIncomeTransactions(incomeTransactions);
+        ({ expenses, income }) => {
+          this.updateDashboard(expenses, income);
+          this.isLoading = false;
         },
-        (error) => {
-          console.error('Error fetching transactions:', error);
-        },
+        (error) => console.error('Error fetching transactions:', error),
       );
   }
 
-  handleExpenseTransactions(transactions: Transaction[]) {
-    if (transactions.length === 0) return;
-    this.expenses = transactions;
-    if (this.from && this.to) {
-      transactions = transactions.filter((transaction) => {
-        return (
-          new Date(transaction.date) >= this.from! &&
-          new Date(transaction.date) <= this.to!
-        );
-      });
-    }
-    this.filteredExpenses = transactions;
-    console.log('transactions:', transactions);
-    this.expenseLineBarData =
-      this.convertTransactionsToLineBarData(transactions);
-    this.calculateStatcardData(transactions, 1);
-    this.allTransactions = this.combineAndSortTransactions(
-      this.filteredIncome,
-      this.filteredExpenses,
+  private filterTransactionsByDateRange(
+    transactions: Transaction[],
+    dateRange: { from: Date; to: Date } | null,
+  ): Transaction[] {
+    if (!dateRange || !dateRange.from || !dateRange.to) return transactions;
+    const to = new Date(dateRange.to);
+    to.setHours(23, 59, 59, 999);
+    return transactions.filter(
+      (transaction) =>
+        new Date(transaction.date) >= dateRange.from! &&
+        new Date(transaction.date) <= to,
     );
   }
 
-  handleIncomeTransactions(transactions: Transaction[]) {
-    if (transactions.length === 0) return;
-    this.income = transactions;
-    if (this.from && this.to) {
-      transactions = transactions.filter((transaction) => {
-        return (
-          new Date(transaction.date) >= this.from! &&
-          new Date(transaction.date) <= this.to!
-        );
-      });
-    }
-    this.filteredIncome = transactions;
-    console.log('transactions:', transactions);
-    this.incomeLineBarData =
-      this.convertTransactionsToLineBarData(transactions);
-    this.calculateStatcardData(transactions, 0);
-    this.allTransactions = this.combineAndSortTransactions(
-      this.filteredIncome,
-      this.filteredExpenses,
-    );
+  private updateDashboard(expenses: Transaction[], income: Transaction[]) {
+    this.updateStatCard(income, 0);
+    this.updateStatCard(expenses, 1);
+    this.calculateNetIncome(income, expenses);
+
+    this.incomeLineBarData = this.convertTransactionsToLineBarData(income);
+    this.expenseLineBarData = this.convertTransactionsToLineBarData(expenses);
+
+    this.allTransactions = this.combineAndSortTransactions(income, expenses);
   }
 
-  calculateStatcardData(transactions: Transaction[], index: number) {
+  private updateStatCard(transactions: Transaction[], index: number) {
     if (transactions.length === 0) {
       this.statCards[index].value = 0;
       this.statCards[index].percentChange = 0;
@@ -148,53 +118,55 @@ export class DashboardPageComponent {
     }
     this.statCards[index].value = this.aggregateTransactions(transactions);
     this.statCards[index].percentChange = this.calculatePercentChange(
-      transactions.slice(-1)[0].amount,
+      transactions[transactions.length - 1].amount,
       transactions[0].amount,
     );
-    this.calculateNetIncome();
   }
 
-  combineAndSortTransactions(
-    income: Transaction[],
-    expenses: Transaction[],
-  ): Transaction[] {
-    const combinedTransactions = [...income, ...expenses];
-    combinedTransactions.sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-    );
-    return combinedTransactions;
-  }
+  private calculateNetIncome(income: Transaction[], expenses: Transaction[]) {
+    const currentIncome = this.aggregateTransactions(income);
+    const currentExpenses = this.aggregateTransactions(expenses);
+    const currentNet = currentIncome - currentExpenses;
 
-  calculateNetIncome() {
-    if (this.income.length === 0 || this.expenses.length === 0) return;
-    this.statCards[2].value = this.statCards[0].value - this.statCards[1].value;
-    const firstIncome = this.income[0].amount;
-    const firstExpense = this.expenses[0].amount;
-    const lastIncome = this.income.slice(-1)[0].amount;
-    const lastExpense = this.expenses.slice(-1)[0].amount;
+    const firstIncome = income.length > 0 ? income[0].amount : 0;
+    const firstExpense = expenses.length > 0 ? expenses[0].amount : 0;
+    const firstNet = firstIncome - firstExpense;
+
+    this.statCards[2].value = currentNet;
     this.statCards[2].percentChange = this.calculatePercentChange(
-      lastIncome - lastExpense,
-      firstIncome - firstExpense,
+      currentNet,
+      firstNet,
     );
   }
 
-  aggregateTransactions(transactions: Transaction[]): number {
+  private aggregateTransactions(transactions: Transaction[]): number {
     return Math.round(
       transactions.reduce((acc, transaction) => acc + transaction.amount, 0),
     );
   }
 
-  calculatePercentChange(current: number, previous: number): number {
-    return ((current - previous) / previous) * 100;
+  private calculatePercentChange(current: number, previous: number): number {
+    return previous !== 0
+      ? ((current - previous) / Math.abs(previous)) * 100
+      : 0;
   }
 
-  convertTransactionsToLineBarData(transactions: Transaction[]): LineBarData[] {
-    return transactions.map((transaction) => {
-      return {
-        tag: transaction.tagIds[0],
-        value: [transaction.date.getTime(), transaction.amount],
-        title: transaction.title,
-      };
-    });
+  private convertTransactionsToLineBarData(
+    transactions: Transaction[],
+  ): LineBarData[] {
+    return transactions.map((transaction) => ({
+      tag: transaction.tagIds[0],
+      value: [new Date(transaction.date).getTime(), transaction.amount],
+      title: transaction.title,
+    }));
+  }
+
+  private combineAndSortTransactions(
+    income: Transaction[],
+    expenses: Transaction[],
+  ): Transaction[] {
+    return [...income, ...expenses].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    );
   }
 }
