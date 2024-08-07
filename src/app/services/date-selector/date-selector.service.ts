@@ -12,8 +12,12 @@ export class DateSelectorService {
 
   constructor() {}
 
-  setDateRange(dateRange: { from: Date; to: Date }) {
+  setDateRange(dateRange: { from: Date; to: Date } | null) {
     this.dateRangeSubject.next(dateRange);
+  }
+
+  clearDateRange() {
+    this.dateRangeSubject.next(null);
   }
 
   getDateRange(): Observable<{ from: Date; to: Date } | null> {

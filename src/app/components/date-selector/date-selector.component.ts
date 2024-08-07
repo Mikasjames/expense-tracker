@@ -62,8 +62,8 @@ export class DateSelectorComponent {
 
   selectRange(range: string) {
     const today = new Date();
-    let fromDate: Date;
-    let toDate: Date;
+    let fromDate: Date | null = null;
+    let toDate: Date | null = null;
 
     switch (range) {
       case 'thisWeek':
@@ -94,20 +94,29 @@ export class DateSelectorComponent {
         fromDate = new Date(today.getFullYear() - 1, 0, 1);
         toDate = new Date(today.getFullYear() - 1, 11, 31);
         break;
+      case 'clear':
+        this.clearDateRange();
+        break;
       default:
         return;
     }
 
-    this.fromDate = this.convertDateToNgbDate(fromDate);
-    this.toDate = this.convertDateToNgbDate(toDate);
-    this.dateSelectorService.setDateRange({ from: fromDate, to: toDate });
-    this.updateStartDate();
+    if (fromDate && toDate) {
+      this.fromDate = this.convertDateToNgbDate(fromDate);
+      this.toDate = this.convertDateToNgbDate(toDate);
+      this.dateSelectorService.setDateRange({ from: fromDate, to: toDate });
+      this.updateStartDate();
+    }
   }
 
   getStartOfWeek(date: Date): Date {
     const day = date.getDay();
     const diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is Sunday
     return new Date(date.setDate(diff));
+  }
+
+  clearDateRange() {
+    this.dateSelectorService.clearDateRange();
   }
 
   getLastDayOfCurrentMonth(): Date {
