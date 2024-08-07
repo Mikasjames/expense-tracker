@@ -8,7 +8,25 @@
       <div class="row col-12 col-lg-6">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h1 class="text-start fw-bold">Dashboard</h1>
-          <app-transaction-form-buttons></app-transaction-form-buttons>
+          <div class="row d-flex justify-content-between align-items-center">
+            <button
+              (click)="toggleDateSelector(); preventCloseOnClick()"
+              class="d-none d-md-block col btn-warning btn btn-sm"
+              style="{width: 20px}"
+            >
+              <i class="bi bi-calendar-fill"></i>
+            </button>
+            <div
+              *ngIf="showDateSelector"
+              (click)="preventCloseOnClick()"
+              class="d-none d-md-block date-selector-container d-flex justify-content-center align-items-center position-absolute"
+            >
+              <app-date-selector></app-date-selector>
+            </div>
+            <div class="col">
+              <app-transaction-form-buttons></app-transaction-form-buttons>
+            </div>
+          </div>
         </div>
         <div class="row mb-3">
           <div
@@ -24,7 +42,6 @@
           </div>
         </div>
         <app-line-bar-chart
-          class="mb-3"
           title="Total Ins"
           percentChangeMessage="Previous gains:"
           [data]="incomeLineBarData"
@@ -34,6 +51,7 @@
       <div class="row col-12 col-lg-6 mt-3 mt-lg-0 mx-lg-2">
         <app-line-bar-chart
           title="Total Outs"
+          class="mb-3"
           percentChangeMessage="Previous dip:"
           [data]="expenseLineBarData"
           [isIncome]="false"

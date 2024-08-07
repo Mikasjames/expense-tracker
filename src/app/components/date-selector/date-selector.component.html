@@ -1,43 +1,65 @@
-<div class="row" style="width: 260px">
-  <ngb-datepicker
-    #dp
-    (dateSelect)="onDateSelection($event)"
-    [startDate]="startDate"
-    [displayMonths]="1"
-    [dayTemplate]="t"
-    outsideDays="hidden"
-  ></ngb-datepicker>
+<div class="container" style="max-width: 260px">
+  <div class="row">
+    <ngb-datepicker
+      #dp
+      (dateSelect)="onDateSelection($event)"
+      [startDate]="startDate"
+      [displayMonths]="1"
+      [dayTemplate]="t"
+      outsideDays="hidden"
+    ></ngb-datepicker>
 
-  <ng-template class="date-selector" #t let-date let-focused="focused">
-    <span
-      class="custom-day"
-      [class.focused]="focused"
-      [class.range]="isRange(date)"
-      [class.faded]="isHovered(date) || isInside(date)"
-      (mouseenter)="hoveredDate = date"
-      (mouseleave)="hoveredDate = null"
-    >
-      {{ date.day }}
-    </span>
-  </ng-template>
+    <ng-template class="date-selector" #t let-date let-focused="focused">
+      <span
+        class="custom-day"
+        [class.focused]="focused"
+        [class.range]="isRange(date)"
+        [class.faded]="isHovered(date) || isInside(date)"
+        (mouseenter)="hoveredDate = date"
+        (mouseleave)="hoveredDate = null"
+      >
+        {{ date.day }}
+      </span>
+    </ng-template>
+  </div>
+
   <hr />
-  <div class="row d-flex justify-content-center align-items-center">
-    <button class="btn btn-sm col-5 m-1" (click)="selectRange('thisWeek')">
+
+  <div class="row d-flex justify-content-center align-items-center pe-2">
+    <button
+      class="btn btn-sm btn-warning col-5 m-1"
+      (click)="selectRange('thisWeek')"
+    >
       This Week
     </button>
-    <button class="btn btn-sm col-5 m-1" (click)="selectRange('lastWeek')">
+    <button
+      class="btn btn-sm btn-warning col-5 m-1"
+      (click)="selectRange('lastWeek')"
+    >
       Last Week
     </button>
-    <button class="btn btn-sm col-5 m-1" (click)="selectRange('thisMonth')">
+    <button
+      class="btn btn-sm btn-warning col-5 m-1"
+      (click)="selectRange('thisMonth')"
+    >
       This Month
     </button>
-    <button class="btn btn-sm col-5 m-1" (click)="selectRange('lastMonth')">
+    <button
+      class="btn btn-sm btn-warning col-5 m-1"
+      (click)="selectRange('lastMonth')"
+    >
       Last Month
     </button>
-    <button class="btn btn-sm col-5 m-1" (click)="selectRange('thisYear')">
+    <button
+      class="btn btn-sm btn-warning col-5 m-1"
+      (click)="selectRange('thisYear')"
+    >
       This Year
     </button>
-    <button class="btn btn-sm col-5 m-1" (click)="selectRange('lastYear')">
+    <button
+      class="btn btn-sm btn-warning col-5 m-1"
+      (click)="selectRange('lastYear')"
+    >
       Last Year
     </button>
     <button

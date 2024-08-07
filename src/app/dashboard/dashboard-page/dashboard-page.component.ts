@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { UserInterface } from '../../models/user.interface';
 import { TransactionService } from '../../services/transactions/transaction.service';
@@ -42,6 +42,8 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
   allTransactions: Transaction[] = [];
   incomeLineBarData: LineBarData[] = [];
   expenseLineBarData: LineBarData[] = [];
+  showDateSelector = false;
+  dateSelectorClicked = false;
   isLoading = true;
 
   private destroy$ = new Subject<void>();
@@ -50,8 +52,16 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private transactionService: TransactionService,
     private dateSelectorService: DateSelectorService,
+    private renderer: Renderer2,
   ) {
     this.userInfo = this.authService.currentUserSig() || ({} as UserInterface);
+
+    this.renderer.listen('window', 'click', (e: Event) => {
+      if (!this.dateSelectorClicked) {
+        this.showDateSelector = false;
+      }
+      this.dateSelectorClicked = false;
+    });
   }
 
   ngOnInit() {
@@ -79,6 +89,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
       .subscribe(
         ({ expenses, income }) => {
           this.updateDashboard(expenses, income);
+          this.showDateSelector = false;
           this.isLoading = false;
         },
         (error) => console.error('Error fetching transactions:', error),
@@ -168,5 +179,13 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     return [...income, ...expenses].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
     );
+  }
+
+  toggleDateSelector() {
+    this.showDateSelector = !this.showDateSelector;
+  }
+
+  preventCloseOnClick() {
+    this.dateSelectorClicked = true;
   }
 }
