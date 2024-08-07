@@ -12,3 +12,11 @@
     </div>
   </ng-container>
 </div>
+
+<div
+  *ngIf="showDateSelector"
+  (click)="preventCloseOnClick()"
+  class="date-selector-container d-flex justify-content-center align-items-center position-absolute"
+>
+  <app-date-selector></app-date-selector>
+</div>
