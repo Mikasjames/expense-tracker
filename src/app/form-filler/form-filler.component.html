@@ -1,1 +1,11 @@
-<p>form-filler works!</p>
+<!--<input class="form-control" type="file" (change)="uploadFile($event)" id="formFile">-->
+<div *ngFor="let form of uploadedFiles">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">{{ form.name }}</h5>
+      <button class="btn btn-primary" (click)="fillForm(form)">
+        Fill Form
+      </button>
+    </div>
+  </div>
+</div>
