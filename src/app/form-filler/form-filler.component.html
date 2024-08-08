@@ -1,4 +1,11 @@
 <!--<input class="form-control" type="file" (change)="uploadFile($event)" id="formFile">-->
+<div class="mb-3">
+  <label for="monthSelector">Select Month:</label>
+  <select id="monthSelector" [(ngModel)]="selectedMonth">
+    <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+  </select>
+</div>
+
 <div *ngFor="let form of uploadedFiles">
   <div class="card">
     <div class="card-body">
