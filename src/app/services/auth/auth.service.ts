@@ -8,7 +8,15 @@ import {
   GoogleAuthProvider,
   FacebookAuthProvider,
 } from '@angular/fire/auth';
-import { from, Observable, of, switchMap } from 'rxjs';
+import {
+  BehaviorSubject,
+  distinctUntilChanged,
+  from,
+  Observable,
+  of,
+  shareReplay,
+  switchMap,
+} from 'rxjs';
 import { UserInterface } from '../../models/user.interface';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
@@ -20,18 +28,21 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 })
 export class AuthService {
   user$ = user(this.firebaseAuth);
-  currentUserSig = signal<UserInterface | null | undefined>(undefined);
+  private currentUserSubject = new BehaviorSubject<
+    UserInterface | null | undefined
+  >(undefined);
+  currentUser$ = this.currentUserSubject
+    .asObservable()
+    .pipe(distinctUntilChanged(), shareReplay(1));
 
   constructor(
     private firebaseAuth: Auth,
     private router: Router,
     private fireAuth: AngularFireAuth,
     private firestore: AngularFirestore,
-  ) {
-    this.initializeUserState();
-  }
+  ) {}
 
-  private initializeUserState() {
+  initializeUserState() {
     this.user$
       .pipe(
         switchMap((user) => {
@@ -45,7 +56,7 @@ export class AuthService {
         }),
       )
       .subscribe((user) => {
-        this.currentUserSig.set(
+        this.currentUserSubject.next(
           user
             ? {
                 email: user.email,
@@ -54,7 +65,6 @@ export class AuthService {
               }
             : null,
         );
-        console.log(this.currentUserSig());
       });
   }
 
@@ -90,7 +100,7 @@ export class AuthService {
 
   logout() {
     this.firebaseAuth.signOut().then(() => {
-      this.currentUserSig.set(null);
+      this.currentUserSubject.next(null);
       this.router.navigateByUrl('/login');
     });
   }
