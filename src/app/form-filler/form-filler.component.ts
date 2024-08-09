@@ -41,6 +41,8 @@ export class FormFillerComponent {
   allIns: Transaction[] = [];
   allOuts: Transaction[] = [];
   totalIns: string = '0.00';
+  bo: Transaction[] = [];
+  totalForwardedFromLastMonth = '0.00';
 
   constructor(
     private pdfService: PdfService,
@@ -63,6 +65,10 @@ export class FormFillerComponent {
         console.error('Error fetching transactions:', error);
       },
     });
+  }
+
+  resetState() {
+    this.bo = [];
   }
 
   uploadFile(event: Event) {
@@ -108,6 +114,7 @@ export class FormFillerComponent {
     a.download = `${this.selectedMonth}_2024-${pdf.name}`;
     a.click();
     URL.revokeObjectURL(downloadUrl);
+    this.resetState();
   }
 
   setBasicInfoFieldValues(form: PDFForm) {
@@ -162,6 +169,7 @@ export class FormFillerComponent {
   createFieldMappings(transactions: Transaction[]): { [key: string]: string } {
     const fieldMappings: { [key: string]: string } = {};
     let depositTransactionIndex = 0;
+    let outTransactionIndex = 0;
 
     transactions.forEach((transaction, index) => {
       const transactionType = transaction.type;
@@ -183,6 +191,7 @@ export class FormFillerComponent {
         ).name;
         fieldMappings[amountField] = transaction.amount.toFixed(2).toString();
       } else {
+        outTransactionIndex = index;
         fieldMappings[outAmountField] = transaction.amount
           .toFixed(2)
           .toString();
@@ -200,6 +209,21 @@ export class FormFillerComponent {
       this.totalIns;
     fieldMappings[`902_${depositTransactionIndex + 3}_S26Value`] =
       this.totalIns;
+
+    fieldMappings[`900_${outTransactionIndex + 64}_Text`] = 'To Branch Office';
+
+    this.bo.forEach((transaction, index) => {
+      fieldMappings[`900_${outTransactionIndex + index + 13}_Text_C`] =
+        `${transaction.date.getDate()}`;
+      fieldMappings[`900_${outTransactionIndex + index + 65}_Text`] =
+        transaction.title;
+      fieldMappings[`902_${outTransactionIndex + index + 60}_S26Value`] =
+        transaction.amount.toFixed(2).toString();
+    });
+
+    this.setTotalForwardedFromLastMonth();
+    fieldMappings[`904_24_S26Amount`] = this.totalForwardedFromLastMonth;
+    fieldMappings[`904_33_S26Amount`] = this.totalForwardedFromLastMonth;
 
     return fieldMappings;
   }
@@ -227,13 +251,44 @@ export class FormFillerComponent {
     field.setFontSize(size);
   }
 
+  setTotalForwardedFromLastMonth() {
+    const allIns = this.allIns;
+    const allOuts = this.allOuts;
+
+    const filteredIns = allIns.filter((transaction) => {
+      const date = new Date(transaction.date);
+      return (
+        date.getMonth() < this.months.indexOf(this.selectedMonth) &&
+        date.getFullYear() === this.currentYear
+      );
+    });
+
+    const filteredOuts = allOuts.filter((transaction) => {
+      const date = new Date(transaction.date);
+      return (
+        date.getMonth() < this.months.indexOf(this.selectedMonth) &&
+        date.getFullYear() === this.currentYear
+      );
+    });
+
+    const totalIns = this.aggregateTransactions(filteredIns);
+    const totalOuts = this.aggregateTransactions(filteredOuts);
+    this.totalForwardedFromLastMonth = (
+      parseFloat(totalIns) - parseFloat(totalOuts)
+    ).toFixed(2);
+  }
+
   filterTransactionsByMonthYear(transactions: Transaction[]) {
     return transactions.filter((transaction) => {
       const date = new Date(transaction.date);
-      return (
+      const isWithinMonthYear =
         date.getMonth() === this.months.indexOf(this.selectedMonth) &&
-        date.getFullYear() === this.currentYear
-      );
+        date.getFullYear() === this.currentYear;
+      if (isWithinMonthYear && transaction.title.includes('WWW')) {
+        this.bo.push(transaction);
+        return false;
+      }
+      return isWithinMonthYear;
     });
   }
 
