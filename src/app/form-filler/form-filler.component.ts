@@ -110,11 +110,23 @@ export class FormFillerComponent {
   }
 
   setBasicInfoFieldValues(form: PDFForm) {
-    form.getTextField('900_1_Text_C').setText('West Tanza');
-    form.getTextField('900_2_Text_C').setText('Tanza');
-    form.getTextField('900_3_Text_C').setText('Cavite');
-    form.getTextField('900_4_Text_C').setText(`${this.selectedMonth}`);
-    form.getTextField('900_5_Text_C').setText(`${this.currentYear}`);
+    const nameField = form.getTextField('900_1_Text_C');
+    const cityField = form.getTextField('900_2_Text_C');
+    const provinceField = form.getTextField('900_3_Text_C');
+    const monthField = form.getTextField('900_4_Text_C');
+    const yearField = form.getTextField('900_5_Text_C');
+
+    this.manuallyModifyFont(nameField, 11.65);
+    this.manuallyModifyFont(cityField, 11.65);
+    this.manuallyModifyFont(provinceField, 11.65);
+    this.manuallyModifyFont(monthField, 11.65);
+    this.manuallyModifyFont(yearField, 11.65);
+
+    nameField.setText('West Tanza');
+    cityField.setText('Tanza');
+    provinceField.setText('Cavite');
+    monthField.setText(`${this.selectedMonth}`);
+    yearField.setText(`${this.currentYear}`);
   }
 
   async inputTransactionData(form: PDFForm) {
@@ -165,9 +177,11 @@ export class FormFillerComponent {
           transaction.tagIds[0],
           transactionType,
         ).name;
-        fieldMappings[amountField] = transaction.amount.toString();
+        fieldMappings[amountField] = transaction.amount.toFixed(2).toString();
       } else {
-        fieldMappings[outAmountField] = transaction.amount.toString();
+        fieldMappings[outAmountField] = transaction.amount
+          .toFixed(2)
+          .toString();
         fieldMappings[outDescriptionField] = transaction.title;
         fieldMappings[outDateField] = `${transaction.date.getDate()}`;
       }
@@ -192,6 +206,10 @@ export class FormFillerComponent {
           field.setFontSize(10);
         }
       });
+  }
+
+  async manuallyModifyFont(field: PDFTextField, size: number) {
+    field.setFontSize(size);
   }
 
   filterTransactionsByMonthYear(transactions: Transaction[]) {
