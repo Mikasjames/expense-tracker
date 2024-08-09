@@ -40,6 +40,7 @@ export class FormFillerComponent {
   selectedMonth: string = this.months[new Date().getMonth()];
   allIns: Transaction[] = [];
   allOuts: Transaction[] = [];
+  totalIns: string = '0.00';
 
   constructor(
     private pdfService: PdfService,
@@ -131,6 +132,7 @@ export class FormFillerComponent {
 
   async inputTransactionData(form: PDFForm) {
     const ins = this.filterTransactionsByMonthYear(this.allIns);
+    this.totalIns = this.aggregateTransactions(ins);
     const outs = this.filterTransactionsByMonthYear(this.allOuts);
 
     ins
@@ -159,6 +161,7 @@ export class FormFillerComponent {
 
   createFieldMappings(transactions: Transaction[]): { [key: string]: string } {
     const fieldMappings: { [key: string]: string } = {};
+    let depositTransactionIndex = 0;
 
     transactions.forEach((transaction, index) => {
       const transactionType = transaction.type;
@@ -166,11 +169,12 @@ export class FormFillerComponent {
       const descriptionField = `900_${index + 59}_Text`;
       const tagField = `900_${index + 111}_Text_C`;
       const amountField = `901_${index + 1}_S26Value`;
-      const outAmountField = `901_${index + 56}_S26Value`;
-      const outDescriptionField = `900_${index + 61}_Text`;
-      const outDateField = `900_${index + 9}_Text_C`;
+      const outAmountField = `902_${index + 57}_S26Value`;
+      const outDescriptionField = `900_${index + 62}_Text`;
+      const outDateField = `900_${index + 10}_Text_C`;
 
       if (transactionType === 'income') {
+        depositTransactionIndex = index;
         fieldMappings[dateField] = `${transaction.date.getDate()}`;
         fieldMappings[descriptionField] = transaction.title;
         fieldMappings[tagField] = this.tagService.synchronousGetTagFromId(
@@ -187,6 +191,16 @@ export class FormFillerComponent {
       }
     });
 
+    fieldMappings[`900_${depositTransactionIndex + 9}_Text_C`] =
+      `${new Date(this.currentYear, this.months.indexOf(this.selectedMonth) + 1, 0).getDate()}`;
+    fieldMappings[`900_${depositTransactionIndex + 113}_Text_C`] = 'D';
+    fieldMappings[`900_${depositTransactionIndex + 61}_Text`] =
+      'Deposit to cashbox';
+    fieldMappings[`901_${depositTransactionIndex + 56}_S26Value`] =
+      this.totalIns;
+    fieldMappings[`902_${depositTransactionIndex + 3}_S26Value`] =
+      this.totalIns;
+
     return fieldMappings;
   }
 
@@ -195,6 +209,7 @@ export class FormFillerComponent {
       const field = form.getTextField(fieldName);
       field.setText(fieldMappings[fieldName]);
     });
+    const lastFieldIndex = Object.keys(fieldMappings).length;
   }
 
   async modifyFont(doc: PDFDocument) {
@@ -220,5 +235,13 @@ export class FormFillerComponent {
         date.getFullYear() === this.currentYear
       );
     });
+  }
+
+  aggregateTransactions(transactions: Transaction[]) {
+    const total = transactions.reduce(
+      (total, transaction) => total + transaction.amount,
+      0,
+    );
+    return total.toFixed(2);
   }
 }
