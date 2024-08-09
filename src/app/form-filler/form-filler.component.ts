@@ -43,6 +43,9 @@ export class FormFillerComponent implements OnInit {
     'November',
     'December',
   ];
+  name = 'West Tanza';
+  city = 'Tanza';
+  province = 'Cavite';
   selectedMonth: string = this.months[new Date().getMonth()];
 
   private transactionsSubject = new BehaviorSubject<{
@@ -60,6 +63,12 @@ export class FormFillerComponent implements OnInit {
       this.calculateTotalForwarded(income, expense),
     ),
   );
+
+  inW: Transaction[] = [];
+  inC: Transaction[] = [];
+
+  totalC: Observable<string> = this.calculateTotal(this.inC);
+  totalW: Observable<string> = this.calculateTotal(this.inW);
 
   constructor(
     private pdfService: PdfService,
@@ -80,6 +89,17 @@ export class FormFillerComponent implements OnInit {
         this.transactionsSubject.next({
           income: incomeTransactions,
           expense: expenseTransactions,
+        });
+        incomeTransactions.forEach((transaction) => {
+          const tag = this.tagService.synchronousGetTagFromId(
+            transaction.tagIds[0],
+            'income',
+          );
+          if (tag.name === 'W') {
+            this.inW.push(transaction);
+          } else if (tag.name === 'C') {
+            this.inC.push(transaction);
+          }
         });
         this.cdr.markForCheck();
       });
@@ -126,12 +146,30 @@ export class FormFillerComponent implements OnInit {
   }
 
   async fillForm(pdf: PdfFile) {
+    const num = pdf.name.split('_')[0].split('-')[1];
+    switch (num) {
+      case '26':
+        this.fill26(pdf);
+        break;
+      case '30':
+        this.fill30(pdf);
+        break;
+      case '62':
+        this.fill62(pdf);
+        break;
+      default:
+        alert('Unsupported PDF form');
+        break;
+    }
+  }
+
+  async fill26(pdf: PdfFile) {
     try {
       const pdfDoc = await this.loadPdfDocument(pdf.url);
       this.modifyFont(pdfDoc);
       const form = pdfDoc.getForm();
 
-      this.setBasicInfoFieldValues(form);
+      this.setBasic26InfoFieldValues(form);
       await this.inputTransactionData(form);
 
       const pdfBytes = await pdfDoc.save();
@@ -144,6 +182,22 @@ export class FormFillerComponent implements OnInit {
     }
   }
 
+  async fill30(pdf: PdfFile) {
+    const pdfDoc = await this.loadPdfDocument(pdf.url);
+    this.modifyFont(pdfDoc);
+    const form = pdfDoc.getForm();
+
+    this.setBasic30InfoFieldValues(form);
+    const pdfBytes = await pdfDoc.save();
+    this.downloadModifiedPdf(pdfBytes, pdf.name);
+  }
+
+  async fill62(pdf: PdfFile) {
+    const pdfDoc = await this.loadPdfDocument(pdf.url);
+    this.modifyFont(pdfDoc);
+    const form = pdfDoc.getForm();
+  }
+
   private async loadPdfDocument(url: string): Promise<PDFDocument> {
     const response = await fetch(url);
     if (!response.ok) {
@@ -153,14 +207,86 @@ export class FormFillerComponent implements OnInit {
     return PDFDocument.load(arrayBuffer);
   }
 
-  private setBasicInfoFieldValues(form: PDFForm) {
+  private setBasic26InfoFieldValues(form: PDFForm) {
     const fields = [
-      { name: '900_1_Text_C', value: 'West Tanza' },
-      { name: '900_2_Text_C', value: 'Tanza' },
-      { name: '900_3_Text_C', value: 'Cavite' },
+      { name: '900_1_Text_C', value: this.name },
+      { name: '900_2_Text_C', value: this.city },
+      { name: '900_3_Text_C', value: this.province },
       { name: '900_4_Text_C', value: this.selectedMonth },
       { name: '900_5_Text_C', value: this.currentYear.toString() },
     ];
+
+    fields.forEach((field) => {
+      const pdfField = form.getTextField(field.name);
+      this.manuallyModifyFont(pdfField, 11.65);
+      pdfField.setText(field.value);
+    });
+  }
+
+  private setBasic30InfoFieldValues(form: PDFForm) {
+    const cForSelectedMonthYear = this.filterTransactionsByMonthYear(this.inC);
+
+    const fields = [
+      { name: '900_1_Text', value: this.name },
+      {
+        name: '900_2_Text',
+        value: `${this.selectedMonth} ${this.currentYear}`,
+      },
+      { name: '900_17_Text_C', value: this.selectedMonth },
+    ];
+
+    this.totalForwardedFromLastMonth$.pipe(take(1)).subscribe((total) => {
+      fields.push({ name: '901_1_S30_Value', value: total });
+    });
+    this.calculateTotal(cForSelectedMonthYear)
+      .pipe(take(1))
+      .subscribe((total) => {
+        fields.push({ name: '901_2_S30_Value', value: total });
+      });
+    this.transactions$.pipe(take(1)).subscribe(({ expense }) => {
+      const outsForSelectedMonthYear =
+        this.filterTransactionsByMonthYear(expense);
+      outsForSelectedMonthYear.forEach((transaction) => {
+        if (transaction.title.includes('KHOC')) {
+          fields.push({
+            name: '901_12_S30_Value',
+            value: transaction.amount.toFixed(2).toString(),
+          });
+          outsForSelectedMonthYear.splice(
+            outsForSelectedMonthYear.indexOf(transaction),
+            1,
+          );
+        }
+      });
+
+      this.boTransactions.forEach((transaction) => {
+        if (transaction.title.includes('resolution')) {
+          fields.push({
+            name: '901_13_S30_Value',
+            value: transaction.amount.toFixed(2).toString(),
+          });
+        }
+        if (transaction.title.includes('from Box')) {
+          fields.push({
+            name: '901_7_S30_Value',
+            value: transaction.amount.toFixed(2).toString(),
+          });
+          fields.push({
+            name: '901_20_S30_Value',
+            value: transaction.amount.toFixed(2).toString(),
+          });
+        }
+      });
+      this.calculateTotal(outsForSelectedMonthYear)
+        .pipe(take(1))
+        .subscribe((total) => {
+          fields.push({
+            name: '900_7_Text',
+            value: `Expenses - Refer to S-26`,
+          });
+          fields.push({ name: '901_14_S30_Value', value: total });
+        });
+    });
 
     fields.forEach((field) => {
       const pdfField = form.getTextField(field.name);
