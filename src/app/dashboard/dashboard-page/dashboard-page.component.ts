@@ -33,7 +33,6 @@ import { map } from 'rxjs/operators';
   styleUrl: './dashboard-page.component.sass',
 })
 export class DashboardPageComponent implements OnInit, OnDestroy {
-  userInfo: UserInterface;
   statCards = [
     { title: 'In', value: 0, percentChange: 0, isIncome: true },
     { title: 'Out', value: 0, percentChange: 0, isIncome: false },
@@ -54,8 +53,6 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     private dateSelectorService: DateSelectorService,
     private renderer: Renderer2,
   ) {
-    this.userInfo = this.authService.currentUserSig() || ({} as UserInterface);
-
     this.renderer.listen('window', 'click', (e: Event) => {
       if (!this.dateSelectorClicked) {
         this.showDateSelector = false;

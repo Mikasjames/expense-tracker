@@ -13,47 +13,6 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
   styleUrl: './sidebar.component.sass',
 })
 export class SidebarComponent {
-  @Input() sidebarItems: ToolBarContent[] = [
-    {
-      label: 'Dashboard',
-      icon: 'bi bi-house',
-      action: () => {
-        this.router.navigateByUrl('/dashboard');
-      },
-    },
-    {
-      label: 'Profile',
-      icon: 'bi bi-person',
-      action: () => {
-        this.router.navigateByUrl('/profile');
-      },
-    },
-    {
-      label: 'Settings',
-      icon: 'bi bi-gear',
-      action: () => {
-        this.router.navigateByUrl('/settings');
-      },
-    },
-    {
-      label: '',
-      icon: 'flex-grow-spacer',
-      action: () => {},
-    },
-    {
-      label: 'Logout',
-      icon: 'bi bi-box-arrow-right',
-      action: () => {
-        this.logout();
-      },
-    },
-  ];
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-  ) {}
-
-  logout() {
-    this.authService.logout();
-  }
+  @Input() sidebarItems: ToolBarContent[] = [];
+  constructor() {}
 }

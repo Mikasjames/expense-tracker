@@ -1,0 +1,28 @@
+<!--<input class="form-control" type="file" (change)="uploadFile($event)" id="formFile">-->
+<div class="mb-3">
+  <label for="monthSelector">Select Month:</label>
+  <select id="monthSelector" [(ngModel)]="selectedMonth">
+    <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+  </select>
+</div>
+
+<ng-container *ngIf="uploadedFiles$ | async as uploadedFiles">
+  <div *ngIf="uploadedFiles.length > 0; else noFiles">
+    <h3>Uploaded Files</h3>
+    <div class="row">
+      <div class="col-md-4 mb-3" *ngFor="let form of uploadedFiles">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ form.name }}</h5>
+            <button class="btn btn-primary" (click)="fillForm(form)">
+              Fill Form
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #noFiles>
+    <p>No files have been uploaded yet.</p>
+  </ng-template>
+</ng-container>
