@@ -3,13 +3,15 @@
   class="container-fluid vh-100 d-flex flex-column align-items-center justify-content-center bg-light z-n1"
 >
   <app-dollar-sign-svgs class="z-0"></app-dollar-sign-svgs>
-  <form [formGroup]="registerForm" (ngSubmit)="register()" class="z-3">
-    <div class="d-flex justify-content-center align-items-center">
-      <div class="row col-11 col-md-9 col-lg-7 col-xl-5">
-        <h1 class="fs-1 fw-bolder text-start">Register</h1>
-        <h5 class="fs-6 text-muted mb-4">Please sign up to continue</h5>
+  <div class="d-flex justify-content-center align-items-center">
+    <div class="row col-11 col-md-9 col-lg-7 col-xl-5">
+      <h1 class="fs-1 fw-bolder text-start">Register</h1>
+      <h5 class="fs-6 text-muted mb-4">Please sign up to continue</h5>
+      <div class="mb-0">
+        <app-platform-buttons></app-platform-buttons>
+      </div>
+      <form [formGroup]="registerForm" (ngSubmit)="register()" class="z-3">
         <div class="mb-0">
-          <app-platform-buttons></app-platform-buttons>
           <div class="position-relative text-center my-4">
             <hr class="m-0" />
             <span
@@ -59,8 +61,8 @@
             >Login</a
           >
         </div>
-      </div>
+      </form>
     </div>
-  </form>
+  </div>
 </div>
 <app-wave [wave]="'bottom'" class="z-0"></app-wave>
