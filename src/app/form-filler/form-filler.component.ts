@@ -70,12 +70,6 @@ export class FormFillerComponent implements OnInit {
     ),
   );
 
-  inW: Transaction[] = [];
-  inC: Transaction[] = [];
-
-  totalC: Observable<string> = this.calculateTotal(this.inC);
-  totalW: Observable<string> = this.calculateTotal(this.inW);
-
   constructor(
     private pdfService: PdfService,
     private transactionService: TransactionService,
@@ -84,15 +78,6 @@ export class FormFillerComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (
-      this.transactionsSubject.value.income.length === 0 &&
-      this.transactionsSubject.value.expense.length === 0
-    ) {
-      this.transactionService.initialize();
-    }
-    if (this.uploadedFilesSubject.value.length === 0) {
-      this.pdfService.initialize();
-    }
     this.loadTransactions();
     this.loadUploadedFiles();
   }
@@ -105,17 +90,6 @@ export class FormFillerComponent implements OnInit {
       this.transactionsSubject.next({
         income: incomeTransactions,
         expense: expenseTransactions,
-      });
-      incomeTransactions.forEach((transaction) => {
-        const tag = this.tagService.synchronousGetTagFromId(
-          transaction.tagIds[0],
-          'income',
-        );
-        if (tag.name === 'W') {
-          this.inW.push(transaction);
-        } else if (tag.name === 'C') {
-          this.inC.push(transaction);
-        }
       });
       this.cdr.markForCheck();
     });
@@ -237,7 +211,20 @@ export class FormFillerComponent implements OnInit {
   }
 
   private setBasic30InfoFieldValues(form: PDFForm) {
-    const cForSelectedMonthYear = this.filterTransactionsByMonthYear(this.inC);
+    const inW: Transaction[] = [];
+    const inC: Transaction[] = [];
+    this.transactionsSubject.value.income.forEach((transaction) => {
+      const tag = this.tagService.synchronousGetTagFromId(
+        transaction.tagIds[0],
+        'income',
+      );
+      if (tag.name === 'W') {
+        inW.push(transaction);
+      } else if (tag.name === 'C') {
+        inC.push(transaction);
+      }
+    });
+    const cForSelectedMonthYear = this.filterTransactionsByMonthYear(inC);
 
     const fields = [
       { name: '900_1_Text', value: this.name },
@@ -295,7 +282,7 @@ export class FormFillerComponent implements OnInit {
         .subscribe((total) => {
           fields.push({
             name: '900_7_Text',
-            value: `Expenses - Refer to S-26`,
+            value: `Expenses - Refer to ${this.uploadedFilesSubject.value[0].name.split('_')[0]}`,
           });
           fields.push({ name: '901_14_S30_Value', value: total });
         });
@@ -400,7 +387,10 @@ export class FormFillerComponent implements OnInit {
     fieldMappings[`902_${depositTransactionIndex + 3}_S26Value`] = totalIns;
 
     // Set 'To Branch Office' description
-    fieldMappings[`900_${outTransactionIndex + 64}_Text`] = 'To Branch Office';
+    if (this.boTransactions.length > 0) {
+      fieldMappings[`900_${outTransactionIndex + 64}_Text`] =
+        'To Branch Office';
+    }
 
     // Handle Branch Office (WWW) transactions
     this.boTransactions.forEach((transaction, index) => {
