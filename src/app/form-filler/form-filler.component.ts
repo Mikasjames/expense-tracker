@@ -12,7 +12,13 @@ import { FormsModule } from '@angular/forms';
 import { TransactionService } from '../services/transactions/transaction.service';
 import { Transaction } from '../models/transaction.interface';
 import { TagService } from '../services/tags/tag.service';
-import { BehaviorSubject, catchError, Observable, switchMap } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  combineLatest,
+  Observable,
+  switchMap,
+} from 'rxjs';
 import { take } from 'rxjs/operators';
 
 @Component({
@@ -78,46 +84,50 @@ export class FormFillerComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    if (this.transactionsSubject.value.income.length === 0 && this.transactionsSubject.value.expense.length === 0) {
+      this.transactionService.initialize();
+    }
+    if (this.uploadedFilesSubject.value.length === 0) {
+      this.pdfService.initialize();
+    }
     this.loadTransactions();
     this.loadUploadedFiles();
   }
 
   loadTransactions() {
-    this.transactionService
-      .getAllTransactions()
-      .subscribe(({ incomeTransactions, expenseTransactions }) => {
-        this.transactionsSubject.next({
-          income: incomeTransactions,
-          expense: expenseTransactions,
-        });
-        incomeTransactions.forEach((transaction) => {
-          const tag = this.tagService.synchronousGetTagFromId(
-            transaction.tagIds[0],
-            'income',
-          );
-          if (tag.name === 'W') {
-            this.inW.push(transaction);
-          } else if (tag.name === 'C') {
-            this.inC.push(transaction);
-          }
-        });
-        this.cdr.markForCheck();
+    combineLatest([
+      this.transactionService.incomeTransactions$,
+      this.transactionService.expenseTransactions$,
+    ]).subscribe(([incomeTransactions, expenseTransactions]) => {
+      this.transactionsSubject.next({
+        income: incomeTransactions,
+        expense: expenseTransactions,
       });
+      incomeTransactions.forEach((transaction) => {
+        const tag = this.tagService.synchronousGetTagFromId(
+          transaction.tagIds[0],
+          'income',
+        );
+        if (tag.name === 'W') {
+          this.inW.push(transaction);
+        } else if (tag.name === 'C') {
+          this.inC.push(transaction);
+        }
+      });
+      this.cdr.markForCheck();
+    });
   }
 
   loadUploadedFiles() {
-    this.pdfService
-      .getAllPdfs()
-      .pipe(
-        catchError((error) => {
-          console.error('Error fetching uploaded files:', error);
-          return [];
-        }),
-      )
-      .subscribe((files) => {
+    this.pdfService.pdfs$.subscribe(
+      (files) => {
         this.uploadedFilesSubject.next(files);
         this.cdr.markForCheck();
-      });
+      },
+      (error) => {
+        console.error('Error fetching uploaded files:', error);
+      },
+    );
   }
 
   uploadFile(event: Event) {
