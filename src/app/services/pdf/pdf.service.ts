@@ -35,11 +35,16 @@ export class PdfService {
     private firestore: AngularFirestore,
     private afAuth: AngularFireAuth,
   ) {
+    this.initialize();
+  }
+
+  initialize() {
     this.afAuth.authState.subscribe((user) => {
       if (user) {
         console.log(user);
         this.userId = user.uid;
         this.getAllPdfs().subscribe((pdfs) => {
+          console.log(pdfs);
           this.pdfsSubject.next(pdfs);
         });
       } else {
