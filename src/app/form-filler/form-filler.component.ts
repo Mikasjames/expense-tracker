@@ -29,6 +29,7 @@ import { take } from 'rxjs/operators';
   styleUrl: './form-filler.component.sass',
 })
 export class FormFillerComponent implements OnInit {
+  // TODO: Refactor this component
   private uploadedFilesSubject = new BehaviorSubject<PdfFile[]>([]);
   uploadedFiles$: Observable<PdfFile[]> =
     this.uploadedFilesSubject.asObservable();
@@ -177,12 +178,41 @@ export class FormFillerComponent implements OnInit {
     this.setBasic30InfoFieldValues(form);
     const pdfBytes = await pdfDoc.save();
     this.downloadModifiedPdf(pdfBytes, pdf.name);
+    this.boTransactions = [];
   }
 
   async fill62(pdf: PdfFile) {
+    const inW: Transaction[] = [];
+    this.transactionsSubject.value.income.forEach((transaction) => {
+      const tag = this.tagService.synchronousGetTagFromId(
+        transaction.tagIds[0],
+        'income',
+      );
+      if (tag.name === 'W') {
+        inW.push(transaction);
+      }
+    });
+    const wForSelectedMonthYear = this.filterTransactionsByMonthYear(inW);
+    this.filterTransactionsByMonthYear(this.transactionsSubject.value.expense);
+    const resolution = this.boTransactions
+      .find((transaction) => transaction.title.includes('resolution'));
+
     const pdfDoc = await this.loadPdfDocument(pdf.url);
     this.modifyFont(pdfDoc);
     const form = pdfDoc.getForm();
+    form.getCheckBox('900_1_CheckBox').check();
+    form.getTextField('900_3_Text').setText(this.name);
+    this.calculateTotal(wForSelectedMonthYear).pipe(take(1)).subscribe((total) => {
+      form.getTextField('901_1_TO62Donate').setText(total);
+    });
+    if (resolution) {
+      form.getTextField('901_2_TO62Donate').setText(resolution.amount.toFixed(2).toString());
+    }
+
+
+    const pdfBytes = await pdfDoc.save();
+    this.downloadModifiedPdf(pdfBytes, pdf.name);
+    this.boTransactions = [];
   }
 
   private async loadPdfDocument(url: string): Promise<PDFDocument> {
