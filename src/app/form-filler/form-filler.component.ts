@@ -84,7 +84,10 @@ export class FormFillerComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.transactionsSubject.value.income.length === 0 && this.transactionsSubject.value.expense.length === 0) {
+    if (
+      this.transactionsSubject.value.income.length === 0 &&
+      this.transactionsSubject.value.expense.length === 0
+    ) {
       this.transactionService.initialize();
     }
     if (this.uploadedFilesSubject.value.length === 0) {

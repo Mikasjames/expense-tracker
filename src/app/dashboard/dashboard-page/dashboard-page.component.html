@@ -31,7 +31,7 @@
         <div class="row mb-3">
           <div
             *ngFor="let statCard of statCards"
-            class="col-6 col-md-4 mb-2 mx-auto mx-md-0"
+            class="col-6 col-xl-4 mb-2 mx-auto mx-xl-0"
           >
             <app-stat-card
               [title]="statCard.title"
@@ -41,25 +41,25 @@
             ></app-stat-card>
           </div>
         </div>
-        <app-line-bar-chart
-          title="Total Ins"
-          percentChangeMessage="Previous gains:"
-          [data]="incomeLineBarData"
-          [isIncome]="true"
-        ></app-line-bar-chart>
-      </div>
-      <div class="row col-12 col-lg-6 mt-3 mt-lg-0 mx-lg-2">
-        <app-line-bar-chart
-          title="Total Outs"
-          class="mb-3"
-          percentChangeMessage="Previous dip:"
-          [data]="expenseLineBarData"
-          [isIncome]="false"
-        ></app-line-bar-chart>
         <app-transaction-table
           [transactions]="allTransactions"
           [showFilter]="true"
         ></app-transaction-table>
+      </div>
+      <div class="row col-12 col-lg-6 mt-3 mt-lg-0 mx-lg-2">
+        <app-line-bar-chart
+          title="Total Ins"
+          class="mb-3"
+          percentChangeMessage="Previous gains:"
+          [data]="incomeLineBarData"
+          [isIncome]="true"
+        ></app-line-bar-chart>
+        <app-line-bar-chart
+          title="Total Outs"
+          percentChangeMessage="Previous dip:"
+          [data]="expenseLineBarData"
+          [isIncome]="false"
+        ></app-line-bar-chart>
       </div>
     </div>
   </div>
