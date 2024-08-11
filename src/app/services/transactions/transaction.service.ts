@@ -40,6 +40,10 @@ export class TransactionService {
     private afAuth: AngularFireAuth,
     private fs: Firestore,
   ) {
+    this.initialize();
+  }
+
+  initialize() {
     this.afAuth.authState
       .pipe(
         switchMap((user) => {
