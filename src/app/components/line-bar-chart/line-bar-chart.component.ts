@@ -138,8 +138,8 @@ export class LineBarChartComponent {
     ] as CustomSeriesOption,
   };
 
-  get arrowIconClass() {
-    return this.percentChange > 0 ? 'w-3 h-3 ms-1' : 'w-3 h-3 ms-1 rotate-180';
+  get percentChangeSymbol() {
+    return this.percentChange > 0 ? 'bi bi-arrow-up' : 'bi bi-arrow-down';
   }
 
   get percentChangeClass() {
