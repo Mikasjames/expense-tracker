@@ -39,19 +39,26 @@ export class PdfService {
   }
 
   initialize() {
-    this.afAuth.authState.subscribe((user) => {
-      if (user) {
-        console.log(user);
-        this.userId = user.uid;
-        this.getAllPdfs().subscribe((pdfs) => {
-          console.log(pdfs);
+    this.afAuth.authState
+      .pipe(
+        switchMap((user) => {
+          if (user) {
+            this.userId = user.uid;
+            return this.getAllPdfs();
+          } else {
+            this.userId = null;
+            return of([]);
+          }
+        }),
+      )
+      .subscribe(
+        (pdfs) => {
           this.pdfsSubject.next(pdfs);
-        });
-      } else {
-        this.userId = null;
-        this.pdfsSubject.next([]);
-      }
-    });
+        },
+        (error) => {
+          console.error(error);
+        },
+      );
   }
 
   uploadPdf(file: File): Observable<PdfFile> {
