@@ -1,9 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { TagService } from '../../services/tags/tag.service';
 import { Tag } from '../../models/chart.interface';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { debounceTime } from 'rxjs';
+import { debounceTime, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-tag-input',
@@ -12,7 +20,7 @@ import { debounceTime } from 'rxjs';
   templateUrl: './tag-input.component.html',
   styleUrl: './tag-input.component.sass',
 })
-export class TagInputComponent implements OnInit {
+export class TagInputComponent implements OnInit, OnDestroy {
   @Input() type: 'income' | 'expense' = 'income';
   @Input() tagId: string | null = null;
   @Output() tagAdded = new EventEmitter<string | null>();
@@ -22,6 +30,8 @@ export class TagInputComponent implements OnInit {
   selectedTag: Tag | null = null;
   suggestions: Tag[] = [];
   searchDelay = 0;
+  isFocused = false;
+  destroy$ = new Subject<void>();
 
   constructor(private tagService: TagService) {
     this.tagService.incomeTags$.subscribe((tags) => {
@@ -42,9 +52,14 @@ export class TagInputComponent implements OnInit {
       this.type === 'income' ? this.incomeTags : this.expenseTags;
     if (this.tagId === null) return;
     this.removeTagFromSuggestions(this.tagId);
-    this.tagService.getTagFromId(this.tagId, this.type).subscribe((tag) => {
-      this.selectedTag = tag;
-    });
+    this.tagService
+      .getTagFromId(this.tagId, this.type)
+      .pipe(
+        takeUntil(this.destroy$), // Assuming you've set up a destroy$ Subject
+      )
+      .subscribe((tag) => {
+        this.selectedTag = tag;
+      });
   }
 
   filterSuggestions(query: string) {
@@ -65,16 +80,13 @@ export class TagInputComponent implements OnInit {
   }
 
   addTag(tag: string) {
-    console.log('Adding tag:', tag);
     this.tagService.addTag(tag, this.type).subscribe(
       (tagId) => {
-        console.log('Tag added successfully');
         this.tagAdded.emit(tagId);
         this.tagForm.setValue('');
-        this.selectedTag = this.tagService.synchronousGetTagFromId(
-          tagId,
-          this.type,
-        );
+        this.tagService.getTagFromId(tagId, this.type).subscribe((tag) => {
+          this.selectedTag = tag;
+        });
         this.removeTagFromSuggestions(tagId);
       },
       (error) => {
@@ -84,11 +96,22 @@ export class TagInputComponent implements OnInit {
   }
 
   addExistingTag(tag: Tag) {
-    console.log('Adding existing tag:', tag.name);
+    const textarea = document.getElementById('tagIds') as HTMLTextAreaElement;
+    textarea.blur();
     this.tagAdded.emit(tag.id);
     this.tagForm.setValue('');
     this.selectedTag = tag;
     this.removeTagFromSuggestions(tag.id);
+  }
+
+  onFocus() {
+    this.isFocused = true;
+  }
+
+  onBlur() {
+    setTimeout(() => {
+      this.isFocused = false;
+    }, 200);
   }
 
   removeExistingTag() {
@@ -100,9 +123,7 @@ export class TagInputComponent implements OnInit {
   }
 
   removeTagFromSuggestions(tagId: string) {
-    this.suggestions = this.suggestions.filter(
-      (tag) => tag.id.toLowerCase() !== tagId.toLowerCase(),
-    );
+    this.suggestions = this.suggestions.filter((tag) => tag.id !== tagId);
   }
 
   showAddTagOption() {
@@ -119,13 +140,20 @@ export class TagInputComponent implements OnInit {
     );
 
     if (exactMatch) {
-      this.addExistingTag(this.suggestions[0]);
+      this.addExistingTag(exactMatch);
       return;
     }
     this.addTag(this.tagForm.value);
+
+    const textarea = document.getElementById('tagIds') as HTMLTextAreaElement;
+    textarea.blur(); // Remove focus from the textarea
   }
 
   isOptionHighlighted(tagName: string) {
     return tagName.toLowerCase() === this.tagForm.value.toLowerCase();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
   }
 }

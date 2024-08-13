@@ -194,21 +194,25 @@ export class FormFillerComponent implements OnInit {
     });
     const wForSelectedMonthYear = this.filterTransactionsByMonthYear(inW);
     this.filterTransactionsByMonthYear(this.transactionsSubject.value.expense);
-    const resolution = this.boTransactions
-      .find((transaction) => transaction.title.includes('resolution'));
+    const resolution = this.boTransactions.find((transaction) =>
+      transaction.title.includes('resolution'),
+    );
 
     const pdfDoc = await this.loadPdfDocument(pdf.url);
     this.modifyFont(pdfDoc);
     const form = pdfDoc.getForm();
     form.getCheckBox('900_1_CheckBox').check();
     form.getTextField('900_3_Text').setText(this.name);
-    this.calculateTotal(wForSelectedMonthYear).pipe(take(1)).subscribe((total) => {
-      form.getTextField('901_1_TO62Donate').setText(total);
-    });
+    this.calculateTotal(wForSelectedMonthYear)
+      .pipe(take(1))
+      .subscribe((total) => {
+        form.getTextField('901_1_TO62Donate').setText(total);
+      });
     if (resolution) {
-      form.getTextField('901_2_TO62Donate').setText(resolution.amount.toFixed(2).toString());
+      form
+        .getTextField('901_2_TO62Donate')
+        .setText(resolution.amount.toFixed(2).toString());
     }
-
 
     const pdfBytes = await pdfDoc.save();
     this.downloadModifiedPdf(pdfBytes, pdf.name);
