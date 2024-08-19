@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1724056550480,
+  "timestamp": 1724057128753,
   "index": "https://mikasjames.github.io/expense-tracker/index.html",
   "assetGroups": [
     {
@@ -20,7 +20,7 @@
         "https://mikasjames.github.io/expense-tracker/main-AMHGHMWV.js",
         "https://mikasjames.github.io/expense-tracker/manifest.webmanifest",
         "https://mikasjames.github.io/expense-tracker/polyfills-GTEVC5Y5.js",
-        "https://mikasjames.github.io/expense-tracker/styles-GKFT7GNW.css"
+        "https://mikasjames.github.io/expense-tracker/styles-QNNL537C.css"
       ],
       "patterns": []
     },
@@ -49,13 +49,13 @@
     "https://mikasjames.github.io/expense-tracker/chunk-IWN6ICAY.js": "9bd3f5694defca153930581024c89cc7c64bfec2",
     "https://mikasjames.github.io/expense-tracker/chunk-SIAVTO45.js": "86e7eabee960bc32d69c21b03224020787d6c09a",
     "https://mikasjames.github.io/expense-tracker/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
-    "https://mikasjames.github.io/expense-tracker/index.html": "3d192aeb0adac0a1a961a4f6237405f240473168",
+    "https://mikasjames.github.io/expense-tracker/index.html": "a559e1b85cff5c546090422877b137e07ccd5acf",
     "https://mikasjames.github.io/expense-tracker/main-AMHGHMWV.js": "bba3a1d1dcad27ec65c2de9d3c394eab97b2f50a",
     "https://mikasjames.github.io/expense-tracker/manifest.webmanifest": "f0c98285d836f65e28d05ef8497bb2219c4f4de4",
     "https://mikasjames.github.io/expense-tracker/media/bootstrap-icons-OCU552PF.woff": "d5831fd39baf13aff7626e483b9a089730f18604",
     "https://mikasjames.github.io/expense-tracker/media/bootstrap-icons-X6UQXWUS.woff2": "020c3c6f9280a315e8425d7f92e15bcd0cdda1b2",
     "https://mikasjames.github.io/expense-tracker/polyfills-GTEVC5Y5.js": "5edc7aa14a6eccd1ac02fa19901db7032d7cd1be",
-    "https://mikasjames.github.io/expense-tracker/styles-GKFT7GNW.css": "850aa6dcc5b9079334b5b6cba64be0c5217621a6"
+    "https://mikasjames.github.io/expense-tracker/styles-QNNL537C.css": "1d741e0aa3081e5a2d7bce4753fbb80a651bec71"
   },
   "navigationUrls": [
     {
