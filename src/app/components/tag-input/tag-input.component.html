@@ -1,6 +1,10 @@
 <div *ngIf="selectedTag" class="badge bg-primary text-wrap">
   {{ selectedTag.name }}
-  <i class="bi bi-x-circle-fill ms-1" (click)="removeExistingTag()"></i>
+  <i
+    role="button"
+    class="bi bi-x-circle-fill ms-1"
+    (click)="removeExistingTag()"
+  ></i>
 </div>
 <textarea
   *ngIf="selectedTag === null"
