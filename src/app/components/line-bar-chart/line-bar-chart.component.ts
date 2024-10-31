@@ -61,6 +61,7 @@ export class LineBarChartComponent {
           itemStyle: {
             color: '#c23531',
           },
+          smooth: true,
         },
       ] as CustomSeriesOption,
     };
