@@ -4,6 +4,10 @@
   <select id="monthSelector" [(ngModel)]="selectedMonth">
     <option *ngFor="let month of months" [value]="month">{{ month }}</option>
   </select>
+  <label id="yearSelector">Select Year:</label>
+  <select id="yearSelector" [(ngModel)]="selectedYear" (ngModelChange)="onYearChange($event)">
+    <option *ngFor="let year of oldestToNewestTransactionYearRange" [value]="year">{{ year }}</option>
+  </select>
 </div>
 
 <ng-container *ngIf="uploadedFiles$ | async as uploadedFiles">

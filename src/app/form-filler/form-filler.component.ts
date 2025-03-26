@@ -35,7 +35,6 @@ export class FormFillerComponent implements OnInit {
     this.uploadedFilesSubject.asObservable();
   boTransactions: Transaction[] = [];
 
-  currentYear: number = new Date().getFullYear();
   months: string[] = [
     'January',
     'February',
@@ -54,6 +53,8 @@ export class FormFillerComponent implements OnInit {
   city = 'Tanza';
   province = 'Cavite';
   selectedMonth: string = this.months[new Date().getMonth()];
+  selectedYear: number = new Date().getFullYear();
+  oldestToNewestTransactionYearRange: number[] = [];
 
   private transactionsSubject = new BehaviorSubject<{
     income: Transaction[];
@@ -92,8 +93,50 @@ export class FormFillerComponent implements OnInit {
         income: incomeTransactions,
         expense: expenseTransactions,
       });
+      this.setOldestAndNewestYearFromTransaction(
+        incomeTransactions,
+        expenseTransactions,
+      );
       this.cdr.markForCheck();
     });
+  }
+
+  setOldestAndNewestYearFromTransaction(
+    income: Transaction[],
+    expense: Transaction[],
+  ) {
+    const allTransactions = [...income, ...expense];
+    if (allTransactions.length === 0) {
+      return;
+    }
+
+    const dates = allTransactions.map(
+      (transaction) => new Date(transaction.date),
+    );
+    const oldestTransactionYear = Math.min(
+      ...dates.map((date) => date.getFullYear()),
+    );
+    const newestTransactionYear = Math.max(
+      ...dates.map((date) => date.getFullYear()),
+    );
+
+    let years = [];
+
+    for (let i = oldestTransactionYear; i <= newestTransactionYear; i++) {
+      years.push(i);
+      if (
+        i === newestTransactionYear &&
+        !this.oldestToNewestTransactionYearRange.includes(this.selectedYear)
+      ) {
+        this.selectedYear = i;
+      }
+    }
+
+    this.oldestToNewestTransactionYearRange = years;
+  }
+
+  onYearChange(value: string) {
+    this.selectedYear = +value;
   }
 
   loadUploadedFiles() {
@@ -234,7 +277,7 @@ export class FormFillerComponent implements OnInit {
       { name: '900_2_Text_C', value: this.city },
       { name: '900_3_Text_C', value: this.province },
       { name: '900_4_Text_C', value: this.selectedMonth },
-      { name: '900_5_Text_C', value: this.currentYear.toString() },
+      { name: '900_5_Text_C', value: this.selectedYear.toString() },
     ];
 
     fields.forEach((field) => {
@@ -264,7 +307,7 @@ export class FormFillerComponent implements OnInit {
       { name: '900_1_Text', value: this.name },
       {
         name: '900_2_Text',
-        value: `${this.selectedMonth} ${this.currentYear}`,
+        value: `${this.selectedMonth} ${this.selectedYear}`,
       },
       { name: '900_17_Text_C', value: this.selectedMonth },
     ];
@@ -354,7 +397,7 @@ export class FormFillerComponent implements OnInit {
       const date = new Date(transaction.date);
       const isWithinMonthYear =
         date.getMonth() === this.months.indexOf(this.selectedMonth) &&
-        date.getFullYear() === this.currentYear;
+        date.getFullYear() === this.selectedYear;
       if (!type && transaction.title.includes('WWW') && isWithinMonthYear) {
         this.boTransactions.push(transaction);
         return false;
@@ -400,7 +443,7 @@ export class FormFillerComponent implements OnInit {
 
     // Set last day of the month for deposit
     const lastDayOfMonth = new Date(
-      this.currentYear,
+      this.selectedYear,
       this.months.indexOf(this.selectedMonth) + 1,
       0,
     ).getDate();
@@ -512,7 +555,7 @@ export class FormFillerComponent implements OnInit {
       const date = new Date(transaction.date);
       return (
         date.getMonth() < currentMonth &&
-        date.getFullYear() === this.currentYear
+        date.getFullYear() === this.selectedYear
       );
     });
   }
@@ -522,7 +565,7 @@ export class FormFillerComponent implements OnInit {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${this.selectedMonth}_${this.currentYear}-${originalName}`;
+    link.download = `${this.selectedMonth}_${this.selectedYear}-${originalName}`;
     link.click();
     URL.revokeObjectURL(url);
   }
