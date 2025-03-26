@@ -1,13 +1,17 @@
 <!--<input class="form-control" type="file" (change)="uploadFile($event)" id="formFile">-->
-<div class="mb-3">
-  <label for="monthSelector">Select Month:</label>
-  <select id="monthSelector" [(ngModel)]="selectedMonth">
-    <option *ngFor="let month of months" [value]="month">{{ month }}</option>
-  </select>
-  <label id="yearSelector">Select Year:</label>
-  <select id="yearSelector" [(ngModel)]="selectedYear" (ngModelChange)="onYearChange($event)">
-    <option *ngFor="let year of oldestToNewestTransactionYearRange" [value]="year">{{ year }}</option>
-  </select>
+<div class="mb-3 d-flex justify-content-center justify-content-md-start align-items-center">
+  <div class="col-6 col-md-2 col-xl-1 px-1">
+    <select id="monthSelector" class="form-select w-100" [(ngModel)]="selectedMonth">
+      <option selected disabled>Month</option>
+      <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+    </select>
+  </div>
+  <div class="col-6 col-md-2 col-xl-1 px-1">
+    <select id="yearSelector" class="form-select w-100" [(ngModel)]="selectedYear" (ngModelChange)="onYearChange($event)">
+      <option selected disabled>Year</option>
+      <option *ngFor="let year of oldestToNewestTransactionYearRange" [value]="year">{{ year }}</option>
+    </select>
+  </div>
 </div>
 
 <ng-container *ngIf="uploadedFiles$ | async as uploadedFiles">

@@ -23,7 +23,6 @@ import { map } from 'rxjs/operators';
     CommonModule,
     LineBarChartComponent,
     StatCardComponent,
-    TransactionFormComponent,
     LoaderComponent,
     TransactionTableComponent,
     TransactionFormButtonsComponent,
