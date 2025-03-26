@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1730386236408,
+  "timestamp": 1742986582096,
   "index": "https://mikasjames.github.io/expense-tracker/index.html",
   "assetGroups": [
     {
@@ -11,16 +11,16 @@
         "ignoreVary": true
       },
       "urls": [
-        "https://mikasjames.github.io/expense-tracker/chunk-BWMVGNHL.js",
-        "https://mikasjames.github.io/expense-tracker/chunk-CF2AHGHN.js",
-        "https://mikasjames.github.io/expense-tracker/chunk-IWN6ICAY.js",
+        "https://mikasjames.github.io/expense-tracker/chunk-EMRAK4B5.js",
+        "https://mikasjames.github.io/expense-tracker/chunk-HLVNZW4O.js",
         "https://mikasjames.github.io/expense-tracker/chunk-SIAVTO45.js",
+        "https://mikasjames.github.io/expense-tracker/chunk-TSEP7WFB.js",
         "https://mikasjames.github.io/expense-tracker/favicon.ico",
         "https://mikasjames.github.io/expense-tracker/index.html",
-        "https://mikasjames.github.io/expense-tracker/main-APNO32IJ.js",
+        "https://mikasjames.github.io/expense-tracker/main-CBQ72A4E.js",
         "https://mikasjames.github.io/expense-tracker/manifest.webmanifest",
-        "https://mikasjames.github.io/expense-tracker/polyfills-GTEVC5Y5.js",
-        "https://mikasjames.github.io/expense-tracker/styles-QNNL537C.css"
+        "https://mikasjames.github.io/expense-tracker/polyfills-EJ46DL77.js",
+        "https://mikasjames.github.io/expense-tracker/styles-VZGCZXBU.css"
       ],
       "patterns": []
     },
@@ -44,18 +44,18 @@
   "hashTable": {
     "https://mikasjames.github.io/expense-tracker/assets/icons/icon512_maskable.png": "ae9d03ad5a82803b13fcdc5a15d83f1f4b7c33a6",
     "https://mikasjames.github.io/expense-tracker/assets/icons/icon512_rounded.png": "aaf3ad29fffcf35322e542042522d9b32aabc28a",
-    "https://mikasjames.github.io/expense-tracker/chunk-BWMVGNHL.js": "589a479b5ac0aef385ce19d66ad7c80c1ecedf32",
-    "https://mikasjames.github.io/expense-tracker/chunk-CF2AHGHN.js": "72c4fa7308d88f674286e7c87da8989dede0ae15",
-    "https://mikasjames.github.io/expense-tracker/chunk-IWN6ICAY.js": "9bd3f5694defca153930581024c89cc7c64bfec2",
+    "https://mikasjames.github.io/expense-tracker/chunk-EMRAK4B5.js": "583019ad95f59bae260e4bb4ae97538498b7ba30",
+    "https://mikasjames.github.io/expense-tracker/chunk-HLVNZW4O.js": "3bd5cf7781ad1efc1d8c4c3738e94f126a762433",
     "https://mikasjames.github.io/expense-tracker/chunk-SIAVTO45.js": "86e7eabee960bc32d69c21b03224020787d6c09a",
+    "https://mikasjames.github.io/expense-tracker/chunk-TSEP7WFB.js": "7b1899ae6f7a17a29f4bb428d0b240d01f6f63ee",
     "https://mikasjames.github.io/expense-tracker/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
-    "https://mikasjames.github.io/expense-tracker/index.html": "08d5bc5d739c6ef5d2584e5e7e50de02c2dfa0ae",
-    "https://mikasjames.github.io/expense-tracker/main-APNO32IJ.js": "6304a485f23613fbed05905d323f4b3009afac03",
-    "https://mikasjames.github.io/expense-tracker/manifest.webmanifest": "f0c98285d836f65e28d05ef8497bb2219c4f4de4",
+    "https://mikasjames.github.io/expense-tracker/index.html": "c435d3f83bc1b51610f577ea87dcebc8a394c622",
+    "https://mikasjames.github.io/expense-tracker/main-CBQ72A4E.js": "d9e10e3e818e231d8064ac311ca70009f6226a76",
+    "https://mikasjames.github.io/expense-tracker/manifest.webmanifest": "d58c5464f4651cb6b11ffc0f5ad31928ca36c0e7",
     "https://mikasjames.github.io/expense-tracker/media/bootstrap-icons-OCU552PF.woff": "d5831fd39baf13aff7626e483b9a089730f18604",
     "https://mikasjames.github.io/expense-tracker/media/bootstrap-icons-X6UQXWUS.woff2": "020c3c6f9280a315e8425d7f92e15bcd0cdda1b2",
-    "https://mikasjames.github.io/expense-tracker/polyfills-GTEVC5Y5.js": "5edc7aa14a6eccd1ac02fa19901db7032d7cd1be",
-    "https://mikasjames.github.io/expense-tracker/styles-QNNL537C.css": "1d741e0aa3081e5a2d7bce4753fbb80a651bec71"
+    "https://mikasjames.github.io/expense-tracker/polyfills-EJ46DL77.js": "01500e27968fb09f51100a67f46a69297cc263de",
+    "https://mikasjames.github.io/expense-tracker/styles-VZGCZXBU.css": "0970efe163aca76946103905bcc1a81209286ebf"
   },
   "navigationUrls": [
     {
