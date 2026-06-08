@@ -1,7 +1,7 @@
 {
   "configVersion": 1,
-  "timestamp": 1742986582096,
-  "index": "https://mikasjames.github.io/expense-tracker/index.html",
+  "timestamp": 1780911622656,
+  "index": "https://tracker.mikasjames.com/index.html",
   "assetGroups": [
     {
       "name": "app",
@@ -11,16 +11,16 @@
         "ignoreVary": true
       },
       "urls": [
-        "https://mikasjames.github.io/expense-tracker/chunk-EMRAK4B5.js",
-        "https://mikasjames.github.io/expense-tracker/chunk-HLVNZW4O.js",
-        "https://mikasjames.github.io/expense-tracker/chunk-SIAVTO45.js",
-        "https://mikasjames.github.io/expense-tracker/chunk-TSEP7WFB.js",
-        "https://mikasjames.github.io/expense-tracker/favicon.ico",
-        "https://mikasjames.github.io/expense-tracker/index.html",
-        "https://mikasjames.github.io/expense-tracker/main-CBQ72A4E.js",
-        "https://mikasjames.github.io/expense-tracker/manifest.webmanifest",
-        "https://mikasjames.github.io/expense-tracker/polyfills-EJ46DL77.js",
-        "https://mikasjames.github.io/expense-tracker/styles-VZGCZXBU.css"
+        "https://tracker.mikasjames.com/chunk-EMRAK4B5.js",
+        "https://tracker.mikasjames.com/chunk-HLVNZW4O.js",
+        "https://tracker.mikasjames.com/chunk-RIHQTBDY.js",
+        "https://tracker.mikasjames.com/chunk-SIAVTO45.js",
+        "https://tracker.mikasjames.com/favicon.ico",
+        "https://tracker.mikasjames.com/index.html",
+        "https://tracker.mikasjames.com/main-Y7J6RS65.js",
+        "https://tracker.mikasjames.com/manifest.webmanifest",
+        "https://tracker.mikasjames.com/polyfills-EJ46DL77.js",
+        "https://tracker.mikasjames.com/styles-DNL5IWFW.css"
       ],
       "patterns": []
     },
@@ -32,30 +32,30 @@
         "ignoreVary": true
       },
       "urls": [
-        "https://mikasjames.github.io/expense-tracker/assets/icons/icon512_maskable.png",
-        "https://mikasjames.github.io/expense-tracker/assets/icons/icon512_rounded.png",
-        "https://mikasjames.github.io/expense-tracker/media/bootstrap-icons-OCU552PF.woff",
-        "https://mikasjames.github.io/expense-tracker/media/bootstrap-icons-X6UQXWUS.woff2"
+        "https://tracker.mikasjames.com/assets/icons/icon512_maskable.png",
+        "https://tracker.mikasjames.com/assets/icons/icon512_rounded.png",
+        "https://tracker.mikasjames.com/media/bootstrap-icons-CVBWLLHT.woff2",
+        "https://tracker.mikasjames.com/media/bootstrap-icons-VQNJTM6Q.woff"
       ],
       "patterns": []
     }
   ],
   "dataGroups": [],
   "hashTable": {
-    "https://mikasjames.github.io/expense-tracker/assets/icons/icon512_maskable.png": "ae9d03ad5a82803b13fcdc5a15d83f1f4b7c33a6",
-    "https://mikasjames.github.io/expense-tracker/assets/icons/icon512_rounded.png": "aaf3ad29fffcf35322e542042522d9b32aabc28a",
-    "https://mikasjames.github.io/expense-tracker/chunk-EMRAK4B5.js": "583019ad95f59bae260e4bb4ae97538498b7ba30",
-    "https://mikasjames.github.io/expense-tracker/chunk-HLVNZW4O.js": "3bd5cf7781ad1efc1d8c4c3738e94f126a762433",
-    "https://mikasjames.github.io/expense-tracker/chunk-SIAVTO45.js": "86e7eabee960bc32d69c21b03224020787d6c09a",
-    "https://mikasjames.github.io/expense-tracker/chunk-TSEP7WFB.js": "7b1899ae6f7a17a29f4bb428d0b240d01f6f63ee",
-    "https://mikasjames.github.io/expense-tracker/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
-    "https://mikasjames.github.io/expense-tracker/index.html": "c435d3f83bc1b51610f577ea87dcebc8a394c622",
-    "https://mikasjames.github.io/expense-tracker/main-CBQ72A4E.js": "d9e10e3e818e231d8064ac311ca70009f6226a76",
-    "https://mikasjames.github.io/expense-tracker/manifest.webmanifest": "d58c5464f4651cb6b11ffc0f5ad31928ca36c0e7",
-    "https://mikasjames.github.io/expense-tracker/media/bootstrap-icons-OCU552PF.woff": "d5831fd39baf13aff7626e483b9a089730f18604",
-    "https://mikasjames.github.io/expense-tracker/media/bootstrap-icons-X6UQXWUS.woff2": "020c3c6f9280a315e8425d7f92e15bcd0cdda1b2",
-    "https://mikasjames.github.io/expense-tracker/polyfills-EJ46DL77.js": "01500e27968fb09f51100a67f46a69297cc263de",
-    "https://mikasjames.github.io/expense-tracker/styles-VZGCZXBU.css": "0970efe163aca76946103905bcc1a81209286ebf"
+    "https://tracker.mikasjames.com/assets/icons/icon512_maskable.png": "ae9d03ad5a82803b13fcdc5a15d83f1f4b7c33a6",
+    "https://tracker.mikasjames.com/assets/icons/icon512_rounded.png": "aaf3ad29fffcf35322e542042522d9b32aabc28a",
+    "https://tracker.mikasjames.com/chunk-EMRAK4B5.js": "583019ad95f59bae260e4bb4ae97538498b7ba30",
+    "https://tracker.mikasjames.com/chunk-HLVNZW4O.js": "3bd5cf7781ad1efc1d8c4c3738e94f126a762433",
+    "https://tracker.mikasjames.com/chunk-RIHQTBDY.js": "4b4913cc16a36eb1dee6716be2f1cef24dd52557",
+    "https://tracker.mikasjames.com/chunk-SIAVTO45.js": "86e7eabee960bc32d69c21b03224020787d6c09a",
+    "https://tracker.mikasjames.com/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
+    "https://tracker.mikasjames.com/index.html": "33691461a43748c495f692947e1710c012c4eb4f",
+    "https://tracker.mikasjames.com/main-Y7J6RS65.js": "82e3a8d64fbaa5b7b714ae1c20b4ccc62a14a0c6",
+    "https://tracker.mikasjames.com/manifest.webmanifest": "f0c98285d836f65e28d05ef8497bb2219c4f4de4",
+    "https://tracker.mikasjames.com/media/bootstrap-icons-CVBWLLHT.woff2": "b441fcff939e24fa0906a37b7788788b9fddbb68",
+    "https://tracker.mikasjames.com/media/bootstrap-icons-VQNJTM6Q.woff": "762010c79b4a05e1131fc8fb3b1aeff324d8033f",
+    "https://tracker.mikasjames.com/polyfills-EJ46DL77.js": "01500e27968fb09f51100a67f46a69297cc263de",
+    "https://tracker.mikasjames.com/styles-DNL5IWFW.css": "8068d2ecc878860312b97b4b6adc888f2ac097de"
   },
   "navigationUrls": [
     {
