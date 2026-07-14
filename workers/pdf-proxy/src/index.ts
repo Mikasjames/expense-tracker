@@ -1,5 +1,6 @@
 import { AwsClient } from 'aws4fetch';
 import * as jose from 'jose';
+import { verifyToken } from './auth';
 
 interface Env {
   B2_ACCESS_KEY_ID: string;
@@ -10,37 +11,12 @@ interface Env {
   ALLOWED_ORIGINS: string;
 }
 
-const JWKS_URL =
-  'https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com';
-let cachedJWKS: ReturnType<typeof jose.createLocalJWKSet> | null = null;
-
-async function getJWKS() {
-  if (!cachedJWKS) {
-    const response = await fetch(JWKS_URL);
-    const data: { keys: jose.JWK[] } = await response.json();
-    cachedJWKS = jose.createLocalJWKSet(data);
-  }
-  return cachedJWKS;
-}
-
-async function verifyToken(
-  token: string,
-  projectId: string,
-): Promise<jose.JWTPayload> {
-  const jwks = await getJWKS();
-  const { payload } = await jose.jwtVerify(token, jwks, {
-    issuer: `https://securetoken.google.com/${projectId}`,
-    audience: projectId,
-  });
-  return payload;
-}
-
 function createAwsClient(env: Env) {
   return new AwsClient({
     accessKeyId: env.B2_ACCESS_KEY_ID,
     secretAccessKey: env.B2_SECRET_ACCESS_KEY,
     service: 's3',
-    region: 'us-west-000',
+    region: 'us-west-004',
   });
 }
 
@@ -55,7 +31,7 @@ function getOrigin(request: Request, env: Env): string {
   return '';
 }
 
-function corsHeaders(origin: string) {
+function corsHeaders(origin: string): Record<string, string> {
   if (!origin) return {};
   return {
     'Access-Control-Allow-Origin': origin,
@@ -63,7 +39,7 @@ function corsHeaders(origin: string) {
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Max-Age': '86400',
     'Access-Control-Expose-Headers': 'ETag',
-  };
+  } as Record<string, string>;
 }
 
 function json(data: unknown, status = 200, extraHeaders: Record<string, string> = {}) {
@@ -72,6 +48,9 @@ function json(data: unknown, status = 200, extraHeaders: Record<string, string> 
     headers: { 'Content-Type': 'application/json', ...extraHeaders },
   });
 }
+
+export { getOrigin, corsHeaders, json, getS3Url, createAwsClient };
+export type { Env };
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -98,6 +77,15 @@ export default {
 
       const aws = createAwsClient(env);
 
+      function presignUrl(method: string, key: string, headers?: Record<string, string>) {
+        const url = new URL(getS3Url(env, key));
+        url.searchParams.set('X-Amz-Expires', '3600');
+        return aws.sign(
+          new Request(url.toString(), { method, headers }),
+          { aws: { signQuery: true } },
+        );
+      }
+
       if (request.method === 'POST' && path === '/api/uploads') {
         const { fileName, contentType } = (await request.json()) as {
           fileName: string;
@@ -105,15 +93,10 @@ export default {
         };
         const fileId = crypto.randomUUID();
         const key = `${userId}/${fileId}`;
-        const s3Url = getS3Url(env, key);
 
-        const signed = await aws.sign(
-          new Request(s3Url, {
-            method: 'PUT',
-            headers: { 'Content-Type': contentType || 'application/pdf' },
-          }),
-          { signQuery: true, expiresIn: 3600 },
-        );
+        const signed = await presignUrl('PUT', key, {
+          'Content-Type': contentType || 'application/pdf',
+        });
 
         return json({ fileId, uploadUrl: signed.url }, 200, cors);
       }
@@ -123,12 +106,7 @@ export default {
         if (!fileId) return json({ error: 'Missing file ID' }, 400, cors);
 
         const key = `${userId}/${fileId}`;
-        const s3Url = getS3Url(env, key);
-
-        const signed = await aws.sign(
-          new Request(s3Url, { method: 'GET' }),
-          { signQuery: true, expiresIn: 3600 },
-        );
+        const signed = await presignUrl('GET', key);
 
         return json({ downloadUrl: signed.url }, 200, cors);
       }
@@ -154,13 +132,13 @@ export default {
 
       return json({ error: 'Not found' }, 404, cors);
     } catch (err) {
-      console.error('Worker error:', err);
       if (err instanceof jose.errors.JWTExpired) {
         return json({ error: 'Token expired' }, 401, cors);
       }
-      if (err instanceof jose.errors.JWTInvalid) {
+      if (err instanceof jose.errors.JOSEError) {
         return json({ error: 'Invalid token' }, 401, cors);
       }
+      console.error('Worker error:', err);
       return json({ error: 'Internal server error' }, 500, cors);
     }
   },
