@@ -78,7 +78,7 @@ export class FormFillerComponent implements OnInit {
     private transactionService: TransactionService,
     private tagService: TagService,
     private cdr: ChangeDetectorRef,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadTransactions();
@@ -200,6 +200,7 @@ export class FormFillerComponent implements OnInit {
       const pdfDoc = await this.loadPdfDocument(pdf.id);
       this.modifyFont(pdfDoc);
       const form = pdfDoc.getForm();
+      this.debugDumpFieldNames(form);
 
       this.setBasic26InfoFieldValues(form);
       await this.inputTransactionData(form);
@@ -218,6 +219,7 @@ export class FormFillerComponent implements OnInit {
     const pdfDoc = await this.loadPdfDocument(pdf.id);
     this.modifyFont(pdfDoc);
     const form = pdfDoc.getForm();
+    this.debugDumpFieldNames(form);
 
     this.setBasic30InfoFieldValues(form);
     const pdfBytes = await pdfDoc.save();
@@ -245,8 +247,9 @@ export class FormFillerComponent implements OnInit {
     const pdfDoc = await this.loadPdfDocument(pdf.id);
     this.modifyFont(pdfDoc);
     const form = pdfDoc.getForm();
-    form.getCheckBox('900_1_CheckBox').check();
-    form.getTextField('900_3_Text').setText(this.name);
+    this.debugDumpFieldNames(form);
+    form.getCheckBox('900_4_CheckBox').check();
+    form.getTextField('900_1_Text').setText(this.name);
     this.calculateTotal(wForSelectedMonthYear)
       .pipe(take(1))
       .subscribe((total) => {
@@ -280,8 +283,7 @@ export class FormFillerComponent implements OnInit {
       { name: '900_1_Text_C', value: this.name },
       { name: '900_2_Text_C', value: this.city },
       { name: '900_3_Text_C', value: this.province },
-      { name: '900_4_Text_C', value: this.selectedMonth },
-      { name: '900_5_Text_C', value: this.selectedYear.toString() },
+      { name: '900_4_Text_C', value: this.selectedMonth + ' ' + this.selectedYear },
     ];
 
     fields.forEach((field) => {
@@ -313,7 +315,6 @@ export class FormFillerComponent implements OnInit {
         name: '900_2_Text',
         value: `${this.selectedMonth} ${this.selectedYear}`,
       },
-      { name: '900_17_Text_C', value: this.selectedMonth },
     ];
 
     this.totalForwardedFromLastMonth$.pipe(take(1)).subscribe((total) => {
@@ -500,6 +501,11 @@ export class FormFillerComponent implements OnInit {
       const field = form.getTextField(fieldName);
       field.setText(value);
     });
+  }
+
+  private debugDumpFieldNames(form: PDFForm) {
+    const names = form.getFields().map(f => f.getName());
+    console.log('PDF form fields:', names);
   }
 
   private modifyFont(doc: PDFDocument) {
