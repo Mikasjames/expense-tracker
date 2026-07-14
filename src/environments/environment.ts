@@ -8,4 +8,5 @@ export const environment = {
     messagingSenderId: '652658231358',
     measurementId: 'G-8E6SEFV1FX',
   },
+  workerUrl: 'https://pdf-storage-proxy.mikasjames.workers.dev/',
 };

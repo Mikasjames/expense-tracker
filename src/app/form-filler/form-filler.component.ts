@@ -16,6 +16,7 @@ import {
   BehaviorSubject,
   catchError,
   combineLatest,
+  firstValueFrom,
   Observable,
   switchMap,
 } from 'rxjs';
@@ -196,7 +197,7 @@ export class FormFillerComponent implements OnInit {
 
   async fill26(pdf: PdfFile) {
     try {
-      const pdfDoc = await this.loadPdfDocument(pdf.url);
+      const pdfDoc = await this.loadPdfDocument(pdf.id);
       this.modifyFont(pdfDoc);
       const form = pdfDoc.getForm();
 
@@ -214,7 +215,7 @@ export class FormFillerComponent implements OnInit {
   }
 
   async fill30(pdf: PdfFile) {
-    const pdfDoc = await this.loadPdfDocument(pdf.url);
+    const pdfDoc = await this.loadPdfDocument(pdf.id);
     this.modifyFont(pdfDoc);
     const form = pdfDoc.getForm();
 
@@ -241,7 +242,7 @@ export class FormFillerComponent implements OnInit {
       transaction.title.includes('resolution'),
     );
 
-    const pdfDoc = await this.loadPdfDocument(pdf.url);
+    const pdfDoc = await this.loadPdfDocument(pdf.id);
     this.modifyFont(pdfDoc);
     const form = pdfDoc.getForm();
     form.getCheckBox('900_1_CheckBox').check();
@@ -262,8 +263,11 @@ export class FormFillerComponent implements OnInit {
     this.boTransactions = [];
   }
 
-  private async loadPdfDocument(url: string): Promise<PDFDocument> {
-    const response = await fetch(url);
+  private async loadPdfDocument(fileId: string): Promise<PDFDocument> {
+    const { downloadUrl } = await firstValueFrom(
+      this.pdfService.getDownloadUrl(fileId),
+    );
+    const response = await fetch(downloadUrl);
     if (!response.ok) {
       throw new Error('Failed to fetch PDF file');
     }

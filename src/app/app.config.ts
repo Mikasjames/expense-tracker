@@ -15,7 +15,6 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getDatabase, provideDatabase } from '@angular/fire/database';
 import { getFunctions, provideFunctions } from '@angular/fire/functions';
 import { getMessaging, provideMessaging } from '@angular/fire/messaging';
-import { getStorage, provideStorage } from '@angular/fire/storage';
 import {
   getRemoteConfig,
   provideRemoteConfig,
@@ -38,7 +37,6 @@ export const appConfig: ApplicationConfig = {
     provideDatabase(() => getDatabase()),
     provideFunctions(() => getFunctions()),
     provideMessaging(() => getMessaging()),
-    provideStorage(() => getStorage()),
     provideRemoteConfig(() => getRemoteConfig()),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),

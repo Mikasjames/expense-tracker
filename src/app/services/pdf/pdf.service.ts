@@ -1,22 +1,26 @@
 import { Injectable } from '@angular/core';
-import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Auth, user } from '@angular/fire/auth';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  doc,
+  deleteDoc,
+  setDoc,
+} from '@angular/fire/firestore';
 import {
   BehaviorSubject,
-  combineLatest,
-  forkJoin,
   from,
   Observable,
   of,
   switchMap,
 } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { environment } from '../../../environments/environment';
 
 export interface PdfFile {
   id: string;
   name: string;
-  url: string;
+  size: number;
   createdAt: Date;
 }
 
@@ -24,139 +28,146 @@ export interface PdfFile {
   providedIn: 'root',
 })
 export class PdfService {
-  private readonly PDF_COLLECTION = 'pdfs';
-  private readonly PDF_STORAGE_PATH = 'pdfs';
-  private userId: string | null = null;
   private pdfsSubject = new BehaviorSubject<PdfFile[]>([]);
   pdfs$ = this.pdfsSubject.asObservable();
 
   constructor(
-    private storage: AngularFireStorage,
-    private firestore: AngularFirestore,
-    private afAuth: AngularFireAuth,
+    private auth: Auth,
+    private firestore: Firestore,
   ) {
     this.initialize();
   }
 
-  initialize() {
-    this.afAuth.authState
+  private initialize() {
+    user(this.auth)
       .pipe(
-        switchMap((user) => {
-          if (user) {
-            this.userId = user.uid;
-            return this.getAllPdfs();
-          } else {
-            this.userId = null;
+        switchMap((firebaseUser) => {
+          if (!firebaseUser) {
             return of([]);
           }
+          return this.getPdfsFromFirestore(firebaseUser.uid);
         }),
       )
-      .subscribe(
-        (pdfs) => {
-          this.pdfsSubject.next(pdfs);
-        },
-        (error) => {
-          console.error(error);
-        },
-      );
+      .subscribe({
+        next: (pdfs) => this.pdfsSubject.next(pdfs),
+        error: (err) => console.error('Error loading PDFs:', err),
+      });
+  }
+
+  private getPdfsFromFirestore(uid: string): Observable<PdfFile[]> {
+    const pdfsCollection = collection(
+      this.firestore,
+      `pdfs/${uid}/userPdfs`,
+    );
+    return collectionData(pdfsCollection, { idField: 'id' }) as Observable<PdfFile[]>;
+  }
+
+  private async getAuthToken(): Promise<string> {
+    const currentUser = this.auth.currentUser;
+    if (!currentUser) {
+      throw new Error('User not authenticated');
+    }
+    return currentUser.getIdToken();
+  }
+
+  private async requestWorker(
+    path: string,
+    options: RequestInit = {},
+  ): Promise<any> {
+    const token = await this.getAuthToken();
+    const response = await fetch(`${environment.workerUrl}${path}`, {
+      ...options,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        ...(options.headers as Record<string, string>),
+      },
+    });
+
+    if (!response.ok) {
+      const body = await response.json().catch(() => ({}));
+      throw new Error(body.error || `Worker request failed: ${response.status}`);
+    }
+
+    return response.json();
   }
 
   uploadPdf(file: File): Observable<PdfFile> {
-    if (!this.userId) {
-      throw new Error('User not authenticated');
+    return from(this.uploadPdfAsync(file));
+  }
+
+  private async uploadPdfAsync(file: File): Promise<PdfFile> {
+    const currentUser = this.auth.currentUser;
+    if (!currentUser) throw new Error('User not authenticated');
+
+    const { fileId, uploadUrl } = await this.requestWorker('/api/uploads', {
+      method: 'POST',
+      body: JSON.stringify({
+        fileName: file.name,
+        contentType: file.type || 'application/pdf',
+      }),
+    });
+
+    const uploadResponse = await fetch(uploadUrl, {
+      method: 'PUT',
+      body: file,
+      headers: { 'Content-Type': file.type || 'application/pdf' },
+    });
+
+    if (!uploadResponse.ok) {
+      throw new Error('Failed to upload file to storage');
     }
 
-    const filePath = `${this.PDF_STORAGE_PATH}/${this.userId}/userPdfs/${file.name}`;
-    const fileRef = this.storage.ref(filePath);
-    const task = this.storage.upload(filePath, file);
+    const pdfData: PdfFile = {
+      id: fileId,
+      name: file.name,
+      size: file.size,
+      createdAt: new Date(),
+    };
 
-    return task.snapshotChanges().pipe(
-      switchMap(() => fileRef.getDownloadURL()),
-      switchMap((url) =>
-        from(fileRef.getMetadata()).pipe(
-          map((metadata) => ({
-            id: metadata.name,
-            name: file.name,
-            url: url,
-            createdAt: new Date(metadata.timeCreated),
-          })),
-        ),
-      ),
-      switchMap((pdfFile) =>
-        this.getAllPdfs().pipe(
-          map((pdfs) => {
-            this.pdfsSubject.next([...pdfs, pdfFile]);
-            return pdfFile;
-          }),
-        ),
-      ),
+    const pdfRef = doc(
+      this.firestore,
+      `pdfs/${currentUser.uid}/userPdfs/${fileId}`,
     );
+    await setDoc(pdfRef, pdfData);
+
+    const current = this.pdfsSubject.value;
+    this.pdfsSubject.next([...current, pdfData]);
+
+    return pdfData;
   }
 
   getAllPdfs(): Observable<PdfFile[]> {
-    if (!this.userId) {
+    const currentUser = this.auth.currentUser;
+    if (!currentUser) {
       return of([]);
     }
-
-    const pdfsPath = `${this.PDF_STORAGE_PATH}/${this.userId}/userPdfs`;
-
-    return from(this.storage.storage.ref().child(pdfsPath).listAll()).pipe(
-      switchMap((res) => {
-        const items = res.items;
-        const metadataPromises = items.map((itemRef) =>
-          from(itemRef.getMetadata()).pipe(
-            switchMap((metadata) =>
-              from(itemRef.getDownloadURL()).pipe(
-                map((url) => ({
-                  id: metadata.name,
-                  name: metadata.name,
-                  url: url,
-                  createdAt: new Date(metadata.timeCreated),
-                })),
-              ),
-            ),
-          ),
-        );
-        return forkJoin(metadataPromises);
-      }),
-    );
+    return this.getPdfsFromFirestore(currentUser.uid);
   }
 
-  getPdfById(id: string): Observable<PdfFile | undefined> {
-    if (!this.userId) {
-      throw new Error('User not authenticated');
-    }
-
-    return this.firestore
-      .collection(this.PDF_COLLECTION)
-      .doc(this.userId)
-      .collection('userPdfs')
-      .doc<PdfFile>(id)
-      .valueChanges();
+  getDownloadUrl(fileId: string): Observable<{ downloadUrl: string }> {
+    return from(this.requestWorker(`/api/downloads/${fileId}`));
   }
 
   deletePdf(pdfFile: PdfFile): Observable<void> {
-    if (!this.userId) {
-      throw new Error('User not authenticated');
-    }
+    return from(this.deletePdfAsync(pdfFile));
+  }
 
-    const storagePath = this.storage.refFromURL(pdfFile.url);
-    return forkJoin([
-      from(
-        this.firestore
-          .collection(this.PDF_COLLECTION)
-          .doc(this.userId)
-          .collection('userPdfs')
-          .doc(pdfFile.id)
-          .delete(),
-      ),
-      from(storagePath.delete()),
-    ]).pipe(
-      switchMap(() => this.getAllPdfs()),
-      map((pdfs) => {
-        this.pdfsSubject.next(pdfs);
-        return undefined;
-      }),
+  private async deletePdfAsync(pdfFile: PdfFile): Promise<void> {
+    const currentUser = this.auth.currentUser;
+    if (!currentUser) throw new Error('User not authenticated');
+
+    await this.requestWorker(`/api/uploads/${pdfFile.id}`, {
+      method: 'DELETE',
+    });
+
+    const pdfRef = doc(
+      this.firestore,
+      `pdfs/${currentUser.uid}/userPdfs/${pdfFile.id}`,
     );
+    await deleteDoc(pdfRef);
+
+    const current = this.pdfsSubject.value;
+    this.pdfsSubject.next(current.filter((p) => p.id !== pdfFile.id));
   }
 }

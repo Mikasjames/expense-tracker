@@ -42,6 +42,10 @@ testem.log
 .DS_Store
 Thumbs.db
 
+# Cloudflare Workers
+.wrangler/
+workers/*/node_modules/
+
 # Firebase
 .firebase
 *-debug.log

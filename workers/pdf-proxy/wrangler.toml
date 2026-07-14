@@ -1,0 +1,9 @@
+name = "pdf-storage-proxy"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+
+[vars]
+B2_ENDPOINT = "s3.us-east-005.backblazeb2.com"
+B2_BUCKET = "expense-tracker-pdf"
+FIREBASE_PROJECT_ID = "expense-tracker-app-ee455"
+ALLOWED_ORIGINS = "http://localhost:4200,https://tracker.mikasjames.com"
