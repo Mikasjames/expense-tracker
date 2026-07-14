@@ -1,4 +1,18 @@
-<!--<input class="form-control" type="file" (change)="uploadFile($event)" id="formFile">-->
+<div class="mb-4">
+  <h5>Upload Forms</h5>
+  <div class="mb-2">
+    <label for="form26" class="form-label">Form 26</label>
+    <input class="form-control" type="file" (change)="uploadFile($event)" id="form26" accept="application/pdf">
+  </div>
+  <div class="mb-2">
+    <label for="form30" class="form-label">Form 30</label>
+    <input class="form-control" type="file" (change)="uploadFile($event)" id="form30" accept="application/pdf">
+  </div>
+  <div class="mb-2">
+    <label for="form62" class="form-label">Form 62</label>
+    <input class="form-control" type="file" (change)="uploadFile($event)" id="form62" accept="application/pdf">
+  </div>
+</div>
 <div class="mb-3 d-flex justify-content-center justify-content-md-start align-items-center">
   <div class="col-6 col-md-2 col-xl-1 px-1">
     <select id="monthSelector" class="form-select w-100" [(ngModel)]="selectedMonth">
@@ -7,7 +21,8 @@
     </select>
   </div>
   <div class="col-6 col-md-2 col-xl-1 px-1">
-    <select id="yearSelector" class="form-select w-100" [(ngModel)]="selectedYear" (ngModelChange)="onYearChange($event)">
+    <select id="yearSelector" class="form-select w-100" [(ngModel)]="selectedYear"
+      (ngModelChange)="onYearChange($event)">
       <option selected disabled>Year</option>
       <option *ngFor="let year of oldestToNewestTransactionYearRange" [value]="year">{{ year }}</option>
     </select>
