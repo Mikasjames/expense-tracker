@@ -75,7 +75,7 @@ export class PdfService {
     options: RequestInit = {},
   ): Promise<any> {
     const token = await this.getAuthToken();
-    const response = await fetch(`${environment.workerUrl}${path}`, {
+    const response = await fetch(new URL(path, environment.workerUrl).toString(), {
       ...options,
       headers: {
         'Authorization': `Bearer ${token}`,
