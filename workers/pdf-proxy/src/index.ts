@@ -12,11 +12,12 @@ interface Env {
 }
 
 function createAwsClient(env: Env) {
+  const region = env.B2_ENDPOINT.match(/^(?:https?:\/\/)?s3\.(.+)\.backblazeb2\.com$/)?.[1] ?? 'us-east-005';
   return new AwsClient({
     accessKeyId: env.B2_ACCESS_KEY_ID,
     secretAccessKey: env.B2_SECRET_ACCESS_KEY,
     service: 's3',
-    region: 'us-west-004',
+    region,
   });
 }
 
@@ -82,7 +83,7 @@ export default {
         url.searchParams.set('X-Amz-Expires', '3600');
         return aws.sign(
           new Request(url.toString(), { method, headers }),
-          { aws: { signQuery: true } },
+          { aws: { signQuery: true, allHeaders: !!headers } },
         );
       }
 
