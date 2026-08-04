@@ -8,26 +8,17 @@
       <div class="w-full lg:w-1/2">
         <div class="mb-3 flex items-center justify-between">
           <h1 class="text-start text-2xl font-bold">Dashboard</h1>
-          <div class="relative flex items-center gap-2">
+          <div class="flex items-center gap-2">
             <button
-              (click)="toggleDateSelector(); preventCloseOnClick()"
+              (click)="openDateSelector()"
               hlmBtn
               variant="outline"
               size="icon"
               [hlmTooltip]="'Select date range'"
               position="bottom"
-              class="hidden md:inline-flex"
             >
               <ng-icon name="lucideCalendarDays" />
             </button>
-            @if (showDateSelector) {
-              <div
-                (click)="preventCloseOnClick()"
-                class="absolute right-0 top-12 z-50 hidden md:flex items-center justify-center rounded-lg border border-border bg-popover p-3 shadow-md"
-              >
-                <app-date-selector></app-date-selector>
-              </div>
-            }
             <app-transaction-form-buttons></app-transaction-form-buttons>
           </div>
         </div>

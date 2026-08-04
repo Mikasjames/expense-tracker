@@ -19,7 +19,7 @@ export class TransactionFormButtonsComponent {
     this.transactionType = transactionType;
     this.dialogService.open(TransactionFormComponent, {
       context: { transactionType, selectedTransaction: null },
-      contentClass: 'sm:max-w-lg',
+      contentClass: 'sm:max-w-4xl',
     });
   }
 }

@@ -7,7 +7,7 @@
   </p>
 </hlm-dialog-header>
 
-<form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" class="grid gap-4">
+<form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" class="grid gap-4 sm:grid-cols-2">
   <div class="grid gap-2">
     <label hlmLabel for="title">Title</label>
     <input
@@ -42,7 +42,7 @@
       </span>
     }
   </div>
-  <div class="grid gap-2">
+  <div class="grid gap-2 sm:col-span-2">
     <label hlmLabel for="description">Description</label>
     <textarea
       hlmTextarea
@@ -69,7 +69,7 @@
       (tagAdded)="updateTransactionTag($event)"
     ></app-tag-input>
   </div>
-  <div class="flex justify-end">
+  <div class="flex justify-end sm:col-span-2">
     <button
       autofocus
       hlmBtn

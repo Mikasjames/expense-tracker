@@ -17,12 +17,3 @@
     }
   }
 </div>
-
-@if (showDateSelector) {
-  <div
-    (click)="preventCloseOnClick()"
-    class="fixed right-0 top-16 z-50 flex w-[460px] max-w-[calc(100vw-1rem)] items-center justify-center rounded-lg border border-border bg-popover p-3 shadow-md"
-  >
-    <app-date-selector></app-date-selector>
-  </div>
-}

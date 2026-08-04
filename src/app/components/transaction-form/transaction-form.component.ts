@@ -110,7 +110,7 @@ export class TransactionFormComponent implements OnInit {
         message: 'Are you sure you want to delete this transaction?',
         onConfirm: () => this.deleteTransaction(),
       },
-      contentClass: 'sm:max-w-sm',
+      contentClass: 'sm:max-w-lg',
     });
   }
 
@@ -206,7 +206,7 @@ interface DeleteConfirmationContext {
   template: `
     <hlm-dialog-header>
       <h3 hlmDialogTitle>Delete Confirmation</h3>
-      <p hlmDialogDescription class="text-muted-foreground text-sm">
+      <p hlmDialogDescription class="text-muted-foreground text-sm mb-3">
         {{ context?.message ?? 'Are you sure you want to delete this item?' }}
       </p>
     </hlm-dialog-header>

@@ -134,7 +134,7 @@ export class TransactionTableComponent {
         transactionType,
         selectedTransaction: this.selectedTransaction,
       },
-      contentClass: 'sm:max-w-lg',
+      contentClass: 'sm:max-w-4xl',
     });
   }
 

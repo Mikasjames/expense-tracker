@@ -2,7 +2,6 @@ import {
   Component,
   OnDestroy,
   OnInit,
-  Renderer2,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
@@ -24,6 +23,7 @@ import { map } from 'rxjs/operators';
 import { NgIcon } from '@ng-icons/core';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
+import { HlmDialogService } from '@spartan-ng/helm/dialog';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -33,7 +33,6 @@ import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
     LoaderComponent,
     TransactionTableComponent,
     TransactionFormButtonsComponent,
-    DateSelectorComponent,
     HlmButtonImports,
     HlmTooltipImports,
     NgIcon,
@@ -51,8 +50,6 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
   allTransactions: Transaction[] = [];
   incomeLineBarData: LineBarData[] = [];
   expenseLineBarData: LineBarData[] = [];
-  showDateSelector = false;
-  dateSelectorClicked = false;
   isLoading = true;
 
   private destroy$ = new Subject<void>();
@@ -61,15 +58,8 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private transactionService: TransactionService,
     private dateSelectorService: DateSelectorService,
-    private renderer: Renderer2,
-  ) {
-    this.renderer.listen('window', 'click', (e: Event) => {
-      if (!this.dateSelectorClicked) {
-        this.showDateSelector = false;
-      }
-      this.dateSelectorClicked = false;
-    });
-  }
+    private dialogService: HlmDialogService,
+  ) {}
 
   ngOnInit() {
     this.initializeData();
@@ -96,7 +86,6 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
       .subscribe(
         ({ expenses, income }) => {
           this.updateDashboard(expenses, income);
-          this.showDateSelector = false;
           this.isLoading = false;
         },
         (error) => console.error('Error fetching transactions:', error),
@@ -188,11 +177,9 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     );
   }
 
-  toggleDateSelector() {
-    this.showDateSelector = !this.showDateSelector;
-  }
-
-  preventCloseOnClick() {
-    this.dateSelectorClicked = true;
+  openDateSelector() {
+    this.dialogService.open(DateSelectorComponent, {
+      contentClass: 'sm:max-w-2xl',
+    });
   }
 }
