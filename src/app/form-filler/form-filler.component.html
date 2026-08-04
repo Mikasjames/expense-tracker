@@ -2,50 +2,85 @@
   <h5>Upload Forms</h5>
   <div class="mb-2">
     <label for="form26" class="form-label">Form 26</label>
-    <input class="form-control" type="file" (change)="uploadFile($event)" id="form26" accept="application/pdf">
+    <input
+      class="form-control"
+      type="file"
+      (change)="uploadFile($event)"
+      id="form26"
+      accept="application/pdf"
+    />
   </div>
   <div class="mb-2">
     <label for="form30" class="form-label">Form 30</label>
-    <input class="form-control" type="file" (change)="uploadFile($event)" id="form30" accept="application/pdf">
+    <input
+      class="form-control"
+      type="file"
+      (change)="uploadFile($event)"
+      id="form30"
+      accept="application/pdf"
+    />
   </div>
   <div class="mb-2">
     <label for="form62" class="form-label">Form 62</label>
-    <input class="form-control" type="file" (change)="uploadFile($event)" id="form62" accept="application/pdf">
+    <input
+      class="form-control"
+      type="file"
+      (change)="uploadFile($event)"
+      id="form62"
+      accept="application/pdf"
+    />
   </div>
 </div>
-<div class="mb-3 d-flex justify-content-center justify-content-md-start align-items-center">
+<div
+  class="mb-3 d-flex justify-content-center justify-content-md-start align-items-center"
+>
   <div class="col-6 col-md-2 col-xl-1 px-1">
-    <select id="monthSelector" class="form-select w-100" [(ngModel)]="selectedMonth">
+    <select
+      id="monthSelector"
+      class="form-select w-100"
+      [(ngModel)]="selectedMonth"
+    >
       <option selected disabled>Month</option>
-      <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+      @for (month of months; track month) {
+        <option [value]="month">{{ month }}</option>
+      }
     </select>
   </div>
   <div class="col-6 col-md-2 col-xl-1 px-1">
-    <select id="yearSelector" class="form-select w-100" [(ngModel)]="selectedYear"
-      (ngModelChange)="onYearChange($event)">
+    <select
+      id="yearSelector"
+      class="form-select w-100"
+      [(ngModel)]="selectedYear"
+      (ngModelChange)="onYearChange($event)"
+    >
       <option selected disabled>Year</option>
-      <option *ngFor="let year of oldestToNewestTransactionYearRange" [value]="year">{{ year }}</option>
+      @for (year of oldestToNewestTransactionYearRange; track year) {
+        <option [value]="year">{{ year }}</option>
+      }
     </select>
   </div>
 </div>
 
-<ng-container *ngIf="uploadedFiles$ | async as uploadedFiles">
-  <div *ngIf="uploadedFiles.length > 0; else noFiles">
-    <h3>Uploaded Files</h3>
-    <div class="row">
-      <div class="col-md-4 mb-3" *ngFor="let form of uploadedFiles">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">{{ form.name }}</h5>
-            <button class="btn btn-warning" (click)="fillForm(form)">
-              Fill Form
-            </button>
+@if (uploadedFiles$ | async; as uploadedFiles) {
+  @if (uploadedFiles.length > 0) {
+    <div>
+      <h3>Uploaded Files</h3>
+      <div class="row">
+        @for (form of uploadedFiles; track form) {
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">{{ form.name }}</h5>
+                <button class="btn btn-warning" (click)="fillForm(form)">
+                  Fill Form
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
+        }
       </div>
     </div>
-  </div>
-  <ng-template #noFiles>
+  } @else {
     <p>No files have been uploaded yet.</p>
-  </ng-template>
-</ng-container>
+  }
+}

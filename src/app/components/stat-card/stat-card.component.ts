@@ -1,10 +1,10 @@
 import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { SettingsService } from '../../services/settings/settings.service';
 
 @Component({
   selector: 'app-stat-card',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './stat-card.component.html',
   styleUrl: './stat-card.component.sass',
 })

@@ -1,9 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-wave',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './wave.component.html',
   styleUrl: './wave.component.sass',
 })

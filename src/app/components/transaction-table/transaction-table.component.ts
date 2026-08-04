@@ -10,7 +10,7 @@ import {
 import { Transaction } from '../../models/transaction.interface';
 import { UtilService } from '../../services/util/util.service';
 import { TagService } from '../../services/tags/tag.service';
-import { CommonModule } from '@angular/common';
+
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { TransactionService } from '../../services/transactions/transaction.service';
 import { SettingsService } from '../../services/settings/settings.service';
@@ -21,12 +21,7 @@ import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-transaction-table',
-  imports: [
-    AgGridAngular,
-    CommonModule,
-    ReactiveFormsModule,
-    TransactionFormComponent,
-  ],
+  imports: [AgGridAngular, ReactiveFormsModule, TransactionFormComponent],
   templateUrl: './transaction-table.component.html',
   styleUrl: './transaction-table.component.css',
 })

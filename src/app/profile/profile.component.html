@@ -6,7 +6,7 @@
       <div class="card mb-4">
         <div class="card-body text-center py-5">
           <div class="avatar mb-3">{{ initials }}</div>
-          <h4 class="mb-1">{{ user?.username || 'User' }}</h4>
+          <h4 class="mb-1">{{ user?.username || "User" }}</h4>
           <p class="text-muted">{{ user?.email }}</p>
         </div>
       </div>
@@ -21,15 +21,19 @@
 
           <div class="mb-0">
             <label class="form-label text-muted small mb-1">Username</label>
-            <div *ngIf="!editingUsername; else editForm">
-              <div class="d-flex align-items-center gap-2">
-                <span class="fs-6">{{ user?.username }}</span>
-                <button class="btn btn-sm btn-outline-warning" (click)="startEdit()">
-                  <i class="bi bi-pencil"></i>
-                </button>
+            @if (!editingUsername) {
+              <div>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="fs-6">{{ user?.username }}</span>
+                  <button
+                    class="btn btn-sm btn-outline-warning"
+                    (click)="startEdit()"
+                  >
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                </div>
               </div>
-            </div>
-            <ng-template #editForm>
+            } @else {
               <div class="d-flex align-items-center gap-2">
                 <input
                   class="form-control form-control-sm w-auto"
@@ -42,17 +46,26 @@
                   (click)="saveUsername()"
                   [disabled]="saving || !usernameInput.trim()"
                 >
-                  <span *ngIf="saving" class="spinner-border spinner-border-sm"></span>
-                  <span *ngIf="!saving">Save</span>
+                  @if (saving) {
+                    <span class="spinner-border spinner-border-sm"></span>
+                  }
+                  @if (!saving) {
+                    <span>Save</span>
+                  }
                 </button>
-                <button class="btn btn-sm btn-outline-secondary" (click)="cancelEdit()">
+                <button
+                  class="btn btn-sm btn-outline-secondary"
+                  (click)="cancelEdit()"
+                >
                   Cancel
                 </button>
               </div>
-              <span *ngIf="saved" class="text-success small mt-1 d-block">
-                <i class="bi bi-check-circle"></i> Username updated
-              </span>
-            </ng-template>
+              @if (saved) {
+                <span class="text-success small mt-1 d-block">
+                  <i class="bi bi-check-circle"></i> Username updated
+                </span>
+              }
+            }
           </div>
         </div>
       </div>
@@ -65,7 +78,7 @@
             [class.bg-warning]="user?.isAdmin"
             [class.bg-secondary]="!user?.isAdmin"
           >
-            {{ user?.isAdmin ? 'Admin' : 'User' }}
+            {{ user?.isAdmin ? "Admin" : "User" }}
           </span>
         </div>
       </div>

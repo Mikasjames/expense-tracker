@@ -6,14 +6,13 @@ import { DollarSignSvgsComponent } from '../../components/dollar-sign-svgs/dolla
 import { WaveComponent } from '../../components/wave/wave.component';
 import { PlatformService } from '../../services/platform/platform.service';
 import { LoaderComponent } from '../../components/loader/loader.component';
-import { CommonModule } from '@angular/common';
+
 import { HttpErrorResponse } from '@angular/common/http';
 import { PlatformButtonsComponent } from '../../components/platform-buttons/platform-buttons.component';
 
 @Component({
   selector: 'app-login',
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     DollarSignSvgsComponent,
     WaveComponent,

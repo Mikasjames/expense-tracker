@@ -1,5 +1,5 @@
 <div class="topbar">
-  <ng-container *ngFor="let item of topbarItems">
+  @for (item of topbarItems; track item) {
     <div
       (click)="item.action()"
       [class]="
@@ -10,13 +10,14 @@
     >
       <i [class]="item.icon"></i>
     </div>
-  </ng-container>
+  }
 </div>
 
-<div
-  *ngIf="showDateSelector"
-  (click)="preventCloseOnClick()"
-  class="date-selector-container-mobile d-flex justify-content-center align-items-center position-absolute"
->
-  <app-date-selector></app-date-selector>
-</div>
+@if (showDateSelector) {
+  <div
+    (click)="preventCloseOnClick()"
+    class="date-selector-container-mobile d-flex justify-content-center align-items-center position-absolute"
+  >
+    <app-date-selector></app-date-selector>
+  </div>
+}

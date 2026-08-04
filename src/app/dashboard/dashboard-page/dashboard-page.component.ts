@@ -3,7 +3,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import { UserInterface } from '../../models/user.interface';
 import { TransactionService } from '../../services/transactions/transaction.service';
 import { Transaction } from '../../models/transaction.interface';
-import { CommonModule } from '@angular/common';
+
 import { LineBarChartComponent } from '../../components/line-bar-chart/line-bar-chart.component';
 import { StatCardComponent } from '../../components/stat-card/stat-card.component';
 import { TransactionFormComponent } from '../../components/transaction-form/transaction-form.component';
@@ -19,7 +19,6 @@ import { map } from 'rxjs/operators';
 @Component({
   selector: 'app-dashboard-page',
   imports: [
-    CommonModule,
     LineBarChartComponent,
     StatCardComponent,
     LoaderComponent,

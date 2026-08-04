@@ -8,13 +8,13 @@ import {
 import { ToolBarContent } from '../../models/util.interface';
 import { Router } from '@angular/router';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
-import { CommonModule } from '@angular/common';
+
 import { DateSelectorComponent } from '../date-selector/date-selector.component';
 import { DateSelectorService } from '../../services/date-selector/date-selector.service';
 
 @Component({
   selector: 'app-topbar',
-  imports: [CommonModule, NgbTooltip, DateSelectorComponent],
+  imports: [NgbTooltip, DateSelectorComponent],
   templateUrl: './topbar.component.html',
   styleUrl: './topbar.component.sass',
 })

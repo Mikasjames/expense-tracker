@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Auth, updateProfile } from 'firebase/auth';
 import { Firestore, doc, updateDoc } from 'firebase/firestore';
@@ -13,7 +13,7 @@ import {
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.sass',
 })

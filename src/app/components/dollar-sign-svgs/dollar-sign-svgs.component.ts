@@ -1,9 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dollar-sign-svgs',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './dollar-sign-svgs.component.html',
   styleUrl: './dollar-sign-svgs.component.sass',
 })
