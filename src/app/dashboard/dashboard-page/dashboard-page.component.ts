@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { UserInterface } from '../../models/user.interface';
 import { TransactionService } from '../../services/transactions/transaction.service';
@@ -27,6 +33,7 @@ import { map } from 'rxjs/operators';
     DateSelectorComponent,
   ],
   templateUrl: './dashboard-page.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dashboard-page.component.sass',
 })
 export class DashboardPageComponent implements OnInit, OnDestroy {

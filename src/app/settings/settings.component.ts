@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -15,6 +15,7 @@ import { version } from '../../../package.json';
   selector: 'app-settings',
   imports: [FormsModule],
   templateUrl: './settings.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './settings.component.sass',
 })
 export class SettingsComponent implements OnInit {

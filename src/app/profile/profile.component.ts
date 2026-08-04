@@ -1,4 +1,9 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { Auth, updateProfile } from 'firebase/auth';
@@ -15,6 +20,7 @@ import {
   selector: 'app-profile',
   imports: [FormsModule],
   templateUrl: './profile.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './profile.component.sass',
 })
 export class ProfileComponent implements OnInit {

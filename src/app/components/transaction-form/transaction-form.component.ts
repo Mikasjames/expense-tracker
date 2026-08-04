@@ -4,6 +4,7 @@ import {
   SimpleChanges,
   OnInit,
   ViewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -19,6 +20,7 @@ import { TagInputComponent } from '../tag-input/tag-input.component';
   selector: 'app-transaction-form',
   imports: [ReactiveFormsModule, CommonModule, TagInputComponent],
   templateUrl: './transaction-form.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './transaction-form.component.sass',
 })
 export class TransactionFormComponent implements OnInit {

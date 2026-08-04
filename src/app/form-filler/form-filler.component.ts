@@ -1,4 +1,9 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { PdfFile, PdfService } from '../services/pdf/pdf.service';
 import { CommonModule } from '@angular/common';
 import {
@@ -26,6 +31,7 @@ import { take } from 'rxjs/operators';
   selector: 'app-form-filler',
   imports: [CommonModule, FormsModule],
   templateUrl: './form-filler.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './form-filler.component.sass',
 })
 export class FormFillerComponent implements OnInit {

@@ -1,4 +1,9 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from './services/auth/auth.service';
@@ -9,6 +14,7 @@ import { provideEcharts } from 'ngx-echarts';
   imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.sass',
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideEcharts()],
 })
 export class AppComponent implements OnInit {

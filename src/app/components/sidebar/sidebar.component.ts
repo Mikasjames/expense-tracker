@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { ToolBarContent } from '../../models/util.interface';
 import { Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
   selector: 'app-sidebar',
   imports: [NgbTooltipModule],
   templateUrl: './sidebar.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './sidebar.component.sass',
 })
 export class SidebarComponent {

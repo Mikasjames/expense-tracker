@@ -1,4 +1,9 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
   ColDef,
@@ -23,6 +28,7 @@ import { map } from 'rxjs/operators';
   selector: 'app-transaction-table',
   imports: [AgGridAngular, ReactiveFormsModule, TransactionFormComponent],
   templateUrl: './transaction-table.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './transaction-table.component.css',
 })
 export class TransactionTableComponent {

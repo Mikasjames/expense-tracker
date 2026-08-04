@@ -1,9 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 @Component({
   selector: 'app-dollar-sign-svgs',
   imports: [],
   templateUrl: './dollar-sign-svgs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dollar-sign-svgs.component.sass',
 })
 export class DollarSignSvgsComponent implements OnInit {

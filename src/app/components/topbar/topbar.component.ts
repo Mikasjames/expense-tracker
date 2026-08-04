@@ -4,6 +4,7 @@ import {
   Input,
   Output,
   Renderer2,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ToolBarContent } from '../../models/util.interface';
 import { Router } from '@angular/router';
@@ -16,6 +17,7 @@ import { DateSelectorService } from '../../services/date-selector/date-selector.
   selector: 'app-topbar',
   imports: [NgbTooltip, DateSelectorComponent],
   templateUrl: './topbar.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './topbar.component.sass',
 })
 export class TopbarComponent {

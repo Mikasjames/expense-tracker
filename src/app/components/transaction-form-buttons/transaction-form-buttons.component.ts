@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TransactionFormComponent } from '../transaction-form/transaction-form.component';
 
@@ -6,6 +6,7 @@ import { TransactionFormComponent } from '../transaction-form/transaction-form.c
   selector: 'app-transaction-form-buttons',
   imports: [TransactionFormComponent],
   templateUrl: './transaction-form-buttons.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './transaction-form-buttons.component.sass',
 })
 export class TransactionFormButtonsComponent {

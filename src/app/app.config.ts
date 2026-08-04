@@ -1,6 +1,9 @@
 import { ApplicationConfig, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideClientHydration } from '@angular/platform-browser';
+import {
+  provideClientHydration,
+  withNoIncrementalHydration,
+} from '@angular/platform-browser';
 import { provideServiceWorker } from '@angular/service-worker';
 import { routes } from './app.routes';
 import {
@@ -12,7 +15,7 @@ import {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideClientHydration(),
+    provideClientHydration(withNoIncrementalHydration()),
     {
       provide: AUTH,
       useFactory: (fb: FirebaseService) => fb.auth,
