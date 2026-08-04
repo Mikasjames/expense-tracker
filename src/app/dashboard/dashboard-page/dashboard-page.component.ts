@@ -21,6 +21,9 @@ import { TransactionFormButtonsComponent } from '../../components/transaction-fo
 import { DateSelectorComponent } from '../../components/date-selector/date-selector.component';
 import { DateSelectorService } from '../../services/date-selector/date-selector.service';
 import { map } from 'rxjs/operators';
+import { NgIcon } from '@ng-icons/core';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -31,6 +34,9 @@ import { map } from 'rxjs/operators';
     TransactionTableComponent,
     TransactionFormButtonsComponent,
     DateSelectorComponent,
+    HlmButtonImports,
+    HlmTooltipImports,
+    NgIcon,
   ],
   templateUrl: './dashboard-page.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,

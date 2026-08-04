@@ -1,8 +1,9 @@
 @if (showFilter) {
   <div>
     <input
+      hlmInput
       type="text"
-      class="filter-box mb-2"
+      class="mb-2"
       id="filter-text-box"
       placeholder="Filter..."
       [formControl]="filterText"
@@ -11,7 +12,7 @@
 }
 
 <ag-grid-angular
-  class="ag-theme-alpine"
+  class="ag-theme-quartz-dark"
   style="height: 300px"
   [rowData]="rowData"
   [columnDefs]="colDefs"
@@ -19,10 +20,3 @@
   (rowDoubleClicked)="onRowDoubleClicked($event)"
   (gridReady)="onGridReady($event)"
 />
-
-<ng-template #modalTemplate>
-  <app-transaction-form
-    [transactionType]="transactionType"
-    [selectedTransaction]="selectedTransaction"
-  ></app-transaction-form>
-</ng-template>

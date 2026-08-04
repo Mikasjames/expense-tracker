@@ -52,12 +52,8 @@ export class StatCardComponent implements OnInit, OnChanges, OnDestroy {
 
   get percentChangeClass() {
     if (this.percentChange === 0) return '';
-    return this.isIncome
-      ? this.percentChange > 0
-        ? 'text-success'
-        : 'text-danger'
-      : this.percentChange > 0
-        ? 'text-danger'
-        : 'text-success';
+    const isUp = this.percentChange > 0;
+    const good = isUp === this.isIncome;
+    return good ? 'text-emerald-600' : 'text-rose-600';
   }
 }

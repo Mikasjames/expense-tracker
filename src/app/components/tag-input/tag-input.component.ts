@@ -13,10 +13,19 @@ import { Tag } from '../../models/chart.interface';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { NgIcon } from '@ng-icons/core';
+import { HlmBadgeImports } from '@spartan-ng/helm/badge';
+import { HlmTextareaImports } from '@spartan-ng/helm/textarea';
 
 @Component({
   selector: 'app-tag-input',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    HlmBadgeImports,
+    HlmTextareaImports,
+    NgIcon,
+  ],
   templateUrl: './tag-input.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tag-input.component.sass',

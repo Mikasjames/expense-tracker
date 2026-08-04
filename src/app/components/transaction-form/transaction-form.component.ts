@@ -1,14 +1,19 @@
 import {
   Component,
-  Input,
   SimpleChanges,
   OnInit,
-  ViewChild,
+  inject,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { BrnDialogRef, injectBrnDialogContext } from '@spartan-ng/brain/dialog';
+import { HlmDialogService, HlmDialogImports } from '@spartan-ng/helm/dialog';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmInputImports } from '@spartan-ng/helm/input';
+import { HlmLabelImports } from '@spartan-ng/helm/label';
+import { HlmTextareaImports } from '@spartan-ng/helm/textarea';
+import { NgIcon } from '@ng-icons/core';
+import { TitleCasePipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import {
   Transaction,
   TransactionForm,
@@ -16,34 +21,54 @@ import {
 import { TransactionService } from '../../services/transactions/transaction.service';
 import { TagInputComponent } from '../tag-input/tag-input.component';
 
+interface TransactionFormContext {
+  transactionType: 'income' | 'expense';
+  selectedTransaction: Transaction | null;
+}
+
 @Component({
   selector: 'app-transaction-form',
-  imports: [ReactiveFormsModule, CommonModule, TagInputComponent],
+  imports: [
+    ReactiveFormsModule,
+    TitleCasePipe,
+    NgIcon,
+    HlmDialogImports,
+    HlmButtonImports,
+    HlmInputImports,
+    HlmLabelImports,
+    HlmTextareaImports,
+    TagInputComponent,
+  ],
   templateUrl: './transaction-form.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './transaction-form.component.sass',
 })
 export class TransactionFormComponent implements OnInit {
-  @ViewChild('deleteConfirmationModal') deleteConfirmationModal!: NgbModal;
   transactionForm = this.fb.group({
     title: ['', Validators.required],
     amount: [0, [Validators.required, Validators.min(0)]],
     type: ['income' as 'income' | 'expense', Validators.required],
     description: [''],
-    date: ['', Validators.required], // Changed to string
+    date: ['', Validators.required],
     tagIds: [[] as string[]],
   });
-  @Input() transactionType: 'income' | 'expense' = 'income';
-  @Input() selectedTransaction: Transaction | null = null;
-  deleteConfirmationModalReference!: NgbModalRef;
+  transactionType: 'income' | 'expense' = 'income';
+  selectedTransaction: Transaction | null = null;
+  private readonly dialogContext =
+    injectBrnDialogContext<TransactionFormContext | null>({ optional: true });
+  private readonly dialogRef = inject(BrnDialogRef, { optional: true });
+  private readonly dialogService = inject(HlmDialogService);
 
   constructor(
-    private ngbModal: NgbModal,
     private fb: FormBuilder,
     private transactionService: TransactionService,
   ) {}
 
   ngOnInit() {
+    this.transactionType =
+      this.dialogContext?.transactionType ?? this.transactionType;
+    this.selectedTransaction =
+      this.dialogContext?.selectedTransaction ?? this.selectedTransaction;
     this.initializeForm();
   }
 
@@ -80,18 +105,13 @@ export class TransactionFormComponent implements OnInit {
   }
 
   deleteConfirmation() {
-    this.deleteConfirmationModalReference = this.ngbModal.open(
-      this.deleteConfirmationModal,
-      {
-        centered: true,
-        backdrop: true,
-        size: 'sm',
+    this.dialogService.open(DeleteConfirmationDialogComponent, {
+      context: {
+        message: 'Are you sure you want to delete this transaction?',
+        onConfirm: () => this.deleteTransaction(),
       },
-    );
-  }
-
-  closeDeleteConfirmation() {
-    this.deleteConfirmationModalReference.close();
+      contentClass: 'sm:max-w-sm',
+    });
   }
 
   deleteTransaction() {
@@ -115,7 +135,7 @@ export class TransactionFormComponent implements OnInit {
   }
 
   closeModal() {
-    this.ngbModal.dismissAll();
+    this.dialogRef?.close();
     this.transactionForm.reset();
   }
 
@@ -141,7 +161,6 @@ export class TransactionFormComponent implements OnInit {
       };
 
       if (this.selectedTransaction) {
-        // Update existing transaction
         this.transactionService
           .updateTransaction(this.selectedTransaction.id, transaction)
           .subscribe({
@@ -153,7 +172,6 @@ export class TransactionFormComponent implements OnInit {
             },
           });
       } else {
-        // Add new transaction
         this.transactionService.addTransaction(transaction).subscribe({
           next: () => {
             console.log('Transaction added successfully');
@@ -171,5 +189,54 @@ export class TransactionFormComponent implements OnInit {
 
   get isPost() {
     return this.selectedTransaction === null;
+  }
+}
+
+interface DeleteConfirmationContext {
+  message?: string;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  onConfirm?: () => void;
+}
+
+@Component({
+  selector: 'app-delete-confirmation-dialog',
+  imports: [HlmButtonImports, HlmDialogImports, NgIcon],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  template: `
+    <hlm-dialog-header>
+      <h3 hlmDialogTitle>Delete Confirmation</h3>
+      <p hlmDialogDescription class="text-muted-foreground text-sm">
+        {{ context?.message ?? 'Are you sure you want to delete this item?' }}
+      </p>
+    </hlm-dialog-header>
+    <div class="flex justify-end gap-2">
+      <button
+        hlmBtn
+        variant="outline"
+        class="text-muted-foreground"
+        (click)="cancel()"
+      >
+        {{ context?.cancelLabel ?? 'Cancel' }}
+      </button>
+      <button hlmBtn variant="destructive" (click)="confirm()">
+        <ng-icon name="lucideTrash2" class="mr-2" />
+        {{ context?.confirmLabel ?? 'Delete' }}
+      </button>
+    </div>
+  `,
+})
+export class DeleteConfirmationDialogComponent {
+  private readonly dialogRef = inject(BrnDialogRef);
+  readonly context =
+    injectBrnDialogContext<DeleteConfirmationContext | null>({ optional: true });
+
+  confirm() {
+    this.context?.onConfirm?.();
+    this.dialogRef.close(true);
+  }
+
+  cancel() {
+    this.dialogRef.dismiss('outside');
   }
 }
