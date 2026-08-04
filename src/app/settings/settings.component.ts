@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
 import { SettingsService } from '../services/settings/settings.service';
 import { CurrencyCode, NumberFormat, UserSettings } from '../models/settings.interface';
+import { version } from '../../../package.json';
 
 @Component({
   selector: 'app-settings',
@@ -14,7 +15,7 @@ import { CurrencyCode, NumberFormat, UserSettings } from '../models/settings.int
   styleUrl: './settings.component.sass',
 })
 export class SettingsComponent implements OnInit {
-  appVersion = '1.0.0';
+  appVersion = version;
   settings: UserSettings;
 
   constructor(
