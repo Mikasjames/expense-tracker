@@ -7,7 +7,7 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Auth, authState } from '@angular/fire/auth';
 import {
   Transaction,
   TransactionForm,
@@ -37,14 +37,14 @@ export class TransactionService {
   expenseTransactions$ = this.expenseTransactionsSubject.asObservable();
 
   constructor(
-    private afAuth: AngularFireAuth,
+    private auth: Auth,
     private fs: Firestore,
   ) {
     this.initialize();
   }
 
   initialize() {
-    this.afAuth.authState
+    authState(this.auth)
       .pipe(
         switchMap((user) => {
           if (user) {

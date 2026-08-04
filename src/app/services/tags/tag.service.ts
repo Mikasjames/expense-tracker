@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Auth, authState } from '@angular/fire/auth';
 import {
   addDoc,
   arrayRemove,
@@ -28,10 +28,10 @@ export class TagService {
   expenseTags$ = this.expenseTags.asObservable();
 
   constructor(
-    private afAuth: AngularFireAuth,
+    private auth: Auth,
     private fs: Firestore,
   ) {
-    this.afAuth.authState
+    authState(this.auth)
       .pipe(
         switchMap((user) => {
           if (user) {
