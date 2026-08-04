@@ -1,14 +1,19 @@
-<div class="sidebar">
+<nav class="flex h-full w-16 flex-col items-center border-r border-sidebar-border bg-sidebar py-3">
   @for (item of sidebarItems; track item) {
-    <div
-      (click)="item.action()"
-      [class]="
-        item.icon === 'flex-grow-spacer' ? 'flex-grow-spacer' : 'sidebar-item'
-      "
-      [ngbTooltip]="item.label"
-      placement="right"
-    >
-      <i [class]="item.icon"></i>
-    </div>
+    @if (item.icon === 'flex-grow-spacer') {
+      <div class="flex-grow"></div>
+    } @else {
+      <button
+        (click)="item.action()"
+        hlmBtn
+        variant="ghost"
+        size="icon-lg"
+        [hlmTooltip]="item.label"
+        position="right"
+        class="mb-1 text-sidebar-foreground/70 hover:text-sidebar-foreground [&_ng-icon]:size-5"
+      >
+        <ng-icon [name]="item.icon" />
+      </button>
+    }
   }
-</div>
+</nav>

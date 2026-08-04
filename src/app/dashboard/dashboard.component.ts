@@ -6,14 +6,14 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
+import { NgClass } from '@angular/common';
 import { SidebarComponent } from '../components/sidebar/sidebar.component';
 import { TopbarComponent } from '../components/topbar/topbar.component';
-import { CommonModule } from '@angular/common';
 import { AuthService } from '../services/auth/auth.service';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterOutlet, SidebarComponent, TopbarComponent, CommonModule],
+  imports: [RouterOutlet, NgClass, SidebarComponent, TopbarComponent],
   templateUrl: './dashboard.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dashboard.component.sass',
@@ -24,21 +24,21 @@ export class DashboardComponent {
   sidebarContent = [
     {
       label: 'Dashboard',
-      icon: 'bi bi-house',
+      icon: 'lucideHouse',
       action: () => {
         this.router.navigateByUrl('/dashboard');
       },
     },
     {
       label: 'Profile',
-      icon: 'bi bi-person',
+      icon: 'lucideUser',
       action: () => {
         this.router.navigateByUrl('/dashboard/profile');
       },
     },
     {
       label: 'Settings',
-      icon: 'bi bi-gear',
+      icon: 'lucideSettings',
       action: () => {
         this.router.navigateByUrl('/dashboard/settings');
       },
@@ -50,7 +50,7 @@ export class DashboardComponent {
     },
     {
       label: 'Logout',
-      icon: 'bi bi-box-arrow-right',
+      icon: 'lucideLogOut',
       action: () => {
         this.logout();
       },
@@ -80,7 +80,7 @@ export class DashboardComponent {
         if (isFormFiller) return;
         this.sidebarContent.unshift({
           label: 'Form Filler',
-          icon: 'bi bi-file-earmark-text',
+          icon: 'lucideFileText',
           action: () => {
             this.router.navigateByUrl('/dashboard/fill-form');
           },

@@ -8,14 +8,16 @@ import {
 } from '@angular/core';
 import { ToolBarContent } from '../../models/util.interface';
 import { Router } from '@angular/router';
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
 import { DateSelectorComponent } from '../date-selector/date-selector.component';
 import { DateSelectorService } from '../../services/date-selector/date-selector.service';
+import { NgIcon } from '@ng-icons/core';
+import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
 
 @Component({
   selector: 'app-topbar',
-  imports: [NgbTooltip, DateSelectorComponent],
+  imports: [HlmTooltipImports, HlmButtonImports, NgIcon, DateSelectorComponent],
   templateUrl: './topbar.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './topbar.component.sass',
@@ -25,7 +27,7 @@ export class TopbarComponent {
   @Input() topbarItems: ToolBarContent[] = [
     {
       label: '',
-      icon: 'bi bi-three-dots-vertical',
+      icon: 'lucideMenu',
       action: () => {
         this.showSidebar = !this.showSidebar;
         this.toggleSidebar.emit(this.showSidebar);
@@ -38,7 +40,7 @@ export class TopbarComponent {
     },
     {
       label: '',
-      icon: 'bi bi-calendar-fill',
+      icon: 'lucideCalendarDays',
       action: () => {
         this.toggleDateSelector();
         this.preventCloseOnClick();
