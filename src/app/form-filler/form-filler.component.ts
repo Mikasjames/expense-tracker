@@ -573,7 +573,7 @@ export class FormFillerComponent implements OnInit {
   }
 
   private downloadModifiedPdf(pdfBytes: Uint8Array, originalName: string) {
-    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const blob = new Blob([pdfBytes.slice()], { type: 'application/pdf' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
