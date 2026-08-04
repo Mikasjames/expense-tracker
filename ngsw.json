@@ -1,7 +1,7 @@
 {
   "configVersion": 1,
-  "timestamp": 1785825752332,
-  "index": "https://tracker.mikasjames.com/index.html",
+  "timestamp": 1785835478797,
+  "index": "/index.csr.html",
   "assetGroups": [
     {
       "name": "app",
@@ -11,16 +11,14 @@
         "ignoreVary": true
       },
       "urls": [
-        "https://tracker.mikasjames.com/chunk-FNX3RRJM.js",
-        "https://tracker.mikasjames.com/chunk-IOVQ32OL.js",
-        "https://tracker.mikasjames.com/chunk-N52SSISG.js",
-        "https://tracker.mikasjames.com/chunk-SIAVTO45.js",
-        "https://tracker.mikasjames.com/favicon.ico",
-        "https://tracker.mikasjames.com/index.html",
-        "https://tracker.mikasjames.com/main-3VQGYBWP.js",
-        "https://tracker.mikasjames.com/manifest.webmanifest",
-        "https://tracker.mikasjames.com/polyfills-2KFT7WIM.js",
-        "https://tracker.mikasjames.com/styles-Q2LEX2S7.css"
+        "/chunk-5GU2RBDX.js",
+        "/chunk-FJEAVHLY.js",
+        "/favicon.ico",
+        "/index.html",
+        "/main-DU6RNMUT.js",
+        "/manifest.webmanifest",
+        "/polyfills-7R4CRVNH.js",
+        "/styles-32NZEEH7.css"
       ],
       "patterns": []
     },
@@ -32,30 +30,28 @@
         "ignoreVary": true
       },
       "urls": [
-        "https://tracker.mikasjames.com/assets/icons/icon512_maskable.png",
-        "https://tracker.mikasjames.com/assets/icons/icon512_rounded.png",
-        "https://tracker.mikasjames.com/media/bootstrap-icons-CVBWLLHT.woff2",
-        "https://tracker.mikasjames.com/media/bootstrap-icons-VQNJTM6Q.woff"
+        "/assets/icons/icon512_maskable.png",
+        "/assets/icons/icon512_rounded.png",
+        "/media/bootstrap-icons-CVBWLLHT.woff2",
+        "/media/bootstrap-icons-VQNJTM6Q.woff"
       ],
       "patterns": []
     }
   ],
   "dataGroups": [],
   "hashTable": {
-    "https://tracker.mikasjames.com/assets/icons/icon512_maskable.png": "ae9d03ad5a82803b13fcdc5a15d83f1f4b7c33a6",
-    "https://tracker.mikasjames.com/assets/icons/icon512_rounded.png": "aaf3ad29fffcf35322e542042522d9b32aabc28a",
-    "https://tracker.mikasjames.com/chunk-FNX3RRJM.js": "3bd5cf7781ad1efc1d8c4c3738e94f126a762433",
-    "https://tracker.mikasjames.com/chunk-IOVQ32OL.js": "0b51791883c82f6bff5a6ea2b0d44b9b4820bb0d",
-    "https://tracker.mikasjames.com/chunk-N52SSISG.js": "5847f102871dcd241df215403c6923c746022e64",
-    "https://tracker.mikasjames.com/chunk-SIAVTO45.js": "86e7eabee960bc32d69c21b03224020787d6c09a",
-    "https://tracker.mikasjames.com/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
-    "https://tracker.mikasjames.com/index.html": "d1375ce01ec9c43ae334e6f754f54b6b1bd2d456",
-    "https://tracker.mikasjames.com/main-3VQGYBWP.js": "963d02a1c6c0d85356283744b66ec8595b0af608",
-    "https://tracker.mikasjames.com/manifest.webmanifest": "d452a280dae256738298fe21537462478f022edd",
-    "https://tracker.mikasjames.com/media/bootstrap-icons-CVBWLLHT.woff2": "b441fcff939e24fa0906a37b7788788b9fddbb68",
-    "https://tracker.mikasjames.com/media/bootstrap-icons-VQNJTM6Q.woff": "762010c79b4a05e1131fc8fb3b1aeff324d8033f",
-    "https://tracker.mikasjames.com/polyfills-2KFT7WIM.js": "01500e27968fb09f51100a67f46a69297cc263de",
-    "https://tracker.mikasjames.com/styles-Q2LEX2S7.css": "c748e6e81fc38da5b9dc5dd9d33c8886c6c95384"
+    "/assets/icons/icon512_maskable.png": "ae9d03ad5a82803b13fcdc5a15d83f1f4b7c33a6",
+    "/assets/icons/icon512_rounded.png": "aaf3ad29fffcf35322e542042522d9b32aabc28a",
+    "/chunk-5GU2RBDX.js": "64db4ab6c497bbbdb5365f234308e3e43550260d",
+    "/chunk-FJEAVHLY.js": "4669b3f3d1010fbc25aba89fc530591a1078ee38",
+    "/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
+    "/index.html": "1b0d0035c2b26c5a9c30d7591490dd8183271447",
+    "/main-DU6RNMUT.js": "9a41400a0b99687ca883b1e77b1e48aca58cd7d7",
+    "/manifest.webmanifest": "d7d47ee5cf9431b04c1b1af27221b942e24b9150",
+    "/media/bootstrap-icons-CVBWLLHT.woff2": "b441fcff939e24fa0906a37b7788788b9fddbb68",
+    "/media/bootstrap-icons-VQNJTM6Q.woff": "762010c79b4a05e1131fc8fb3b1aeff324d8033f",
+    "/polyfills-7R4CRVNH.js": "f2241e9a25858f895ce299d15f6f22e849e2fd72",
+    "/styles-32NZEEH7.css": "1e6a1020117088fb5a96d76fb15da0df90e35ab5"
   },
   "navigationUrls": [
     {
