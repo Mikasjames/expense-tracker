@@ -9,6 +9,9 @@ import { LoaderComponent } from '../../components/loader/loader.component';
 
 import { HttpErrorResponse } from '@angular/common/http';
 import { PlatformButtonsComponent } from '../../components/platform-buttons/platform-buttons.component';
+import { NgIcon } from '@ng-icons/core';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmInputImports } from '@spartan-ng/helm/input';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +21,9 @@ import { PlatformButtonsComponent } from '../../components/platform-buttons/plat
     WaveComponent,
     LoaderComponent,
     PlatformButtonsComponent,
+    HlmButtonImports,
+    HlmInputImports,
+    NgIcon,
   ],
   templateUrl: './login.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,

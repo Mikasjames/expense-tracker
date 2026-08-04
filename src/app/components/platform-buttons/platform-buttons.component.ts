@@ -1,9 +1,10 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
 
 @Component({
   selector: 'app-platform-buttons',
-  imports: [],
+  imports: [HlmButtonImports],
   templateUrl: './platform-buttons.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './platform-buttons.component.sass',
