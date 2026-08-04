@@ -2,9 +2,11 @@ allowBuilds:
   '@firebase/util': true
   '@parcel/watcher': true
   esbuild: true
+  less: set this to true or false
   lmdb: true
   msgpackr-extract: true
   nice-napi: true
+  nx: set this to true or false
   protobufjs: true
   sharp: true
   workerd: true
