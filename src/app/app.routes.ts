@@ -10,9 +10,13 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { DashboardPageComponent } from './dashboard/dashboard-page/dashboard-page.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { FormFillerComponent } from './form-filler/form-filler.component';
+import { ProfileComponent } from './profile/profile.component';
+import { SettingsComponent } from './settings/settings.component';
 
 const dashboardChildRoutes: Routes = [
   { path: '', component: DashboardPageComponent },
+  { path: 'profile', component: ProfileComponent },
+  { path: 'settings', component: SettingsComponent },
   {
     path: 'fill-form',
     component: FormFillerComponent,

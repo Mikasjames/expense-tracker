@@ -1,0 +1,76 @@
+<div class="settings-container">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      <h1 class="fw-bold mb-4">Settings</h1>
+
+      <div class="card mb-4">
+        <div class="card-header fw-semibold">
+          <i class="bi bi-palette me-2"></i>Preferences
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label text-muted small mb-1">Currency</label>
+            <select class="form-select form-select-sm w-auto" disabled>
+              <option selected>PHP (&#8369;)</option>
+              <option>USD (&#36;)</option>
+              <option>EUR (&euro;)</option>
+            </select>
+            <div class="form-text">Coming soon</div>
+          </div>
+          <div class="mb-0">
+            <label class="form-label text-muted small mb-1">Number Format</label>
+            <select class="form-select form-select-sm w-auto" disabled>
+              <option selected>1,234.56</option>
+              <option>1 234,56</option>
+            </select>
+            <div class="form-text">Coming soon</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-header fw-semibold">
+          <i class="bi bi-bell me-2"></i>Notifications
+        </div>
+        <div class="card-body">
+          <div class="form-check form-switch mb-2">
+            <input class="form-check-input" type="checkbox" id="emailNotif" disabled />
+            <label class="form-check-label" for="emailNotif">Email notifications</label>
+          </div>
+          <div class="form-check form-switch mb-0">
+            <input class="form-check-input" type="checkbox" id="pushNotif" disabled />
+            <label class="form-check-label" for="pushNotif">Push notifications</label>
+          </div>
+          <div class="form-text">Coming soon</div>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-header fw-semibold">
+          <i class="bi bi-shield-check me-2"></i>Account
+        </div>
+        <div class="card-body d-flex align-items-center justify-content-between">
+          <div>
+            <p class="mb-1 fw-medium">Sign out</p>
+            <p class="mb-0 text-muted small">Sign out of your account on this device</p>
+          </div>
+          <button class="btn btn-outline-danger btn-sm" (click)="logout()">
+            <i class="bi bi-box-arrow-right me-1"></i>Logout
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header fw-semibold">
+          <i class="bi bi-info-circle me-2"></i>About
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <span class="text-muted">App Version</span>
+            <span>{{ appVersion }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
