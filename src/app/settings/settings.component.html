@@ -10,20 +10,26 @@
         <div class="card-body">
           <div class="mb-3">
             <label class="form-label text-muted small mb-1">Currency</label>
-            <select class="form-select form-select-sm w-auto" disabled>
-              <option selected>PHP (&#8369;)</option>
-              <option>USD (&#36;)</option>
-              <option>EUR (&euro;)</option>
+            <select
+              class="form-select form-select-sm w-auto"
+              [value]="settings.currency"
+              (change)="setCurrency($any($event.target).value)"
+            >
+              <option value="PHP">PHP (&#8369;)</option>
+              <option value="USD">USD (&#36;)</option>
+              <option value="EUR">EUR (&euro;)</option>
             </select>
-            <div class="form-text">Coming soon</div>
           </div>
           <div class="mb-0">
             <label class="form-label text-muted small mb-1">Number Format</label>
-            <select class="form-select form-select-sm w-auto" disabled>
-              <option selected>1,234.56</option>
-              <option>1 234,56</option>
+            <select
+              class="form-select form-select-sm w-auto"
+              [value]="settings.numberFormat"
+              (change)="setNumberFormat($any($event.target).value)"
+            >
+              <option value="en-US">1,234.56</option>
+              <option value="de-DE">1 234,56</option>
             </select>
-            <div class="form-text">Coming soon</div>
           </div>
         </div>
       </div>
@@ -34,14 +40,26 @@
         </div>
         <div class="card-body">
           <div class="form-check form-switch mb-2">
-            <input class="form-check-input" type="checkbox" id="emailNotif" disabled />
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="emailNotif"
+              [checked]="settings.emailNotifications"
+              (change)="setEmailNotifications($any($event.target).checked)"
+            />
             <label class="form-check-label" for="emailNotif">Email notifications</label>
           </div>
           <div class="form-check form-switch mb-0">
-            <input class="form-check-input" type="checkbox" id="pushNotif" disabled />
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="pushNotif"
+              [checked]="settings.pushNotifications"
+              (change)="setPushNotifications($any($event.target).checked)"
+            />
             <label class="form-check-label" for="pushNotif">Push notifications</label>
           </div>
-          <div class="form-text">Coming soon</div>
+          <div class="form-text">Preferences are saved to your account</div>
         </div>
       </div>
 

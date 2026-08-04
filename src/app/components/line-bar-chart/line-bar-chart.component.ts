@@ -94,7 +94,7 @@ export class LineBarChartComponent {
         );
         return (
           `<small>${date}</small><br/>${result}<br/>` +
-          `${params.data.points.length > 1 ? `<small>Total: ₱${params.value[1].toLocaleString()}</small>` : ''}`
+          `${params.data.points.length > 1 ? `<small>Total: ${this.utilService.formatAmount(params.value[1])}</small>` : ''}`
         );
       },
       axisPointer: {
