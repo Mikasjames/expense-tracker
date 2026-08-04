@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   NgbCalendar,
   NgbDate,
@@ -8,9 +8,9 @@ import { DateSelectorService } from '../../services/date-selector/date-selector.
 
 @Component({
   selector: 'app-date-selector',
-  standalone: true,
   imports: [NgbDatepicker],
   templateUrl: './date-selector.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './date-selector.component.sass',
 })
 export class DateSelectorComponent {

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { NgxEchartsDirective } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
 import {
@@ -13,9 +13,9 @@ import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-line-bar-chart',
-  standalone: true,
   imports: [NgxEchartsDirective, TitleCasePipe],
   templateUrl: './line-bar-chart.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './line-bar-chart.component.scss',
 })
 export class LineBarChartComponent {

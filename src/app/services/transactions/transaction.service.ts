@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import {
   BehaviorSubject,
   combineLatest,
@@ -7,7 +7,6 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
 import {
   Transaction,
   TransactionForm,
@@ -15,7 +14,6 @@ import {
 import {
   addDoc,
   collection,
-  collectionData,
   deleteDoc,
   doc,
   Firestore,
@@ -23,8 +21,12 @@ import {
   query,
   Timestamp,
   updateDoc,
-} from '@angular/fire/firestore';
+} from 'firebase/firestore';
 import { map } from 'rxjs/operators';
+import {
+  FIRESTORE,
+  FirebaseService,
+} from '../firebase/firebase.service';
 
 @Injectable({
   providedIn: 'root',
@@ -37,14 +39,14 @@ export class TransactionService {
   expenseTransactions$ = this.expenseTransactionsSubject.asObservable();
 
   constructor(
-    private afAuth: AngularFireAuth,
-    private fs: Firestore,
+    @Inject(FIRESTORE) private fs: Firestore,
+    private fb: FirebaseService,
   ) {
     this.initialize();
   }
 
   initialize() {
-    this.afAuth.authState
+    this.fb.authState$()
       .pipe(
         switchMap((user) => {
           if (user) {
@@ -102,9 +104,7 @@ export class TransactionService {
       `transactions/${this.userId}/${transactionType}`,
     );
     const q = query(transactionsCollection, orderBy('date'));
-    return collectionData(q, {
-      idField: 'id',
-    }).pipe(
+    return this.fb.collectionData$(q, 'id').pipe(
       map((transactions: any[]) =>
         transactions.map((transaction) => ({
           ...transaction,

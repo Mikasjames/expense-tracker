@@ -1,13 +1,23 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, Inject, signal } from '@angular/core';
 import {
   Auth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signInWithPopup,
   updateProfile,
-  user,
   GoogleAuthProvider,
   FacebookAuthProvider,
-} from '@angular/fire/auth';
+} from 'firebase/auth';
+import {
+  collection,
+  CollectionReference,
+  doc,
+  DocumentReference,
+  Firestore,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from 'firebase/firestore';
 import {
   BehaviorSubject,
   distinctUntilChanged,
@@ -19,15 +29,18 @@ import {
 } from 'rxjs';
 import { UserInterface } from '../../models/user.interface';
 import { Router } from '@angular/router';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { map } from 'rxjs/operators';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import {
+  AUTH,
+  FIRESTORE,
+  FirebaseService,
+} from '../firebase/firebase.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  user$ = user(this.firebaseAuth);
+  user$ = this.fb.user$();
   private currentUserSubject = new BehaviorSubject<
     UserInterface | null | undefined
   >(undefined);
@@ -36,10 +49,10 @@ export class AuthService {
     .pipe(distinctUntilChanged(), shareReplay(1));
 
   constructor(
-    private firebaseAuth: Auth,
+    @Inject(AUTH) private firebaseAuth: Auth,
     private router: Router,
-    private fireAuth: AngularFireAuth,
-    private firestore: AngularFirestore,
+    @Inject(FIRESTORE) private firestore: Firestore,
+    private fb: FirebaseService,
   ) {}
 
   initializeUserState() {
@@ -47,9 +60,11 @@ export class AuthService {
       .pipe(
         switchMap((user) => {
           if (user) {
-            return this.firestore
-              .doc<UserInterface & { isAdmin?: boolean }>(`users/${user.uid}`)
-              .valueChanges();
+            return this.fb.docData$(
+              doc(this.firestore, `users/${user.uid}`) as DocumentReference<
+                UserInterface & { isAdmin?: boolean }
+              >,
+            );
           } else {
             return of(null);
           }
@@ -78,8 +93,8 @@ export class AuthService {
       email,
       password,
     ).then((response) => {
-      updateProfile(response.user, { displayName: username }).then(() => {
-        this.firestore.doc(`users/${response.user.uid}`).set({
+      return updateProfile(response.user, { displayName: username }).then(() => {
+        return setDoc(doc(this.firestore, `users/${response.user.uid}`), {
           email,
           username,
         });
@@ -106,7 +121,7 @@ export class AuthService {
   }
 
   googleSignIn() {
-    return this.fireAuth.signInWithPopup(new GoogleAuthProvider()).then(
+    return signInWithPopup(this.firebaseAuth, new GoogleAuthProvider()).then(
       async (res) => {
         if (res.user) {
           await this.updateUserData(
@@ -125,7 +140,7 @@ export class AuthService {
   }
 
   facebookSignIn() {
-    return this.fireAuth.signInWithPopup(new FacebookAuthProvider()).then(
+    return signInWithPopup(this.firebaseAuth, new FacebookAuthProvider()).then(
       (res) => {
         if (res.user) {
           this.updateUserData(
@@ -150,26 +165,31 @@ export class AuthService {
       username,
       isAdmin: existingUser?.isAdmin ?? false, // Preserve existing admin status or set to false if not present
     };
-    return this.firestore.doc(`users/${uid}`).set(userData, { merge: true });
+    return setDoc(doc(this.firestore, `users/${uid}`), userData, {
+      merge: true,
+    });
   }
 
-  private getUserData(
+  private async getUserData(
     uid: string,
   ): Promise<(UserInterface & { isAdmin?: boolean }) | null> {
-    return this.firestore
-      .doc<UserInterface & { isAdmin?: boolean }>(`users/${uid}`)
-      .get()
-      .toPromise()
-      .then((doc) => doc?.data() || null);
+    const docSnap = await getDoc(
+      doc(this.firestore, `users/${uid}`),
+    );
+    return docSnap.exists()
+      ? (docSnap.data() as UserInterface & { isAdmin?: boolean })
+      : null;
   }
 
   isAdmin(): Observable<boolean> {
     return this.user$.pipe(
       switchMap((user) => {
         if (user) {
-          return this.firestore
-            .doc<{ isAdmin?: boolean }>(`users/${user.uid}`)
-            .valueChanges();
+          return this.fb.docData$(
+            doc(this.firestore, `users/${user.uid}`) as DocumentReference<{
+              isAdmin?: boolean;
+            }>,
+          );
         } else {
           return of(null);
         }
@@ -179,10 +199,12 @@ export class AuthService {
   }
 
   setAdminStatus(uid: string, isAdmin: boolean): Promise<void> {
-    return this.firestore.doc(`users/${uid}`).update({ isAdmin });
+    return updateDoc(doc(this.firestore, `users/${uid}`), { isAdmin });
   }
 
   getAllUsers(): Observable<UserInterface[]> {
-    return this.firestore.collection<UserInterface>('users').valueChanges();
+    return this.fb.collectionData$(
+      collection(this.firestore, 'users') as CollectionReference<UserInterface>,
+    );
   }
 }

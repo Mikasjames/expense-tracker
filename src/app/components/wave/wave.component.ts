@@ -1,11 +1,10 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-wave',
-  standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './wave.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './wave.component.sass',
 })
 export class WaveComponent {

@@ -1,12 +1,19 @@
-import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  Component,
+  Input,
+  OnInit,
+  OnChanges,
+  OnDestroy,
+  ChangeDetectionStrategy,
+} from '@angular/core';
+
 import { SettingsService } from '../../services/settings/settings.service';
 
 @Component({
   selector: 'app-stat-card',
-  standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './stat-card.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './stat-card.component.sass',
 })
 export class StatCardComponent implements OnInit, OnChanges, OnDestroy {

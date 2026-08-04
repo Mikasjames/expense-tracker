@@ -1,21 +1,21 @@
 import { Injectable, inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { Auth, authState } from '@angular/fire/auth';
 import { map, take } from 'rxjs/operators';
 import { AuthService } from './auth/auth.service';
 import { combineLatest } from 'rxjs';
+import { FirebaseService } from './firebase/firebase.service';
 
 @Injectable({
   providedIn: 'root',
 })
 class AuthGuardService {
   constructor(
-    private auth: Auth,
     private router: Router,
+    private fb: FirebaseService,
   ) {}
 
   canActivate(): ReturnType<CanActivateFn> {
-    return authState(this.auth).pipe(
+    return this.fb.authState$().pipe(
       take(1),
       map((user) => {
         if (user) {
@@ -34,12 +34,12 @@ class AuthGuardService {
 })
 class PublicOnlyGuardService {
   constructor(
-    private auth: Auth,
     private router: Router,
+    private fb: FirebaseService,
   ) {}
 
   canActivate(): ReturnType<CanActivateFn> {
-    return authState(this.auth).pipe(
+    return this.fb.authState$().pipe(
       take(1),
       map((user) => {
         if (user) {
@@ -58,14 +58,14 @@ class PublicOnlyGuardService {
 })
 class AdminOnlyGuardService {
   constructor(
-    private auth: Auth,
     private router: Router,
     private authService: AuthService,
+    private fb: FirebaseService,
   ) {}
 
   canActivate(): ReturnType<CanActivateFn> {
     return combineLatest([
-      authState(this.auth),
+      this.fb.authState$(),
       this.authService.isAdmin(),
     ]).pipe(
       take(1),

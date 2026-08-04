@@ -1,8 +1,8 @@
-<div *ngIf="isLoading; else loginFormTemplate">
-  <app-loader></app-loader>
-</div>
-
-<ng-template #loginFormTemplate>
+@if (isLoading) {
+  <div>
+    <app-loader></app-loader>
+  </div>
+} @else {
   <app-wave class="z-0"></app-wave>
   <div
     class="container-fluid vh-100 d-flex flex-column align-items-center justify-content-center bg-light z-n1"
@@ -57,11 +57,13 @@
             >
           </div>
         </form>
-        <div *ngIf="error" class="text-danger">
-          {{ error }}
-        </div>
+        @if (error) {
+          <div class="text-danger">
+            {{ error }}
+          </div>
+        }
       </div>
     </div>
   </div>
   <app-wave [wave]="'bottom'" class="z-0"></app-wave>
-</ng-template>
+}

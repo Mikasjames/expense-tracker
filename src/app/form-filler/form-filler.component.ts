@@ -1,4 +1,9 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { PdfFile, PdfService } from '../services/pdf/pdf.service';
 import { CommonModule } from '@angular/common';
 import {
@@ -24,9 +29,9 @@ import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-form-filler',
-  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './form-filler.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './form-filler.component.sass',
 })
 export class FormFillerComponent implements OnInit {
@@ -78,7 +83,7 @@ export class FormFillerComponent implements OnInit {
     private transactionService: TransactionService,
     private tagService: TagService,
     private cdr: ChangeDetectorRef,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.loadTransactions();
@@ -283,7 +288,10 @@ export class FormFillerComponent implements OnInit {
       { name: '900_1_Text_C', value: this.name },
       { name: '900_2_Text_C', value: this.city },
       { name: '900_3_Text_C', value: this.province },
-      { name: '900_4_Text_C', value: this.selectedMonth + ' ' + this.selectedYear },
+      {
+        name: '900_4_Text_C',
+        value: this.selectedMonth + ' ' + this.selectedYear,
+      },
     ];
 
     fields.forEach((field) => {
@@ -504,7 +512,7 @@ export class FormFillerComponent implements OnInit {
   }
 
   private debugDumpFieldNames(form: PDFForm) {
-    const names = form.getFields().map(f => f.getName());
+    const names = form.getFields().map((f) => f.getName());
     console.log('PDF form fields:', names);
   }
 
@@ -571,7 +579,7 @@ export class FormFillerComponent implements OnInit {
   }
 
   private downloadModifiedPdf(pdfBytes: Uint8Array, originalName: string) {
-    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const blob = new Blob([pdfBytes.slice()], { type: 'application/pdf' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;

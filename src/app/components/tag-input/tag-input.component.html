@@ -1,44 +1,51 @@
-<div *ngIf="selectedTag" class="badge bg-primary text-wrap">
-  {{ selectedTag.name }}
-  <i
-    role="button"
-    class="bi bi-x-circle-fill ms-1"
-    (click)="removeExistingTag()"
-  ></i>
-</div>
-<textarea
-  *ngIf="selectedTag === null"
-  class="form-control border-0 shadow-none"
-  id="tagIds"
-  placeholder="Add a tag"
-  style="height: 40px; resize: none; overflow: hidden"
-  [formControl]="tagForm"
-  rows="3"
-  (keydown.enter)="onEnterKey($event)"
-  (focus)="onFocus()"
-  (blur)="onBlur()"
-></textarea>
+@if (selectedTag) {
+  <div class="badge bg-primary text-wrap">
+    {{ selectedTag.name }}
+    <i
+      role="button"
+      class="bi bi-x-circle-fill ms-1"
+      (click)="removeExistingTag()"
+    ></i>
+  </div>
+}
+@if (selectedTag === null) {
+  <textarea
+    class="form-control border-0 shadow-none"
+    id="tagIds"
+    placeholder="Add a tag"
+    style="height: 40px; resize: none; overflow: hidden"
+    [formControl]="tagForm"
+    rows="3"
+    (keydown.enter)="onEnterKey($event)"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+  ></textarea>
+}
 
-<div *ngIf="isFocused" class="position-relative col-6">
-  <ul
-    class="list-group position-absolute shadow rounded border border-1 border-secondary bg-white w-100 mt-1 p-0"
-    style="max-height: 125px; overflow-y: auto"
-  >
-    <li
-      *ngIf="showAddTagOption() && tagForm.value"
-      (click)="addTag(tagForm.value)"
-      class="add-tag list-group-item d-flex justify-content-between align-items-center p-2"
+@if (isFocused) {
+  <div class="position-relative col-6">
+    <ul
+      class="list-group position-absolute shadow rounded border border-1 border-secondary bg-white w-100 mt-1 p-0"
+      style="max-height: 125px; overflow-y: auto"
     >
-      Add tag "{{ tagForm.value }}"
-    </li>
-    <li
-      *ngFor="let suggestion of suggestions"
-      [ngClass]="{ 'add-tag': isOptionHighlighted(suggestion.name) }"
-      class="list-group-item d-flex justify-content-between align-items-center p-2 icon-link-hover"
-      (click)="addExistingTag(suggestion)"
-    >
-      {{ suggestion.name }}
-      <i class="bi bi-plus-lg mx-1"></i>
-    </li>
-  </ul>
-</div>
+      @if (showAddTagOption() && tagForm.value) {
+        <li
+          (click)="addTag(tagForm.value)"
+          class="add-tag list-group-item d-flex justify-content-between align-items-center p-2"
+        >
+          Add tag "{{ tagForm.value }}"
+        </li>
+      }
+      @for (suggestion of suggestions; track suggestion) {
+        <li
+          [ngClass]="{ 'add-tag': isOptionHighlighted(suggestion.name) }"
+          class="list-group-item d-flex justify-content-between align-items-center p-2 icon-link-hover"
+          (click)="addExistingTag(suggestion)"
+        >
+          {{ suggestion.name }}
+          <i class="bi bi-plus-lg mx-1"></i>
+        </li>
+      }
+    </ul>
+  </div>
+}

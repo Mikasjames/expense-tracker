@@ -6,6 +6,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { TagService } from '../../services/tags/tag.service';
 import { Tag } from '../../models/chart.interface';
@@ -15,9 +16,9 @@ import { debounceTime, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-tag-input',
-  standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './tag-input.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tag-input.component.sass',
 })
 export class TagInputComponent implements OnInit, OnDestroy {

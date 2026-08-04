@@ -1,9 +1,15 @@
-import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { UserInterface } from '../../models/user.interface';
 import { TransactionService } from '../../services/transactions/transaction.service';
 import { Transaction } from '../../models/transaction.interface';
-import { CommonModule } from '@angular/common';
+
 import { LineBarChartComponent } from '../../components/line-bar-chart/line-bar-chart.component';
 import { StatCardComponent } from '../../components/stat-card/stat-card.component';
 import { TransactionFormComponent } from '../../components/transaction-form/transaction-form.component';
@@ -18,9 +24,7 @@ import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard-page',
-  standalone: true,
   imports: [
-    CommonModule,
     LineBarChartComponent,
     StatCardComponent,
     LoaderComponent,
@@ -29,6 +33,7 @@ import { map } from 'rxjs/operators';
     DateSelectorComponent,
   ],
   templateUrl: './dashboard-page.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dashboard-page.component.sass',
 })
 export class DashboardPageComponent implements OnInit, OnDestroy {

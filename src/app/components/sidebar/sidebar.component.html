@@ -1,5 +1,5 @@
 <div class="sidebar">
-  <ng-container *ngFor="let item of sidebarItems">
+  @for (item of sidebarItems; track item) {
     <div
       (click)="item.action()"
       [class]="
@@ -10,5 +10,5 @@
     >
       <i [class]="item.icon"></i>
     </div>
-  </ng-container>
+  }
 </div>

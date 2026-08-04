@@ -1,8 +1,8 @@
-<div *ngIf="isLoading; else content">
-  <app-loader></app-loader>
-</div>
-
-<ng-template #content>
+@if (isLoading) {
+  <div>
+    <app-loader></app-loader>
+  </div>
+} @else {
   <div class="container-fluid d-flex justify-content-center">
     <div class="mt-2 row d-flex justify-content-center">
       <div class="row col-12 col-lg-6">
@@ -16,30 +16,30 @@
             >
               <i class="bi bi-calendar-fill"></i>
             </button>
-            <div
-              *ngIf="showDateSelector"
-              (click)="preventCloseOnClick()"
-              class="d-none d-md-block date-selector-container d-flex justify-content-center align-items-center position-absolute"
-            >
-              <app-date-selector></app-date-selector>
-            </div>
+            @if (showDateSelector) {
+              <div
+                (click)="preventCloseOnClick()"
+                class="d-none d-md-block date-selector-container d-flex justify-content-center align-items-center position-absolute"
+              >
+                <app-date-selector></app-date-selector>
+              </div>
+            }
             <div class="col">
               <app-transaction-form-buttons></app-transaction-form-buttons>
             </div>
           </div>
         </div>
         <div class="row mb-3">
-          <div
-            *ngFor="let statCard of statCards"
-            class="col-6 col-xl-4 mb-2 mx-auto mx-xl-0"
-          >
-            <app-stat-card
-              [title]="statCard.title"
-              [value]="statCard.value"
-              [percentChange]="statCard.percentChange"
-              [isIncome]="statCard.isIncome"
-            ></app-stat-card>
-          </div>
+          @for (statCard of statCards; track statCard) {
+            <div class="col-6 col-xl-4 mb-2 mx-auto mx-xl-0">
+              <app-stat-card
+                [title]="statCard.title"
+                [value]="statCard.value"
+                [percentChange]="statCard.percentChange"
+                [isIncome]="statCard.isIncome"
+              ></app-stat-card>
+            </div>
+          }
         </div>
         <app-transaction-table
           [transactions]="allTransactions"
@@ -63,4 +63,4 @@
       </div>
     </div>
   </div>
-</ng-template>
+}

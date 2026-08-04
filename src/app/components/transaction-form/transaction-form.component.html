@@ -15,15 +15,12 @@
           formControlName="title"
           placeholder="Enter title"
         />
-        <div
-          *ngIf="
-            transactionForm.controls['title'].invalid &&
-            transactionForm.controls['title'].touched
-          "
-          class="text-danger"
-        >
-          Title is required.
-        </div>
+        @if (
+          transactionForm.controls["title"].invalid &&
+          transactionForm.controls["title"].touched
+        ) {
+          <div class="text-danger">Title is required.</div>
+        }
       </div>
       <div class="form-row mb-3">
         <label for="amount" class="form-label">Amount</label>
@@ -34,15 +31,14 @@
           formControlName="amount"
           placeholder="Enter amount"
         />
-        <div
-          *ngIf="
-            transactionForm.controls['amount'].invalid &&
-            transactionForm.controls['amount'].touched
-          "
-          class="text-danger"
-        >
-          Amount is required and must be greater than or equal to 0.
-        </div>
+        @if (
+          transactionForm.controls["amount"].invalid &&
+          transactionForm.controls["amount"].touched
+        ) {
+          <div class="text-danger">
+            Amount is required and must be greater than or equal to 0.
+          </div>
+        }
       </div>
       <div class="form-row mb-3">
         <label for="description" class="form-label">Description</label>
@@ -62,15 +58,12 @@
           id="date"
           formControlName="date"
         />
-        <div
-          *ngIf="
-            transactionForm.controls['date'].invalid &&
-            transactionForm.controls['date'].touched
-          "
-          class="text-danger"
-        >
-          Date is required.
-        </div>
+        @if (
+          transactionForm.controls["date"].invalid &&
+          transactionForm.controls["date"].touched
+        ) {
+          <div class="text-danger">Date is required.</div>
+        }
       </div>
       <div class="form-row mb-3">
         <app-tag-input
@@ -90,12 +83,14 @@
         </button>
       </div>
     </form>
-    <div *ngIf="!isPost" class="modal-footer d-flex justify-content-center">
-      <span role="button" (click)="deleteConfirmation()" class="text-danger">
-        <i class="bi bi-trash"></i>
-        Delete Transaction
-      </span>
-    </div>
+    @if (!isPost) {
+      <div class="modal-footer d-flex justify-content-center">
+        <span role="button" (click)="deleteConfirmation()" class="text-danger">
+          <i class="bi bi-trash"></i>
+          Delete Transaction
+        </span>
+      </div>
+    }
   </div>
 </div>
 

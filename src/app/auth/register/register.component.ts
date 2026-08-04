@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
@@ -8,7 +8,6 @@ import { PlatformButtonsComponent } from '../../components/platform-buttons/plat
 
 @Component({
   selector: 'app-register',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     WaveComponent,
@@ -16,6 +15,7 @@ import { PlatformButtonsComponent } from '../../components/platform-buttons/plat
     PlatformButtonsComponent,
   ],
   templateUrl: './register.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './register.component.sass',
 })
 export class RegisterComponent {

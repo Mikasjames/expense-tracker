@@ -1,13 +1,12 @@
-import { Injectable } from '@angular/core';
-import { Auth, user } from '@angular/fire/auth';
+import { Injectable, Inject } from '@angular/core';
+import { Auth } from 'firebase/auth';
 import {
   Firestore,
   collection,
-  collectionData,
   doc,
   deleteDoc,
   setDoc,
-} from '@angular/fire/firestore';
+} from 'firebase/firestore';
 import {
   BehaviorSubject,
   from,
@@ -16,6 +15,11 @@ import {
   switchMap,
 } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import {
+  AUTH,
+  FIRESTORE,
+  FirebaseService,
+} from '../firebase/firebase.service';
 
 export interface PdfFile {
   id: string;
@@ -32,14 +36,15 @@ export class PdfService {
   pdfs$ = this.pdfsSubject.asObservable();
 
   constructor(
-    private auth: Auth,
-    private firestore: Firestore,
+    @Inject(AUTH) private auth: Auth,
+    @Inject(FIRESTORE) private firestore: Firestore,
+    private fb: FirebaseService,
   ) {
     this.initialize();
   }
 
   private initialize() {
-    user(this.auth)
+    this.fb.user$()
       .pipe(
         switchMap((firebaseUser) => {
           if (!firebaseUser) {
@@ -59,7 +64,7 @@ export class PdfService {
       this.firestore,
       `pdfs/${uid}/userPdfs`,
     );
-    return collectionData(pdfsCollection, { idField: 'id' }) as Observable<PdfFile[]>;
+    return this.fb.collectionData$(pdfsCollection, 'id') as Observable<PdfFile[]>;
   }
 
   private async getAuthToken(): Promise<string> {

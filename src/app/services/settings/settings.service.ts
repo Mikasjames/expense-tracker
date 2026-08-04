@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Auth, user } from '@angular/fire/auth';
-import { Firestore, doc, docData, setDoc } from '@angular/fire/firestore';
+import { Injectable, Inject } from '@angular/core';
+import { Firestore, doc, setDoc } from 'firebase/firestore';
 import { from, Observable, of } from 'rxjs';
 import {
   distinctUntilChanged,
@@ -10,6 +9,10 @@ import {
   tap,
 } from 'rxjs/operators';
 import { CurrencyCode, NumberFormat, UserSettings } from '../../models/settings.interface';
+import {
+  FIRESTORE,
+  FirebaseService,
+} from '../firebase/firebase.service';
 
 export const DEFAULT_SETTINGS: UserSettings = {
   currency: 'PHP',
@@ -33,7 +36,7 @@ const LAST_USER_KEY = 'expense-tracker:last-user';
 export class SettingsService {
   private currentSettings: UserSettings = { ...DEFAULT_SETTINGS };
 
-  private uid$ = user(this.auth).pipe(
+  private uid$ = this.fb.user$().pipe(
     map((u) => (u ? u.uid : null)),
     distinctUntilChanged(),
     shareReplay(1),
@@ -47,8 +50,8 @@ export class SettingsService {
   );
 
   constructor(
-    private firestore: Firestore,
-    private auth: Auth,
+    @Inject(FIRESTORE) private firestore: Firestore,
+    private fb: FirebaseService,
   ) {
     const lastUid = this.readLastUser();
     if (lastUid) {
@@ -75,7 +78,7 @@ export class SettingsService {
 
   private loadSettings(uid: string): Observable<UserSettings> {
     const ref = doc(this.firestore, `settings/${uid}`);
-    return docData(ref).pipe(
+    return this.fb.docData$(ref).pipe(
       map((stored) => ({ ...DEFAULT_SETTINGS, ...(stored || {}) })),
       tap((settings) => this.writeCache(uid, settings)),
     );

@@ -1,13 +1,13 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { NgxEchartsDirective } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
 import { PieData } from '../../models/chart.interface';
 
 @Component({
   selector: 'app-pie-chart',
-  standalone: true,
   imports: [NgxEchartsDirective],
   templateUrl: './pie-chart.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './pie-chart.component.scss',
 })
 export class PieChartComponent {

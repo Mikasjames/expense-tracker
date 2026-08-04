@@ -1,11 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  Component,
+  Input,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 @Component({
   selector: 'app-dollar-sign-svgs',
-  standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './dollar-sign-svgs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dollar-sign-svgs.component.sass',
 })
 export class DollarSignSvgsComponent implements OnInit {

@@ -1,17 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
 import { SettingsService } from '../services/settings/settings.service';
-import { CurrencyCode, NumberFormat, UserSettings } from '../models/settings.interface';
+import {
+  CurrencyCode,
+  NumberFormat,
+  UserSettings,
+} from '../models/settings.interface';
 import { version } from '../../../package.json';
 
 @Component({
   selector: 'app-settings',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './settings.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './settings.component.sass',
 })
 export class SettingsComponent implements OnInit {
@@ -41,11 +45,17 @@ export class SettingsComponent implements OnInit {
   }
 
   setEmailNotifications(enabled: boolean) {
-    this.settingsService.updateNotifications(enabled, this.settings.pushNotifications);
+    this.settingsService.updateNotifications(
+      enabled,
+      this.settings.pushNotifications,
+    );
   }
 
   setPushNotifications(enabled: boolean) {
-    this.settingsService.updateNotifications(this.settings.emailNotifications, enabled);
+    this.settingsService.updateNotifications(
+      this.settings.emailNotifications,
+      enabled,
+    );
   }
 
   logout() {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
@@ -6,15 +6,13 @@ import { DollarSignSvgsComponent } from '../../components/dollar-sign-svgs/dolla
 import { WaveComponent } from '../../components/wave/wave.component';
 import { PlatformService } from '../../services/platform/platform.service';
 import { LoaderComponent } from '../../components/loader/loader.component';
-import { CommonModule } from '@angular/common';
+
 import { HttpErrorResponse } from '@angular/common/http';
 import { PlatformButtonsComponent } from '../../components/platform-buttons/platform-buttons.component';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     DollarSignSvgsComponent,
     WaveComponent,
@@ -22,6 +20,7 @@ import { PlatformButtonsComponent } from '../../components/platform-buttons/plat
     PlatformButtonsComponent,
   ],
   templateUrl: './login.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './login.component.sass',
 })
 export class LoginComponent {
