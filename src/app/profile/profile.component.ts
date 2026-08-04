@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Auth, user, updateProfile } from '@angular/fire/auth';
+import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
 import { AuthService } from '../services/auth/auth.service';
 import { UserInterface } from '../models/user.interface';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Component({
   selector: 'app-profile',
@@ -23,8 +23,8 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private fireAuth: AngularFireAuth,
-    private firestore: AngularFirestore,
+    private auth: Auth,
+    private firestore: Firestore,
   ) {}
 
   ngOnInit() {
@@ -32,7 +32,7 @@ export class ProfileComponent implements OnInit {
       this.user = user ?? null;
       this.usernameInput = user?.username || '';
     });
-    this.fireAuth.currentUser.then((u) => {
+    user(this.auth).subscribe((u) => {
       this.uid = u?.uid || null;
     });
   }
@@ -59,16 +59,22 @@ export class ProfileComponent implements OnInit {
 
   saveUsername() {
     if (!this.uid || !this.usernameInput.trim()) return;
+    const username = this.usernameInput.trim();
     this.saving = true;
-    this.firestore
-      .doc(`users/${this.uid}`)
-      .update({ username: this.usernameInput.trim() })
+    updateDoc(doc(this.firestore, `users/${this.uid}`), { username })
+      .then(() => {
+        const currentUser = this.auth.currentUser;
+        if (currentUser) {
+          return updateProfile(currentUser, { displayName: username });
+        }
+        return Promise.resolve();
+      })
       .then(() => {
         this.saving = false;
         this.editingUsername = false;
         this.saved = true;
         if (this.user) {
-          this.user = { ...this.user, username: this.usernameInput.trim() };
+          this.user = { ...this.user, username };
         }
         setTimeout(() => (this.saved = false), 2000);
       })
