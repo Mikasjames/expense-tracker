@@ -15,18 +15,15 @@ import { CurrencyCode, NumberFormat, UserSettings } from '../models/settings.int
 })
 export class SettingsComponent implements OnInit {
   appVersion = '1.0.0';
-  settings: UserSettings = {
-    currency: 'PHP',
-    numberFormat: 'en-US',
-    emailNotifications: false,
-    pushNotifications: false,
-  };
+  settings: UserSettings;
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private settingsService: SettingsService,
-  ) {}
+  ) {
+    this.settings = { ...this.settingsService.current };
+  }
 
   ngOnInit() {
     this.settingsService.settings$.subscribe((s) => {

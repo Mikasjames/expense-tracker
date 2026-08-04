@@ -24,6 +24,9 @@ const CURRENCY_SYMBOLS: Record<CurrencyCode, string> = {
   EUR: '€',
 };
 
+const CACHE_KEY = 'expense-tracker:settings';
+const LAST_USER_KEY = 'expense-tracker:last-user';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -37,7 +40,8 @@ export class SettingsService {
   );
 
   settings$: Observable<UserSettings> = this.uid$.pipe(
-    switchMap((uid) => (uid ? this.loadSettings(uid) : of({ ...DEFAULT_SETTINGS }))),
+    switchMap((uid) => (uid ? this.loadSettings(uid) : of(null))),
+    map((stored) => stored ?? { ...DEFAULT_SETTINGS }),
     tap((settings) => (this.currentSettings = settings)),
     shareReplay(1),
   );
@@ -45,7 +49,17 @@ export class SettingsService {
   constructor(
     private firestore: Firestore,
     private auth: Auth,
-  ) {}
+  ) {
+    const lastUid = this.readLastUser();
+    if (lastUid) {
+      const cached = this.readCache(lastUid);
+      if (cached) this.currentSettings = { ...cached };
+    }
+  }
+
+  get current(): UserSettings {
+    return this.currentSettings;
+  }
 
   updateCurrency(currency: CurrencyCode): void {
     this.applyUpdate({ currency });
@@ -63,6 +77,7 @@ export class SettingsService {
     const ref = doc(this.firestore, `settings/${uid}`);
     return docData(ref).pipe(
       map((stored) => ({ ...DEFAULT_SETTINGS, ...(stored || {}) })),
+      tap((settings) => this.writeCache(uid, settings)),
     );
   }
 
@@ -72,6 +87,7 @@ export class SettingsService {
       .pipe(
         switchMap((uid) => {
           if (!uid) return of(null);
+          this.writeCache(uid, this.currentSettings);
           return from(
             setDoc(doc(this.firestore, `settings/${uid}`), partial, {
               merge: true,
@@ -80,6 +96,37 @@ export class SettingsService {
         }),
       )
       .subscribe();
+  }
+
+  private readLastUser(): string | null {
+    if (typeof localStorage === 'undefined') return null;
+    try {
+      return localStorage.getItem(LAST_USER_KEY);
+    } catch {
+      return null;
+    }
+  }
+
+  private readCache(uid: string): UserSettings | null {
+    if (typeof localStorage === 'undefined') return null;
+    try {
+      const cache = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
+      return cache[uid] || null;
+    } catch {
+      return null;
+    }
+  }
+
+  private writeCache(uid: string, settings: UserSettings): void {
+    if (typeof localStorage === 'undefined') return;
+    try {
+      const cache = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
+      cache[uid] = settings;
+      localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+      localStorage.setItem(LAST_USER_KEY, uid);
+    } catch {
+      // ignore cache write failures
+    }
   }
 
   format(value: number): string {
