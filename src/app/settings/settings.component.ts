@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
-import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
 import { SettingsService } from '../services/settings/settings.service';
@@ -10,10 +9,21 @@ import {
   UserSettings,
 } from '../models/settings.interface';
 import { version } from '../../../package.json';
+import { NgIcon } from '@ng-icons/core';
+import { HlmCardImports } from '@spartan-ng/helm/card';
+import { HlmNativeSelectImports } from '@spartan-ng/helm/native-select';
+import { HlmSwitchImports } from '@spartan-ng/helm/switch';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
 
 @Component({
   selector: 'app-settings',
-  imports: [FormsModule],
+  imports: [
+    HlmCardImports,
+    HlmNativeSelectImports,
+    HlmSwitchImports,
+    HlmButtonImports,
+    NgIcon,
+  ],
   templateUrl: './settings.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './settings.component.sass',
@@ -36,12 +46,14 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  setCurrency(currency: CurrencyCode) {
-    this.settingsService.updateCurrency(currency);
+  setCurrency(currency: CurrencyCode | string | null | undefined) {
+    if (!currency) return;
+    this.settingsService.updateCurrency(currency as CurrencyCode);
   }
 
-  setNumberFormat(numberFormat: NumberFormat) {
-    this.settingsService.updateNumberFormat(numberFormat);
+  setNumberFormat(numberFormat: NumberFormat | string | null | undefined) {
+    if (!numberFormat) return;
+    this.settingsService.updateNumberFormat(numberFormat as NumberFormat);
   }
 
   setEmailNotifications(enabled: boolean) {

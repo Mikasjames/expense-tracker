@@ -17,6 +17,11 @@ import { FormsModule } from '@angular/forms';
 import { TransactionService } from '../services/transactions/transaction.service';
 import { Transaction } from '../models/transaction.interface';
 import { TagService } from '../services/tags/tag.service';
+import { NgIcon } from '@ng-icons/core';
+import { HlmCardImports } from '@spartan-ng/helm/card';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmInputImports } from '@spartan-ng/helm/input';
+import { HlmNativeSelectImports } from '@spartan-ng/helm/native-select';
 import {
   BehaviorSubject,
   catchError,
@@ -29,7 +34,13 @@ import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-form-filler',
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    HlmCardImports,
+    HlmButtonImports,
+    HlmInputImports,
+    HlmNativeSelectImports,
+  ],
   templateUrl: './form-filler.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './form-filler.component.sass',
@@ -141,7 +152,8 @@ export class FormFillerComponent implements OnInit {
     this.oldestToNewestTransactionYearRange = years;
   }
 
-  onYearChange(value: string) {
+  onYearChange(value: string | number | null | undefined) {
+    if (value === null || value === undefined) return;
     this.selectedYear = +value;
   }
 
