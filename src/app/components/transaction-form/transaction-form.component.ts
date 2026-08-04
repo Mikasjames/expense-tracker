@@ -17,7 +17,6 @@ import { TagInputComponent } from '../tag-input/tag-input.component';
 
 @Component({
   selector: 'app-transaction-form',
-  standalone: true,
   imports: [ReactiveFormsModule, CommonModule, TagInputComponent],
   templateUrl: './transaction-form.component.html',
   styleUrl: './transaction-form.component.sass',

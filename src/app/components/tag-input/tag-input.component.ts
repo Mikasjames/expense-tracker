@@ -15,7 +15,6 @@ import { debounceTime, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-tag-input',
-  standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './tag-input.component.html',
   styleUrl: './tag-input.component.sass',

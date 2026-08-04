@@ -14,7 +14,6 @@ import { DateSelectorService } from '../../services/date-selector/date-selector.
 
 @Component({
   selector: 'app-topbar',
-  standalone: true,
   imports: [CommonModule, NgbTooltip, DateSelectorComponent],
   templateUrl: './topbar.component.html',
   styleUrl: './topbar.component.sass',

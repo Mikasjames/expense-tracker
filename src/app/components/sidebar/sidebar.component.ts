@@ -7,7 +7,6 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-sidebar',
-  standalone: true,
   imports: [CommonModule, NgbTooltipModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.sass',

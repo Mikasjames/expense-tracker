@@ -4,7 +4,6 @@ import { TransactionFormComponent } from '../transaction-form/transaction-form.c
 
 @Component({
   selector: 'app-transaction-form-buttons',
-  standalone: true,
   imports: [TransactionFormComponent],
   templateUrl: './transaction-form-buttons.component.html',
   styleUrl: './transaction-form-buttons.component.sass',

@@ -5,7 +5,6 @@ import { PieData } from '../../models/chart.interface';
 
 @Component({
   selector: 'app-pie-chart',
-  standalone: true,
   imports: [NgxEchartsDirective],
   templateUrl: './pie-chart.component.html',
   styleUrl: './pie-chart.component.scss',

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dollar-sign-svgs',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './dollar-sign-svgs.component.html',
   styleUrl: './dollar-sign-svgs.component.sass',

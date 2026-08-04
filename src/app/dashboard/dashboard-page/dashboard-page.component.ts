@@ -18,7 +18,6 @@ import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard-page',
-  standalone: true,
   imports: [
     CommonModule,
     LineBarChartComponent,

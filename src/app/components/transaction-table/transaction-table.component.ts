@@ -21,7 +21,6 @@ import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-transaction-table',
-  standalone: true,
   imports: [
     AgGridAngular,
     CommonModule,

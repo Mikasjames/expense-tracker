@@ -8,7 +8,6 @@ import { DateSelectorService } from '../../services/date-selector/date-selector.
 
 @Component({
   selector: 'app-date-selector',
-  standalone: true,
   imports: [NgbDatepicker],
   templateUrl: './date-selector.component.html',
   styleUrl: './date-selector.component.sass',

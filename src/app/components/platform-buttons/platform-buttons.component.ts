@@ -3,7 +3,6 @@ import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-platform-buttons',
-  standalone: true,
   imports: [],
   templateUrl: './platform-buttons.component.html',
   styleUrl: './platform-buttons.component.sass',

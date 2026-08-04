@@ -12,7 +12,6 @@ import { PlatformButtonsComponent } from '../../components/platform-buttons/plat
 
 @Component({
   selector: 'app-login',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,

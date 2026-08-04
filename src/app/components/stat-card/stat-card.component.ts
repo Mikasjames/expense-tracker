@@ -4,7 +4,6 @@ import { SettingsService } from '../../services/settings/settings.service';
 
 @Component({
   selector: 'app-stat-card',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './stat-card.component.html',
   styleUrl: './stat-card.component.sass',

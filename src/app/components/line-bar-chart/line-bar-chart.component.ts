@@ -13,7 +13,6 @@ import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-line-bar-chart',
-  standalone: true,
   imports: [NgxEchartsDirective, TitleCasePipe],
   templateUrl: './line-bar-chart.component.html',
   styleUrl: './line-bar-chart.component.scss',

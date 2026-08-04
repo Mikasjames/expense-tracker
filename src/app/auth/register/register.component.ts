@@ -8,7 +8,6 @@ import { PlatformButtonsComponent } from '../../components/platform-buttons/plat
 
 @Component({
   selector: 'app-register',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     WaveComponent,
