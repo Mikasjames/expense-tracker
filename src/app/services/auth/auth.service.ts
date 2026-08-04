@@ -1,26 +1,23 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, Inject, signal } from '@angular/core';
 import {
   Auth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
   updateProfile,
-  user,
   GoogleAuthProvider,
   FacebookAuthProvider,
-} from '@angular/fire/auth';
+} from 'firebase/auth';
 import {
   collection,
-  collectionData,
   CollectionReference,
   doc,
-  docData,
   DocumentReference,
   Firestore,
   getDoc,
   setDoc,
   updateDoc,
-} from '@angular/fire/firestore';
+} from 'firebase/firestore';
 import {
   BehaviorSubject,
   distinctUntilChanged,
@@ -33,12 +30,17 @@ import {
 import { UserInterface } from '../../models/user.interface';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
+import {
+  AUTH,
+  FIRESTORE,
+  FirebaseService,
+} from '../firebase/firebase.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  user$ = user(this.firebaseAuth);
+  user$ = this.fb.user$();
   private currentUserSubject = new BehaviorSubject<
     UserInterface | null | undefined
   >(undefined);
@@ -47,9 +49,10 @@ export class AuthService {
     .pipe(distinctUntilChanged(), shareReplay(1));
 
   constructor(
-    private firebaseAuth: Auth,
+    @Inject(AUTH) private firebaseAuth: Auth,
     private router: Router,
-    private firestore: Firestore,
+    @Inject(FIRESTORE) private firestore: Firestore,
+    private fb: FirebaseService,
   ) {}
 
   initializeUserState() {
@@ -57,7 +60,7 @@ export class AuthService {
       .pipe(
         switchMap((user) => {
           if (user) {
-            return docData(
+            return this.fb.docData$(
               doc(this.firestore, `users/${user.uid}`) as DocumentReference<
                 UserInterface & { isAdmin?: boolean }
               >,
@@ -182,7 +185,7 @@ export class AuthService {
     return this.user$.pipe(
       switchMap((user) => {
         if (user) {
-          return docData(
+          return this.fb.docData$(
             doc(this.firestore, `users/${user.uid}`) as DocumentReference<{
               isAdmin?: boolean;
             }>,
@@ -200,7 +203,7 @@ export class AuthService {
   }
 
   getAllUsers(): Observable<UserInterface[]> {
-    return collectionData(
+    return this.fb.collectionData$(
       collection(this.firestore, 'users') as CollectionReference<UserInterface>,
     );
   }

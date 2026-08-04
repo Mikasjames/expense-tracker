@@ -1,21 +1,23 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
-import { Auth, authState } from '@angular/fire/auth';
 import {
   addDoc,
   arrayRemove,
   arrayUnion,
   collection,
-  collectionData,
   deleteDoc,
   doc,
   Firestore,
   getDoc,
   updateDoc,
-} from '@angular/fire/firestore';
+} from 'firebase/firestore';
 import { Tag } from '../../models/chart.interface';
 import { map } from 'rxjs/operators';
 import { Transaction } from '../../models/transaction.interface';
+import {
+  FIRESTORE,
+  FirebaseService,
+} from '../firebase/firebase.service';
 
 @Injectable({
   providedIn: 'root',
@@ -28,10 +30,10 @@ export class TagService {
   expenseTags$ = this.expenseTags.asObservable();
 
   constructor(
-    private auth: Auth,
-    private fs: Firestore,
+    @Inject(FIRESTORE) private fs: Firestore,
+    private fb: FirebaseService,
   ) {
-    authState(this.auth)
+    this.fb.authState$()
       .pipe(
         switchMap((user) => {
           if (user) {
@@ -72,9 +74,7 @@ export class TagService {
   getTags(): Observable<Tag[]> {
     if (!this.userId) return of([]);
     const tagsCollection = collection(this.fs, `tags/${this.userId}/userTags`);
-    return collectionData(tagsCollection, { idField: 'id' }) as Observable<
-      Tag[]
-    >;
+    return this.fb.collectionData$(tagsCollection, 'id') as Observable<Tag[]>;
   }
 
   addTag(tag: string, type: 'income' | 'expense'): Observable<string> {
@@ -209,7 +209,7 @@ export class TagService {
       this.fs,
       `transactions/${this.userId}/${transactionType}`,
     );
-    return collectionData(transactionsCollection, { idField: 'id' }).pipe(
+    return this.fb.collectionData$(transactionsCollection, 'id').pipe(
       map((transactions) => {
         return (transactions as any[]).filter((transaction) => {
           // Safely access tagIds, assuming it might not exist on some documents

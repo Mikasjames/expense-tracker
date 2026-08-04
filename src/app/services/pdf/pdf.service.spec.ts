@@ -1,9 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-import { provideAuth, getAuth } from '@angular/fire/auth';
-import { provideFirestore, getFirestore } from '@angular/fire/firestore';
-import { environment } from '../../../environments/environment';
 import { PdfService } from './pdf.service';
+import {
+  AUTH,
+  FIRESTORE,
+  FirebaseService,
+} from '../firebase/firebase.service';
 
 describe('PdfService', () => {
   let service: PdfService;
@@ -11,9 +12,16 @@ describe('PdfService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
-        provideAuth(() => getAuth()),
-        provideFirestore(() => getFirestore()),
+        {
+          provide: AUTH,
+          useFactory: (fb: FirebaseService) => fb.auth,
+          deps: [FirebaseService],
+        },
+        {
+          provide: FIRESTORE,
+          useFactory: (fb: FirebaseService) => fb.fs,
+          deps: [FirebaseService],
+        },
       ],
     });
 

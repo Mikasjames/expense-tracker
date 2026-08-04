@@ -1,10 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Auth, user, updateProfile } from '@angular/fire/auth';
-import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
+import { Auth, updateProfile } from 'firebase/auth';
+import { Firestore, doc, updateDoc } from 'firebase/firestore';
 import { AuthService } from '../services/auth/auth.service';
 import { UserInterface } from '../models/user.interface';
+import {
+  AUTH,
+  FIRESTORE,
+  FirebaseService,
+} from '../services/firebase/firebase.service';
 
 @Component({
   selector: 'app-profile',
@@ -23,8 +28,9 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private auth: Auth,
-    private firestore: Firestore,
+    @Inject(AUTH) private auth: Auth,
+    @Inject(FIRESTORE) private firestore: Firestore,
+    private fb: FirebaseService,
   ) {}
 
   ngOnInit() {
@@ -32,7 +38,7 @@ export class ProfileComponent implements OnInit {
       this.user = user ?? null;
       this.usernameInput = user?.username || '';
     });
-    user(this.auth).subscribe((u) => {
+    this.fb.user$().subscribe((u) => {
       this.uid = u?.uid || null;
     });
   }

@@ -1,9 +1,7 @@
-allowBuilds:
-  esbuild: true
-  nice-napi: true
-  protobufjs: true
-  sharp: true
-  workerd: true
-
-packages:
-  - 'workers/pdf-proxy'
+onlyBuiltDependencies:
+  - '@firebase/util'
+  - esbuild
+  - nice-napi
+  - protobufjs
+  - sharp
+  - workerd
