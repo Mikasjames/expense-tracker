@@ -1,10 +1,7 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { PdfService } from './pdf.service';
-import {
-  AUTH,
-  FIRESTORE,
-  FirebaseService,
-} from '../firebase/firebase.service';
+import { AUTH, FIRESTORE, FirebaseService } from '../firebase/firebase.service';
 
 describe('PdfService', () => {
   let service: PdfService;
