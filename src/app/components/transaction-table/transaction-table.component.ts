@@ -13,6 +13,7 @@ import { TagService } from '../../services/tags/tag.service';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { TransactionService } from '../../services/transactions/transaction.service';
+import { SettingsService } from '../../services/settings/settings.service';
 import { TransactionFormComponent } from '../transaction-form/transaction-form.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { combineLatest, Observable } from 'rxjs';
@@ -41,7 +42,7 @@ export class TransactionTableComponent {
     { field: 'title' },
     {
       field: 'amount',
-      valueFormatter: (params) => `${params.value.toLocaleString()}`,
+      valueFormatter: (params) => this.settingsService.format(params.value),
     },
     { field: 'date' },
     { field: 'category' },
@@ -59,13 +60,19 @@ export class TransactionTableComponent {
   };
   selectedTransaction: Transaction | null = null;
   transactionType: 'income' | 'expense' = 'income';
+  private settingsSubscription: any;
 
   constructor(
     private utilService: UtilService,
     private tagService: TagService,
     private transactionService: TransactionService,
     private ngbModal: NgbModal,
-  ) {}
+    private settingsService: SettingsService,
+  ) {
+    this.settingsSubscription = this.settingsService.settings$.subscribe(() => {
+      this.gridApi?.refreshCells({ force: true });
+    });
+  }
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
@@ -128,6 +135,10 @@ export class TransactionTableComponent {
       centered: true,
       fullscreen: 'sm',
     });
+  }
+
+  ngOnDestroy() {
+    this.settingsSubscription?.unsubscribe();
   }
 }
 

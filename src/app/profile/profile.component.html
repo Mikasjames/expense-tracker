@@ -1,0 +1,74 @@
+<div class="profile-container">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      <h1 class="fw-bold mb-4">Profile</h1>
+
+      <div class="card mb-4">
+        <div class="card-body text-center py-5">
+          <div class="avatar mb-3">{{ initials }}</div>
+          <h4 class="mb-1">{{ user?.username || 'User' }}</h4>
+          <p class="text-muted">{{ user?.email }}</p>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-header fw-semibold">Account Information</div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label text-muted small mb-1">Email</label>
+            <p class="mb-0 fs-6">{{ user?.email }}</p>
+          </div>
+
+          <div class="mb-0">
+            <label class="form-label text-muted small mb-1">Username</label>
+            <div *ngIf="!editingUsername; else editForm">
+              <div class="d-flex align-items-center gap-2">
+                <span class="fs-6">{{ user?.username }}</span>
+                <button class="btn btn-sm btn-outline-warning" (click)="startEdit()">
+                  <i class="bi bi-pencil"></i>
+                </button>
+              </div>
+            </div>
+            <ng-template #editForm>
+              <div class="d-flex align-items-center gap-2">
+                <input
+                  class="form-control form-control-sm w-auto"
+                  [(ngModel)]="usernameInput"
+                  (keyup.enter)="saveUsername()"
+                  placeholder="Enter username"
+                />
+                <button
+                  class="btn btn-sm btn-warning"
+                  (click)="saveUsername()"
+                  [disabled]="saving || !usernameInput.trim()"
+                >
+                  <span *ngIf="saving" class="spinner-border spinner-border-sm"></span>
+                  <span *ngIf="!saving">Save</span>
+                </button>
+                <button class="btn btn-sm btn-outline-secondary" (click)="cancelEdit()">
+                  Cancel
+                </button>
+              </div>
+              <span *ngIf="saved" class="text-success small mt-1 d-block">
+                <i class="bi bi-check-circle"></i> Username updated
+              </span>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header fw-semibold">Role</div>
+        <div class="card-body">
+          <span
+            class="badge"
+            [class.bg-warning]="user?.isAdmin"
+            [class.bg-secondary]="!user?.isAdmin"
+          >
+            {{ user?.isAdmin ? 'Admin' : 'User' }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -27,14 +27,14 @@ export class DashboardComponent {
       label: 'Profile',
       icon: 'bi bi-person',
       action: () => {
-        this.router.navigateByUrl('/profile');
+        this.router.navigateByUrl('/dashboard/profile');
       },
     },
     {
       label: 'Settings',
       icon: 'bi bi-gear',
       action: () => {
-        this.router.navigateByUrl('/settings');
+        this.router.navigateByUrl('/dashboard/settings');
       },
     },
     {

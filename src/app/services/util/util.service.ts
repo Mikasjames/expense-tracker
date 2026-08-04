@@ -9,12 +9,20 @@ import {
   TitleValue,
 } from '../../models/chart.interface';
 import { TagService } from '../tags/tag.service';
+import { SettingsService } from '../settings/settings.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UtilService {
-  constructor(private tagService: TagService) {}
+  constructor(
+    private tagService: TagService,
+    private settingsService: SettingsService,
+  ) {}
+
+  formatAmount(value: number): string {
+    return this.settingsService.format(value);
+  }
 
   formatDateToDayMonthYearWeekday(date: Date) {
     const options: Intl.DateTimeFormatOptions = {
@@ -158,7 +166,7 @@ export class UtilService {
         const pointsString = tag.points
           .map(
             (point: TitleValue) =>
-              `${point.title}: ₱${point.value.toLocaleString()}`,
+              `${point.title}: ${this.settingsService.format(point.value)}`,
           )
           .join('<br/>');
         return `<small><pr><code>${tagName}</code></pr></small><br/>${pointsString}`;
