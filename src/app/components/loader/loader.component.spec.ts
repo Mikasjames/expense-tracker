@@ -20,4 +20,13 @@ describe('LoaderComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('defaults size to 250', () => {
+    expect(component.size).toBe(250);
+  });
+
+  it('accepts a custom size', () => {
+    component.size = 100;
+    expect(component.size).toBe(100);
+  });
 });

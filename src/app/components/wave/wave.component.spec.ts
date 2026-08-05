@@ -20,4 +20,13 @@ describe('WaveComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('defaults wave to top', () => {
+    expect(component.wave).toBe('top');
+  });
+
+  it('accepts a custom wave value', () => {
+    component.wave = 'bottom';
+    expect(component.wave).toBe('bottom');
+  });
 });
