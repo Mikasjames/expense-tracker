@@ -40,6 +40,103 @@
       <hlm-card class="mb-4">
         <hlm-card-header>
           <h3 hlmCardTitle class="flex items-center gap-2">
+            <ng-icon name="lucideTagPlus" />
+            Tag management
+          </h3>
+          <p hlmCardDescription>
+            Create and organize the categories available when adding transactions.
+          </p>
+        </hlm-card-header>
+        <div hlmCardContent class="grid gap-6 md:grid-cols-2">
+          <section>
+            <h4 class="mb-3 font-medium text-green-700 dark:text-green-300">Income tags</h4>
+            <div class="mb-3 flex gap-2">
+              <input
+                hlmInput
+                [(ngModel)]="newIncomeTag"
+                aria-label="New income tag"
+                placeholder="e.g. Salary"
+                (keydown.enter)="addTag('income')"
+              />
+              <button
+                hlmBtn
+                type="button"
+                size="sm"
+                [disabled]="!newIncomeTag.trim() || addingType !== null"
+                (click)="addTag('income')"
+              >
+                {{ addingType === 'income' ? 'Adding...' : 'Add' }}
+              </button>
+            </div>
+            <div class="space-y-2">
+              @for (tag of incomeTags$ | async; track tag.id) {
+                <div class="flex items-center justify-between gap-3 rounded-md border border-border px-3 py-2">
+                  <span>{{ tag.name }}</span>
+                  <button
+                    hlmBtn
+                    type="button"
+                    variant="ghost"
+                    size="icon-sm"
+                    [disabled]="deletingTagId === tag.id"
+                    [attr.aria-label]="'Delete income tag ' + tag.name"
+                    (click)="confirmDeleteTag(tag)"
+                  >
+                    <ng-icon name="lucideTrash2" class="text-destructive" />
+                  </button>
+                </div>
+              } @empty {
+                <p class="text-sm text-muted-foreground">No income tags yet.</p>
+              }
+            </div>
+          </section>
+
+          <section>
+            <h4 class="mb-3 font-medium text-red-700 dark:text-red-300">Expense tags</h4>
+            <div class="mb-3 flex gap-2">
+              <input
+                hlmInput
+                [(ngModel)]="newExpenseTag"
+                aria-label="New expense tag"
+                placeholder="e.g. Groceries"
+                (keydown.enter)="addTag('expense')"
+              />
+              <button
+                hlmBtn
+                type="button"
+                size="sm"
+                [disabled]="!newExpenseTag.trim() || addingType !== null"
+                (click)="addTag('expense')"
+              >
+                {{ addingType === 'expense' ? 'Adding...' : 'Add' }}
+              </button>
+            </div>
+            <div class="space-y-2">
+              @for (tag of expenseTags$ | async; track tag.id) {
+                <div class="flex items-center justify-between gap-3 rounded-md border border-border px-3 py-2">
+                  <span>{{ tag.name }}</span>
+                  <button
+                    hlmBtn
+                    type="button"
+                    variant="ghost"
+                    size="icon-sm"
+                    [disabled]="deletingTagId === tag.id"
+                    [attr.aria-label]="'Delete expense tag ' + tag.name"
+                    (click)="confirmDeleteTag(tag)"
+                  >
+                    <ng-icon name="lucideTrash2" class="text-destructive" />
+                  </button>
+                </div>
+              } @empty {
+                <p class="text-sm text-muted-foreground">No expense tags yet.</p>
+              }
+            </div>
+          </section>
+        </div>
+      </hlm-card>
+
+      <hlm-card class="mb-4">
+        <hlm-card-header>
+          <h3 hlmCardTitle class="flex items-center gap-2">
             <ng-icon name="lucideBell" />
             Notifications
           </h3>
