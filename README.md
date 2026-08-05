@@ -69,4 +69,4 @@ The built app is served from the `gh-pages` branch. The repository page (the one
 
 ## License
 
-Private / proprietary — see the repository owner for details.
+Licensed under the [MIT License](LICENSE).
