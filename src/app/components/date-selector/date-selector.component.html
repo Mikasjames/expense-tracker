@@ -1,81 +1,31 @@
-<div class="container">
-  <div class="row d-flex">
-    <div class="col-12 col-md-6">
-      <div class="row">
-        <ngb-datepicker
-          #dp
-          (dateSelect)="onDateSelection($event)"
-          [startDate]="startDate"
-          [displayMonths]="1"
-          [dayTemplate]="t"
-          outsideDays="hidden"
-        ></ngb-datepicker>
-
-        <ng-template class="date-selector" #t let-date let-focused="focused">
-          <span
-            class="custom-day"
-            [class.focused]="focused"
-            [class.range]="isRange(date)"
-            [class.faded]="isHovered(date) || isInside(date)"
-            (mouseenter)="hoveredDate = date"
-            (mouseleave)="hoveredDate = null"
-          >
-            {{ date.day }}
-          </span>
-        </ng-template>
-      </div>
-
-      <hr class="d-md-none" />
-    </div>
-    <div
-      class="col-12 col-md-6 d-flex justify-content-center align-items-center"
-    >
-      <div
-        class="row d-flex justify-content-center align-items-center pe-2 pe-md-0"
+<div class="flex w-full flex-col gap-4 md:flex-row">
+  <div class="min-w-0 flex-1">
+    <hlm-calendar-range
+      [startDate]="startDate()"
+      [endDate]="endDate()"
+      (startDateChange)="onStartDateChange($event)"
+      (endDateChange)="onEndDateChange($event)"
+    />
+  </div>
+  <div class="grid w-full grid-cols-2 gap-2 md:flex md:w-36 md:shrink-0 md:flex-col">
+    @for (range of presets; track range.value) {
+      <button
+        hlmBtn
+        variant="outline"
+        size="sm"
+        (click)="selectRange(range.value)"
       >
-        <button
-          class="btn btn-sm btn-warning col-5 m-1"
-          (click)="selectRange('thisWeek')"
-        >
-          This Week
-        </button>
-        <button
-          class="btn btn-sm btn-warning col-5 m-1"
-          (click)="selectRange('lastWeek')"
-        >
-          Last Week
-        </button>
-        <button
-          class="btn btn-sm btn-warning col-5 m-1"
-          (click)="selectRange('thisMonth')"
-        >
-          This Month
-        </button>
-        <button
-          class="btn btn-sm btn-warning col-5 m-1"
-          (click)="selectRange('lastMonth')"
-        >
-          Last Month
-        </button>
-        <button
-          class="btn btn-sm btn-warning col-5 m-1"
-          (click)="selectRange('thisYear')"
-        >
-          This Year
-        </button>
-        <button
-          class="btn btn-sm btn-warning col-5 m-1"
-          (click)="selectRange('lastYear')"
-        >
-          Last Year
-        </button>
-        <button
-          class="btn btn-sm col-5 m-1 bg-danger"
-          (click)="selectRange('clear')"
-        >
-          Clear
-        </button>
-      </div>
-    </div>
+        {{ range.label }}
+      </button>
+    }
+    <button
+      hlmBtn
+      variant="ghost"
+      size="sm"
+      class="col-span-2 text-destructive hover:text-destructive md:col-span-1"
+      (click)="selectRange('clear')"
+    >
+      Clear
+    </button>
   </div>
 </div>

@@ -13,10 +13,19 @@ import { Tag } from '../../models/chart.interface';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { NgIcon } from '@ng-icons/core';
+import { HlmBadgeImports } from '@spartan-ng/helm/badge';
+import { HlmTextareaImports } from '@spartan-ng/helm/textarea';
 
 @Component({
   selector: 'app-tag-input',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    HlmBadgeImports,
+    HlmTextareaImports,
+    NgIcon,
+  ],
   templateUrl: './tag-input.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tag-input.component.sass',
@@ -32,6 +41,7 @@ export class TagInputComponent implements OnInit, OnDestroy {
   suggestions: Tag[] = [];
   searchDelay = 0;
   isFocused = false;
+  highlightedIndex = -1;
   destroy$ = new Subject<void>();
 
   constructor(private tagService: TagService) {
@@ -85,6 +95,8 @@ export class TagInputComponent implements OnInit, OnDestroy {
       (tagId) => {
         this.tagAdded.emit(tagId);
         this.tagForm.setValue('');
+        this.isFocused = false;
+        this.highlightedIndex = -1;
         this.tagService.getTagFromId(tagId, this.type).subscribe((tag) => {
           this.selectedTag = tag;
         });
@@ -101,12 +113,15 @@ export class TagInputComponent implements OnInit, OnDestroy {
     textarea.blur();
     this.tagAdded.emit(tag.id);
     this.tagForm.setValue('');
+    this.isFocused = false;
+    this.highlightedIndex = -1;
     this.selectedTag = tag;
     this.removeTagFromSuggestions(tag.id);
   }
 
   onFocus() {
     this.isFocused = true;
+    this.highlightedIndex = -1;
   }
 
   onBlur() {
@@ -115,12 +130,40 @@ export class TagInputComponent implements OnInit, OnDestroy {
     }, 200);
   }
 
+  onKeydown(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      this.isFocused = false;
+      this.highlightedIndex = -1;
+      return;
+    }
+
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      if (!this.suggestions.length) return;
+      const direction = event.key === 'ArrowDown' ? 1 : -1;
+      this.highlightedIndex =
+        (this.highlightedIndex + direction + this.suggestions.length) %
+        this.suggestions.length;
+      return;
+    }
+
+    if (event.key === 'Enter' && this.highlightedIndex >= 0) {
+      event.preventDefault();
+      const tag = this.suggestions[this.highlightedIndex];
+      if (tag) this.addExistingTag(tag);
+      return;
+    }
+
+    if (event.key === 'Enter') this.onEnterKey(event);
+  }
+
   removeExistingTag() {
     if (!this.selectedTag) return;
     this.tagAdded.emit(null);
     this.suggestions =
       this.type === 'income' ? this.incomeTags : this.expenseTags;
     this.selectedTag = null;
+    this.highlightedIndex = -1;
   }
 
   removeTagFromSuggestions(tagId: string) {

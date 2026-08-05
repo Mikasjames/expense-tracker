@@ -5,6 +5,9 @@ import { Router } from '@angular/router';
 import { WaveComponent } from '../../components/wave/wave.component';
 import { DollarSignSvgsComponent } from '../../components/dollar-sign-svgs/dollar-sign-svgs.component';
 import { PlatformButtonsComponent } from '../../components/platform-buttons/platform-buttons.component';
+import { NgIcon } from '@ng-icons/core';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmInputImports } from '@spartan-ng/helm/input';
 
 @Component({
   selector: 'app-register',
@@ -13,6 +16,9 @@ import { PlatformButtonsComponent } from '../../components/platform-buttons/plat
     WaveComponent,
     DollarSignSvgsComponent,
     PlatformButtonsComponent,
+    HlmButtonImports,
+    HlmInputImports,
+    NgIcon,
   ],
   templateUrl: './register.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,

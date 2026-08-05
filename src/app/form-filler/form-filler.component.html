@@ -1,9 +1,10 @@
 <div class="mb-4">
-  <h5>Upload Forms</h5>
+  <h5 class="text-lg font-semibold">Upload Forms</h5>
   <div class="mb-2">
-    <label for="form26" class="form-label">Form 26</label>
+    <label for="form26" class="mb-1 block text-sm text-muted-foreground">Form 26</label>
     <input
-      class="form-control"
+      hlmInput
+      class="w-full"
       type="file"
       (change)="uploadFile($event)"
       id="form26"
@@ -11,9 +12,10 @@
     />
   </div>
   <div class="mb-2">
-    <label for="form30" class="form-label">Form 30</label>
+    <label for="form30" class="mb-1 block text-sm text-muted-foreground">Form 30</label>
     <input
-      class="form-control"
+      hlmInput
+      class="w-full"
       type="file"
       (change)="uploadFile($event)"
       id="form30"
@@ -21,9 +23,10 @@
     />
   </div>
   <div class="mb-2">
-    <label for="form62" class="form-label">Form 62</label>
+    <label for="form62" class="mb-1 block text-sm text-muted-foreground">Form 62</label>
     <input
-      class="form-control"
+      hlmInput
+      class="w-full"
       type="file"
       (change)="uploadFile($event)"
       id="form62"
@@ -32,51 +35,44 @@
   </div>
 </div>
 <div
-  class="mb-3 d-flex justify-content-center justify-content-md-start align-items-center"
+  class="mb-3 flex flex-wrap items-center justify-center gap-2 md:justify-start"
 >
-  <div class="col-6 col-md-2 col-xl-1 px-1">
-    <select
-      id="monthSelector"
-      class="form-select w-100"
-      [(ngModel)]="selectedMonth"
-    >
-      <option selected disabled>Month</option>
-      @for (month of months; track month) {
-        <option [value]="month">{{ month }}</option>
-      }
-    </select>
-  </div>
-  <div class="col-6 col-md-2 col-xl-1 px-1">
-    <select
-      id="yearSelector"
-      class="form-select w-100"
-      [(ngModel)]="selectedYear"
-      (ngModelChange)="onYearChange($event)"
-    >
-      <option selected disabled>Year</option>
-      @for (year of oldestToNewestTransactionYearRange; track year) {
-        <option [value]="year">{{ year }}</option>
-      }
-    </select>
-  </div>
+  <hlm-native-select
+    [value]="selectedMonth"
+    (valueChange)="selectedMonth = $event ?? ''"
+    class="w-32"
+  >
+    <option selected disabled>Month</option>
+    @for (month of months; track month) {
+      <option [value]="month">{{ month }}</option>
+    }
+  </hlm-native-select>
+  <hlm-native-select
+    [value]="selectedYear.toString()"
+    (valueChange)="onYearChange($event)"
+    class="w-32"
+  >
+    <option selected disabled>Year</option>
+    @for (year of oldestToNewestTransactionYearRange; track year) {
+      <option [value]="year">{{ year }}</option>
+    }
+  </hlm-native-select>
 </div>
 
 @if (uploadedFiles$ | async; as uploadedFiles) {
   @if (uploadedFiles.length > 0) {
     <div>
-      <h3>Uploaded Files</h3>
-      <div class="row">
+      <h3 class="text-xl font-bold">Uploaded Files</h3>
+      <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
         @for (form of uploadedFiles; track form) {
-          <div class="col-md-4 mb-3">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">{{ form.name }}</h5>
-                <button class="btn btn-warning" (click)="fillForm(form)">
-                  Fill Form
-                </button>
-              </div>
+          <hlm-card>
+            <hlm-card-header>
+              <h5 hlmCardTitle>{{ form.name }}</h5>
+            </hlm-card-header>
+            <div hlmCardContent>
+              <button hlmBtn (click)="fillForm(form)">Fill Form</button>
             </div>
-          </div>
+          </hlm-card>
         }
       </div>
     </div>

@@ -1,7 +1,6 @@
 import {
   Component,
   Input,
-  ViewChild,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -20,19 +19,19 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { TransactionService } from '../../services/transactions/transaction.service';
 import { SettingsService } from '../../services/settings/settings.service';
 import { TransactionFormComponent } from '../transaction-form/transaction-form.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HlmDialogService } from '@spartan-ng/helm/dialog';
+import { HlmInputImports } from '@spartan-ng/helm/input';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-transaction-table',
-  imports: [AgGridAngular, ReactiveFormsModule, TransactionFormComponent],
+  imports: [AgGridAngular, ReactiveFormsModule, HlmInputImports],
   templateUrl: './transaction-table.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './transaction-table.component.css',
 })
 export class TransactionTableComponent {
-  @ViewChild('modalTemplate') modalTemplate!: TransactionFormComponent;
   private gridApi!: GridApi;
   @Input() transactions: Transaction[] = [];
   @Input() showFilter = false;
@@ -52,10 +51,9 @@ export class TransactionTableComponent {
   gridOptions: GridOptions = {
     getRowStyle: (params) => {
       const isIncome = params.data.type === 'income';
-      const oddRow = (params.node.rowIndex ?? 0) % 2 === 0;
       return isIncome
-        ? { backgroundColor: oddRow ? '#e6f3e6' : '#f0f8f0' }
-        : { backgroundColor: oddRow ? '#fce4e4' : '#fdf0f0' };
+        ? { backgroundColor: 'rgba(34, 197, 94, 0.08)' }
+        : { backgroundColor: 'rgba(239, 68, 68, 0.08)' };
     },
   };
   selectedTransaction: Transaction | null = null;
@@ -66,7 +64,7 @@ export class TransactionTableComponent {
     private utilService: UtilService,
     private tagService: TagService,
     private transactionService: TransactionService,
-    private ngbModal: NgbModal,
+    private dialogService: HlmDialogService,
     private settingsService: SettingsService,
   ) {
     this.settingsSubscription = this.settingsService.settings$.subscribe(() => {
@@ -131,9 +129,13 @@ export class TransactionTableComponent {
 
   openModal(transactionType: 'income' | 'expense') {
     this.transactionType = transactionType;
-    this.ngbModal.open(this.modalTemplate, {
-      centered: true,
-      fullscreen: 'sm',
+    this.dialogService.open(TransactionFormComponent, {
+      context: {
+        transactionType,
+        selectedTransaction: this.selectedTransaction,
+      },
+      contentClass: 'sm:max-w-4xl',
+      showCloseButton: false,
     });
   }
 

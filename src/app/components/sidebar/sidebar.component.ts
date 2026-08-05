@@ -1,13 +1,12 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
-import { AuthService } from '../../services/auth/auth.service';
+import { NgIcon } from '@ng-icons/core';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
 import { ToolBarContent } from '../../models/util.interface';
-import { Router } from '@angular/router';
-
-import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [NgbTooltipModule],
+  imports: [HlmButtonImports, HlmTooltipImports, NgIcon],
   templateUrl: './sidebar.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './sidebar.component.sass',

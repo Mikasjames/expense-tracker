@@ -1,22 +1,20 @@
-<div class="btn-group">
+<div class="inline-flex items-center gap-2">
   <button
     (click)="openModal('income')"
     type="button"
-    class="btn btn-success btn-sm"
+    hlmBtn
+    size="icon"
+    class="bg-emerald-600 hover:bg-emerald-600/90 text-white"
   >
-    <i class="bi bi-plus-circle-fill"></i>
+    <ng-icon name="lucidePlus" />
   </button>
   <button
     (click)="openModal('expense')"
     type="button"
-    class="btn btn-danger btn-sm"
+    hlmBtn
+    size="icon"
+    class="bg-rose-600 hover:bg-rose-600/90 text-white"
   >
-    <i class="bi bi-dash-circle-fill"></i>
+    <ng-icon name="lucideMinus" />
   </button>
 </div>
-
-<ng-template #modalTemplate>
-  <app-transaction-form
-    [transactionType]="transactionType"
-  ></app-transaction-form>
-</ng-template>

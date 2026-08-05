@@ -1,8 +1,9 @@
 @if (showFilter) {
   <div>
     <input
+      hlmInput
       type="text"
-      class="filter-box mb-2"
+      class="mb-2"
       id="filter-text-box"
       placeholder="Filter..."
       [formControl]="filterText"
@@ -10,19 +11,21 @@
   </div>
 }
 
-<ag-grid-angular
-  class="ag-theme-alpine"
-  style="height: 300px"
-  [rowData]="rowData"
-  [columnDefs]="colDefs"
-  [gridOptions]="gridOptions"
-  (rowDoubleClicked)="onRowDoubleClicked($event)"
-  (gridReady)="onGridReady($event)"
-/>
-
-<ng-template #modalTemplate>
-  <app-transaction-form
-    [transactionType]="transactionType"
-    [selectedTransaction]="selectedTransaction"
-  ></app-transaction-form>
-</ng-template>
+@if (rowData.length) {
+  <ag-grid-angular
+    class="ag-theme-quartz-dark"
+    style="height: 300px"
+    [rowData]="rowData"
+    [columnDefs]="colDefs"
+    [gridOptions]="gridOptions"
+    (rowDoubleClicked)="onRowDoubleClicked($event)"
+    (gridReady)="onGridReady($event)"
+  />
+} @else {
+  <div class="flex min-h-75 flex-col items-center justify-center rounded-lg border border-dashed border-border p-6 text-center">
+    <h2 class="font-semibold">No transactions yet</h2>
+    <p class="mt-1 max-w-sm text-sm text-muted-foreground">
+      Add an income or expense to start tracking your money here.
+    </p>
+  </div>
+}

@@ -1,64 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
 
-/* Importing Bootstrap SCSS file. */
-@import 'bootstrap/scss/bootstrap'
-@import 'bootstrap-icons/font/bootstrap-icons.css'
+/* Ag-Grid styles */
 @import 'ag-grid-community/styles/ag-grid.css'
 @import 'ag-grid-community/styles/ag-theme-quartz.css'
 @import 'ag-grid-community/styles/ag-theme-alpine.css'
 
-$primary: #fd7e14
-$primary-color: white
-
 html
   touch-action: manipulation
 
-.platform-signup-button
-  border-radius: 10px
-  background-color: $primary-color
-  padding: 10px
-  border: 1px solid #ccc
+select[data-slot='native-select'] option,
+select[data-slot='native-select'] optgroup
+  background-color: var(--popover)
+  color: var(--popover-foreground)
 
-
-.btn
-  border-radius: 10px
-  padding: 10px
-  background-color: $primary
-  border-color: $primary
-  color: $primary-color
-
-input
-  border: 1px solid #ccc
-  box-shadow: none
-  padding: 10px
-
-input:focus
-  border: 1px solid #ccc
-  box-shadow: none
-  outline: none
-
-.hyperlink
-  color: $primary
-  text-decoration: none
-
-.tooltip
-  z-index: 9999 !important
-
-.date-selector-container-mobile
-  width: 280px
-  top: 60px
-  z-index: 1000
-  background-color: white
-  border: 1px solid #ccc
-  padding: 10px
-  right: 0
-
-.date-selector-container
-  width: 550px
-  top: 100px
-  z-index: 1000
-  background-color: white
-  border: 1px solid #ccc
-  padding: 10px
-  left: 50%
-  transform: translateX(-50%)
+.ag-theme-quartz-dark
+  --ag-background-color: var(--background)
+  --ag-foreground-color: var(--foreground)
+  --ag-secondary-foreground-color: var(--muted-foreground)
+  --ag-border-color: var(--border)
+  --ag-secondary-border-color: var(--border)
+  --ag-header-background-color: var(--secondary)
+  --ag-header-foreground-color: var(--muted-foreground)
+  --ag-row-hover-color: var(--muted)
+  --ag-selected-row-background-color: color-mix(in oklab, var(--primary) 18%, var(--background))
+  --ag-active-color: var(--primary)
+  --ag-quartz-icon-active-color: var(--primary)
+  --ag-input-border-color: var(--border)
+  --ag-input-focus-border-color: var(--ring)
+  --ag-font-family: var(--font-sans)

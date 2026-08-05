@@ -3,19 +3,20 @@ import {
   EventEmitter,
   Input,
   Output,
-  Renderer2,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { ToolBarContent } from '../../models/util.interface';
 import { Router } from '@angular/router';
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
 import { DateSelectorComponent } from '../date-selector/date-selector.component';
-import { DateSelectorService } from '../../services/date-selector/date-selector.service';
+import { NgIcon } from '@ng-icons/core';
+import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmDialogService } from '@spartan-ng/helm/dialog';
 
 @Component({
   selector: 'app-topbar',
-  imports: [NgbTooltip, DateSelectorComponent],
+  imports: [HlmTooltipImports, HlmButtonImports, NgIcon],
   templateUrl: './topbar.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './topbar.component.sass',
@@ -25,7 +26,7 @@ export class TopbarComponent {
   @Input() topbarItems: ToolBarContent[] = [
     {
       label: '',
-      icon: 'bi bi-three-dots-vertical',
+      icon: 'lucideMenu',
       action: () => {
         this.showSidebar = !this.showSidebar;
         this.toggleSidebar.emit(this.showSidebar);
@@ -38,39 +39,22 @@ export class TopbarComponent {
     },
     {
       label: '',
-      icon: 'bi bi-calendar-fill',
+      icon: 'lucideCalendarDays',
       action: () => {
-        this.toggleDateSelector();
-        this.preventCloseOnClick();
+        this.openDateSelector();
       },
     },
   ];
   @Output() toggleSidebar = new EventEmitter<boolean>();
-  showDateSelector = false;
-  dateSelectorClicked = false;
 
   constructor(
     private router: Router,
-    private dateSelectorService: DateSelectorService,
-    private renderer: Renderer2,
-  ) {
-    this.dateSelectorService.dateRange$.subscribe(() => {
-      this.showDateSelector = false;
+    private dialogService: HlmDialogService,
+  ) {}
+
+  openDateSelector() {
+    this.dialogService.open(DateSelectorComponent, {
+      contentClass: 'sm:max-w-2xl',
     });
-
-    this.renderer.listen('window', 'click', (e: Event) => {
-      if (!this.dateSelectorClicked) {
-        this.showDateSelector = false;
-      }
-      this.dateSelectorClicked = false;
-    });
-  }
-
-  toggleDateSelector() {
-    this.showDateSelector = !this.showDateSelector;
-  }
-
-  preventCloseOnClick() {
-    this.dateSelectorClicked = true;
   }
 }

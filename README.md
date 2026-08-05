@@ -1,27 +1,72 @@
-# ExpenseTracker
+# In-N-Outify
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.7.
+Track your income and expenses with a clean, dark-first dashboard. Built with Angular, Firebase, and spartan-ng/ui-helm.
 
-## Development server
+## Features
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- **Income & expense tracking** — log transactions with title, amount, date, description, and tags.
+- **Dashboard** — stat cards (In, Out, On Hand), income/expense charts, and a filterable transactions table (AG Grid).
+- **Tag management** — create and delete income/expense tags from the Settings page.
+- **Date range filtering** — pick a date range to scope the dashboard.
+- **Settings** — currency and number-format preferences, profile management.
+- **PWA** — installable and offline-capable via the Angular service worker.
+- **Notifications** — toast feedback for save/delete/errors.
 
-## Code scaffolding
+## Tech stack
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+| Layer      | Technology                                        |
+| ---------- | ------------------------------------------------- |
+| Framework  | Angular 22 (SSR via Angular)                      |
+| UI         | Tailwind CSS v4 + spartan-ng/ui-helm + ng-icons   |
+| Data       | Firebase (Auth + Firestore)                       |
+| Charts     | ECharts (ngx-echarts)                            |
+| Grid       | AG Grid                                          |
+| Tests      | Vitest                                            |
+| Package    | pnpm                                             |
 
-## Build
+## Getting started
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Prerequisites
 
-## Running unit tests
+- Node.js (LTS)
+- pnpm — `corepack enable` or `npm i -g pnpm`
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Install & run
 
-## Running end-to-end tests
+```bash
+pnpm install
+pnpm start
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Navigate to `http://localhost:4200/`. The app hot-reloads on changes.
 
-## Further help
+## Commands
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+| Command        | Description                                  |
+| -------------- | -------------------------------------------- |
+| `pnpm start`   | Run the dev server on `http://localhost:4200` |
+| `pnpm build`   | Build the app into `dist/`                    |
+| `pnpm test`    | Run unit tests (Vitest)                       |
+| `pnpm watch`   | Rebuild on change (development config)        |
+| `pnpm serve:ssr:expense-tracker` | Serve the SSR build locally      |
+
+## Configuration
+
+Firebase credentials and environment-specific values live in `src/environments/`. Add your own Firebase project config there before deploying.
+
+## Deployment
+
+### GitHub Pages
+
+This repo deploys to GitHub Pages using `angular-cli-ghpages`:
+
+```bash
+pnpm build
+pnpm dlx angular-cli-ghpages --dir=dist/expense-tracker/browser --cname=tracker.mikasjames.com
+```
+
+The built app is served from the `gh-pages` branch. The repository page (the one you're reading now) is rendered from the `README.md` on the default branch.
+
+## License
+
+Private / proprietary — see the repository owner for details.

@@ -1,94 +1,200 @@
-<div class="settings-container">
-  <div class="row justify-content-center">
-    <div class="col-12 col-lg-8">
-      <h1 class="fw-bold mb-4">Settings</h1>
+<div class="py-5">
+  <div class="flex justify-center">
+    <div class="w-full lg:w-2/3">
+      <h1 class="mb-4 text-2xl font-bold">Settings</h1>
 
-      <div class="card mb-4">
-        <div class="card-header fw-semibold">
-          <i class="bi bi-palette me-2"></i>Preferences
-        </div>
-        <div class="card-body">
-          <div class="mb-3">
-            <label class="form-label text-muted small mb-1">Currency</label>
-            <select
-              class="form-select form-select-sm w-auto"
+      <hlm-card class="mb-4">
+        <hlm-card-header>
+          <h3 hlmCardTitle class="flex items-center gap-2">
+            <ng-icon name="lucidePalette" />
+            Preferences
+          </h3>
+        </hlm-card-header>
+        <div hlmCardContent class="space-y-3">
+          <div>
+            <label class="mb-1 block text-sm text-muted-foreground">Currency</label>
+            <hlm-native-select
               [value]="settings.currency"
-              (change)="setCurrency($any($event.target).value)"
+              (valueChange)="setCurrency($event)"
+              class="w-40"
             >
               <option value="PHP">PHP (&#8369;)</option>
               <option value="USD">USD (&#36;)</option>
               <option value="EUR">EUR (&euro;)</option>
-            </select>
+            </hlm-native-select>
           </div>
-          <div class="mb-0">
-            <label class="form-label text-muted small mb-1">Number Format</label>
-            <select
-              class="form-select form-select-sm w-auto"
+          <div>
+            <label class="mb-1 block text-sm text-muted-foreground">Number Format</label>
+            <hlm-native-select
               [value]="settings.numberFormat"
-              (change)="setNumberFormat($any($event.target).value)"
+              (valueChange)="setNumberFormat($event)"
+              class="w-40"
             >
               <option value="en-US">1,234.56</option>
               <option value="de-DE">1 234,56</option>
-            </select>
+            </hlm-native-select>
           </div>
         </div>
-      </div>
+      </hlm-card>
 
-      <div class="card mb-4">
-        <div class="card-header fw-semibold">
-          <i class="bi bi-bell me-2"></i>Notifications
+      <hlm-card class="mb-4">
+        <hlm-card-header>
+          <h3 hlmCardTitle class="flex items-center gap-2">
+            <ng-icon name="lucideTagPlus" />
+            Tag management
+          </h3>
+          <p hlmCardDescription>
+            Create and organize the categories available when adding transactions.
+          </p>
+        </hlm-card-header>
+        <div hlmCardContent class="grid gap-6 md:grid-cols-2">
+          <section>
+            <h4 class="mb-3 font-medium text-green-700 dark:text-green-300">Income tags</h4>
+            <div class="mb-3 flex gap-2">
+              <input
+                hlmInput
+                [(ngModel)]="newIncomeTag"
+                aria-label="New income tag"
+                placeholder="e.g. Salary"
+                (keydown.enter)="addTag('income')"
+              />
+              <button
+                hlmBtn
+                type="button"
+                size="sm"
+                [disabled]="!newIncomeTag.trim() || addingType !== null"
+                (click)="addTag('income')"
+              >
+                {{ addingType === 'income' ? 'Adding...' : 'Add' }}
+              </button>
+            </div>
+            <div class="space-y-2">
+              @for (tag of incomeTags$ | async; track tag.id) {
+                <div class="flex items-center justify-between gap-3 rounded-md border border-border px-3 py-2">
+                  <span>{{ tag.name }}</span>
+                  <button
+                    hlmBtn
+                    type="button"
+                    variant="ghost"
+                    size="icon-sm"
+                    [disabled]="deletingTagId === tag.id"
+                    [attr.aria-label]="'Delete income tag ' + tag.name"
+                    (click)="confirmDeleteTag(tag)"
+                  >
+                    <ng-icon name="lucideTrash2" class="text-destructive" />
+                  </button>
+                </div>
+              } @empty {
+                <p class="text-sm text-muted-foreground">No income tags yet.</p>
+              }
+            </div>
+          </section>
+
+          <section>
+            <h4 class="mb-3 font-medium text-red-700 dark:text-red-300">Expense tags</h4>
+            <div class="mb-3 flex gap-2">
+              <input
+                hlmInput
+                [(ngModel)]="newExpenseTag"
+                aria-label="New expense tag"
+                placeholder="e.g. Groceries"
+                (keydown.enter)="addTag('expense')"
+              />
+              <button
+                hlmBtn
+                type="button"
+                size="sm"
+                [disabled]="!newExpenseTag.trim() || addingType !== null"
+                (click)="addTag('expense')"
+              >
+                {{ addingType === 'expense' ? 'Adding...' : 'Add' }}
+              </button>
+            </div>
+            <div class="space-y-2">
+              @for (tag of expenseTags$ | async; track tag.id) {
+                <div class="flex items-center justify-between gap-3 rounded-md border border-border px-3 py-2">
+                  <span>{{ tag.name }}</span>
+                  <button
+                    hlmBtn
+                    type="button"
+                    variant="ghost"
+                    size="icon-sm"
+                    [disabled]="deletingTagId === tag.id"
+                    [attr.aria-label]="'Delete expense tag ' + tag.name"
+                    (click)="confirmDeleteTag(tag)"
+                  >
+                    <ng-icon name="lucideTrash2" class="text-destructive" />
+                  </button>
+                </div>
+              } @empty {
+                <p class="text-sm text-muted-foreground">No expense tags yet.</p>
+              }
+            </div>
+          </section>
         </div>
-        <div class="card-body">
-          <div class="form-check form-switch mb-2">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              id="emailNotif"
+      </hlm-card>
+
+      <hlm-card class="mb-4">
+        <hlm-card-header>
+          <h3 hlmCardTitle class="flex items-center gap-2">
+            <ng-icon name="lucideBell" />
+            Notifications
+          </h3>
+        </hlm-card-header>
+        <div hlmCardContent class="space-y-2">
+          <label class="flex items-center justify-between gap-4">
+            <span>Email notifications</span>
+            <hlm-switch
               [checked]="settings.emailNotifications"
-              (change)="setEmailNotifications($any($event.target).checked)"
+              (checkedChange)="setEmailNotifications($event)"
             />
-            <label class="form-check-label" for="emailNotif">Email notifications</label>
-          </div>
-          <div class="form-check form-switch mb-0">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              id="pushNotif"
+          </label>
+          <label class="flex items-center justify-between gap-4">
+            <span>Push notifications</span>
+            <hlm-switch
               [checked]="settings.pushNotifications"
-              (change)="setPushNotifications($any($event.target).checked)"
+              (checkedChange)="setPushNotifications($event)"
             />
-            <label class="form-check-label" for="pushNotif">Push notifications</label>
-          </div>
-          <div class="form-text">Preferences are saved to your account</div>
+          </label>
+          <p class="text-sm text-muted-foreground">
+            Preferences are saved to your account
+          </p>
         </div>
-      </div>
+      </hlm-card>
 
-      <div class="card mb-4">
-        <div class="card-header fw-semibold">
-          <i class="bi bi-shield-check me-2"></i>Account
-        </div>
-        <div class="card-body d-flex align-items-center justify-content-between">
+      <hlm-card class="mb-4">
+        <hlm-card-header>
+          <h3 hlmCardTitle class="flex items-center gap-2">
+            <ng-icon name="lucideShieldCheck" />
+            Account
+          </h3>
+        </hlm-card-header>
+        <div hlmCardContent class="flex items-center justify-between">
           <div>
-            <p class="mb-1 fw-medium">Sign out</p>
-            <p class="mb-0 text-muted small">Sign out of your account on this device</p>
+            <p class="font-medium">Sign out</p>
+            <p class="text-sm text-muted-foreground">
+              Sign out of your account on this device
+            </p>
           </div>
-          <button class="btn btn-outline-danger btn-sm" (click)="logout()">
-            <i class="bi bi-box-arrow-right me-1"></i>Logout
+          <button hlmBtn variant="outline" size="sm" class="text-destructive hover:text-destructive" (click)="logout()">
+            <ng-icon name="lucideLogOut" class="mr-1" />
+            Logout
           </button>
         </div>
-      </div>
+      </hlm-card>
 
-      <div class="card">
-        <div class="card-header fw-semibold">
-          <i class="bi bi-info-circle me-2"></i>About
+      <hlm-card>
+        <hlm-card-header>
+          <h3 hlmCardTitle class="flex items-center gap-2">
+            <ng-icon name="lucideInfo" />
+            About
+          </h3>
+        </hlm-card-header>
+        <div hlmCardContent class="flex justify-between">
+          <span class="text-muted-foreground">App Version</span>
+          <span>{{ appVersion }}</span>
         </div>
-        <div class="card-body">
-          <div class="d-flex justify-content-between">
-            <span class="text-muted">App Version</span>
-            <span>{{ appVersion }}</span>
-          </div>
-        </div>
-      </div>
+      </hlm-card>
     </div>
   </div>
 </div>

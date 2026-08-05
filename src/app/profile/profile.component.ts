@@ -16,9 +16,24 @@ import {
   FirebaseService,
 } from '../services/firebase/firebase.service';
 
+import { NgIcon } from '@ng-icons/core';
+import { HlmCardImports } from '@spartan-ng/helm/card';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmInputImports } from '@spartan-ng/helm/input';
+import { HlmSpinnerImports } from '@spartan-ng/helm/spinner';
+import { HlmBadgeImports } from '@spartan-ng/helm/badge';
+
 @Component({
   selector: 'app-profile',
-  imports: [FormsModule],
+  imports: [
+    FormsModule,
+    HlmCardImports,
+    HlmButtonImports,
+    HlmInputImports,
+    HlmSpinnerImports,
+    HlmBadgeImports,
+    NgIcon,
+  ],
   templateUrl: './profile.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './profile.component.sass',

@@ -1,7 +1,7 @@
-<div class="bg-light border border-primary rounded-4 p-4">
-  <h3 class="text-muted small">{{ title }}</h3>
-  <p class="h2 fw-bold">{{ formattedValue }}</p>
-  <p [class]="percentChangeClass" class="small mb-0">
+<div class="rounded-lg border border-border bg-card p-4 shadow-sm">
+  <h3 class="text-sm font-medium text-muted-foreground">{{ title }}</h3>
+  <p class="mt-1 text-2xl font-bold">{{ formattedValue }}</p>
+  <p [class]="percentChangeClass" class="mt-1 text-sm">
     {{ roundedPercentChange }}%
   </p>
 </div>

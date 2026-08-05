@@ -9,11 +9,13 @@ import {
 } from '../../models/chart.interface';
 import { UtilService } from '../../services/util/util.service';
 import { CustomSeriesOption } from 'echarts';
-import { TitleCasePipe } from '@angular/common';
+import { NgIcon } from '@ng-icons/core';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
 
 @Component({
   selector: 'app-line-bar-chart',
-  imports: [NgxEchartsDirective, TitleCasePipe],
+  imports: [NgxEchartsDirective, HlmButtonImports, HlmTooltipImports, NgIcon],
   templateUrl: './line-bar-chart.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './line-bar-chart.component.scss',
@@ -69,7 +71,7 @@ export class LineBarChartComponent {
   }
 
   get toggleChartTypeSymbol() {
-    return this.type === 'bar' ? 'bi bi-bar-chart-fill' : 'bi bi-graph-up';
+    return this.type === 'bar' ? 'lucideBarChart' : 'lucideChartLine';
   }
 
   calculatePercentChange(data: LineBarData[]): number {
@@ -140,21 +142,13 @@ export class LineBarChartComponent {
   };
 
   get percentChangeSymbol() {
-    return this.percentChange > 0 ? 'bi bi-arrow-up' : 'bi bi-arrow-down';
+    return this.percentChange > 0 ? 'lucideArrowUp' : 'lucideArrowDown';
   }
 
   get percentChangeClass() {
-    let colorClasses = '';
-
-    if (this.percentChange !== 0) {
-      const isPositiveChange = this.percentChange > 0;
-      if (this.isIncome) {
-        colorClasses = isPositiveChange ? 'text-success' : 'text-danger';
-      } else {
-        colorClasses = isPositiveChange ? 'text-danger' : 'text-success';
-      }
-    }
-
-    return `${colorClasses}`;
+    if (this.percentChange === 0) return '';
+    const isPositiveChange = this.percentChange > 0;
+    const good = isPositiveChange === this.isIncome;
+    return good ? 'text-emerald-600' : 'text-rose-600';
   }
 }
