@@ -8,10 +8,11 @@ import {
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from './services/auth/auth.service';
 import { provideEcharts } from 'ngx-echarts';
+import { ToastComponent } from './components/toast/toast.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, ToastComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.sass',
   changeDetection: ChangeDetectionStrategy.Eager,

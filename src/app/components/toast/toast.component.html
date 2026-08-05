@@ -1,0 +1,27 @@
+<div
+  aria-live="polite"
+  aria-atomic="true"
+  class="pointer-events-none fixed inset-x-4 bottom-4 z-100 flex flex-col items-end gap-2 sm:inset-x-6 sm:bottom-6"
+>
+  @for (notification of messages$ | async; track notification.id) {
+    <div
+      role="status"
+      class="pointer-events-auto flex w-full max-w-sm items-center justify-between gap-3 rounded-lg border p-3 text-sm shadow-lg"
+      [ngClass]="{
+        'border-green-500/30 bg-green-500/10 text-green-800 dark:text-green-200': notification.type === 'success',
+        'border-destructive/30 bg-destructive/10 text-destructive': notification.type === 'error',
+        'border-border bg-popover text-popover-foreground': notification.type === 'info'
+      }"
+    >
+      <span>{{ notification.message }}</span>
+      <button
+        type="button"
+        class="rounded p-1 text-current opacity-70 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current"
+        [attr.aria-label]="'Dismiss: ' + notification.message"
+        (click)="dismiss(notification.id)"
+      >
+        ×
+      </button>
+    </div>
+  }
+</div>

@@ -69,23 +69,23 @@
       (tagAdded)="updateTransactionTag($event)"
     ></app-tag-input>
   </div>
-  <div class="flex justify-end sm:col-span-2">
+  <div class="sticky bottom-0 -mx-6 flex justify-end border-t bg-popover px-6 py-3 sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:col-span-2">
     <button
       autofocus
       hlmBtn
       type="submit"
-      [disabled]="transactionForm.invalid"
+      [disabled]="transactionForm.invalid || isSaving"
     >
-      {{ isPost ? "Submit" : "Update" }}
+      {{ isSaving ? "Saving..." : isPost ? "Submit" : "Update" }}
     </button>
   </div>
 </form>
 
 @if (!isPost) {
   <div class="mt-2 flex justify-center">
-    <button hlmBtn variant="ghost" (click)="deleteConfirmation()">
+    <button hlmBtn type="button" variant="ghost" [disabled]="isDeleting" (click)="deleteConfirmation()">
       <ng-icon name="lucideTrash2" class="text-destructive mr-2" />
-      <span class="text-destructive">Delete Transaction</span>
+      <span class="text-destructive">{{ isDeleting ? "Deleting..." : "Delete Transaction" }}</span>
     </button>
   </div>
 }

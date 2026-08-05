@@ -19,7 +19,11 @@
     placeholder="Add a tag"
     [formControl]="tagForm"
     rows="3"
-    (keydown.enter)="onEnterKey($event)"
+    role="combobox"
+    aria-autocomplete="list"
+    [attr.aria-expanded]="isFocused"
+    aria-controls="tag-suggestions"
+    (keydown)="onKeydown($event)"
     (focus)="onFocus()"
     (blur)="onBlur()"
   ></textarea>
@@ -28,6 +32,8 @@
 @if (isFocused) {
   <div class="relative w-1/2">
     <ul
+      id="tag-suggestions"
+      role="listbox"
       class="absolute z-50 mt-1 w-full list-none overflow-y-auto rounded-md border border-border bg-background p-0 shadow-md"
       style="max-height: 125px"
     >
@@ -41,7 +47,10 @@
       }
       @for (suggestion of suggestions; track suggestion) {
         <li
+          role="option"
+          [attr.aria-selected]="highlightedIndex === $index"
           [ngClass]="{ 'hover:bg-accent': true }"
+          [class.bg-accent]="highlightedIndex === $index"
           class="flex cursor-pointer items-center justify-between p-2"
           (click)="addExistingTag(suggestion)"
         >

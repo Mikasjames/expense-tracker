@@ -20,6 +20,11 @@ import {
 } from '../../models/transaction.interface';
 import { TransactionService } from '../../services/transactions/transaction.service';
 import { TagInputComponent } from '../tag-input/tag-input.component';
+import {
+  ConfirmationDialogComponent,
+  ConfirmationDialogContext,
+} from '../confirmation-dialog/confirmation-dialog.component';
+import { NotificationService } from '../../services/notification/notification.service';
 
 interface TransactionFormContext {
   transactionType: 'income' | 'expense';
@@ -54,6 +59,8 @@ export class TransactionFormComponent implements OnInit {
   });
   transactionType: 'income' | 'expense' = 'income';
   selectedTransaction: Transaction | null = null;
+  isSaving = false;
+  isDeleting = false;
   private readonly dialogContext =
     injectBrnDialogContext<TransactionFormContext | null>({ optional: true });
   private readonly dialogRef = inject(BrnDialogRef, { optional: true });
@@ -62,6 +69,7 @@ export class TransactionFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private transactionService: TransactionService,
+    private notifications: NotificationService,
   ) {}
 
   ngOnInit() {
@@ -105,11 +113,15 @@ export class TransactionFormComponent implements OnInit {
   }
 
   deleteConfirmation() {
-    this.dialogService.open(DeleteConfirmationDialogComponent, {
-      context: {
-        message: 'Are you sure you want to delete this transaction?',
-        onConfirm: () => this.deleteTransaction(),
-      },
+    const context: ConfirmationDialogContext = {
+      title: 'Delete transaction?',
+      message: 'This transaction will be permanently deleted.',
+      confirmLabel: 'Delete',
+      destructive: true,
+      onConfirm: () => this.deleteTransaction(),
+    };
+    this.dialogService.open(ConfirmationDialogComponent, {
+      context,
       contentClass:
         'mx-auto h-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-lg overflow-y-auto rounded-xl p-6 sm:mx-auto',
       showCloseButton: false,
@@ -117,19 +129,19 @@ export class TransactionFormComponent implements OnInit {
   }
 
   deleteTransaction() {
-    if (this.selectedTransaction) {
-      this.transactionService
-        .deleteTransaction(this.selectedTransaction)
-        .subscribe({
-          next: () => {
-            console.log('Transaction deleted successfully');
-          },
-          error: (error) => {
-            console.error('Error deleting transaction', error);
-          },
-        });
-    }
-    this.closeModal();
+    if (!this.selectedTransaction || this.isDeleting) return;
+    this.isDeleting = true;
+    this.transactionService.deleteTransaction(this.selectedTransaction).subscribe({
+      next: () => {
+        this.notifications.show('Transaction deleted.', 'success');
+        this.closeModal();
+      },
+      error: (error) => {
+        console.error('Error deleting transaction', error);
+        this.notifications.show('Could not delete the transaction.', 'error');
+        this.isDeleting = false;
+      },
+    });
   }
 
   parseDate(dateString: string): Date {
@@ -142,7 +154,6 @@ export class TransactionFormComponent implements OnInit {
   }
 
   updateTransactionTag(tagId: string | null) {
-    console.log('Tag ID:', tagId);
     if (!tagId) {
       this.transactionForm.get('tagIds')?.setValue([]);
       return;
@@ -151,7 +162,9 @@ export class TransactionFormComponent implements OnInit {
   }
 
   onSubmit() {
+    if (this.isSaving) return;
     if (this.transactionForm.valid) {
+      this.isSaving = true;
       const formValue = this.transactionForm.value;
       const transaction: TransactionForm = {
         title: formValue.title ?? '',
@@ -166,79 +179,36 @@ export class TransactionFormComponent implements OnInit {
         this.transactionService
           .updateTransaction(this.selectedTransaction.id, transaction)
           .subscribe({
-            next: () => {
-              console.log('Transaction updated successfully');
+          next: () => {
+              this.notifications.show('Transaction updated.', 'success');
+              this.closeModal();
             },
             error: (error) => {
               console.error('Error updating transaction', error);
+              this.notifications.show('Could not update the transaction.', 'error');
+              this.isSaving = false;
             },
           });
       } else {
         this.transactionService.addTransaction(transaction).subscribe({
           next: () => {
-            console.log('Transaction added successfully');
+            this.notifications.show('Transaction added.', 'success');
+            this.closeModal();
           },
           error: (error) => {
             console.error('Error adding transaction', error);
+            this.notifications.show('Could not add the transaction.', 'error');
+            this.isSaving = false;
           },
         });
       }
-      this.closeModal();
     } else {
-      console.error('Form is invalid');
+      this.transactionForm.markAllAsTouched();
+      this.notifications.show('Complete the required fields before saving.', 'info');
     }
   }
 
   get isPost() {
     return this.selectedTransaction === null;
-  }
-}
-
-interface DeleteConfirmationContext {
-  message?: string;
-  confirmLabel?: string;
-  cancelLabel?: string;
-  onConfirm?: () => void;
-}
-
-@Component({
-  selector: 'app-delete-confirmation-dialog',
-  imports: [HlmButtonImports, HlmDialogImports, NgIcon],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  template: `
-    <hlm-dialog-header>
-      <h3 hlmDialogTitle>Delete Confirmation</h3>
-      <p hlmDialogDescription class="text-muted-foreground text-sm mb-3">
-        {{ context?.message ?? 'Are you sure you want to delete this item?' }}
-      </p>
-    </hlm-dialog-header>
-    <div class="flex justify-end gap-2">
-      <button
-        hlmBtn
-        variant="outline"
-        class="text-muted-foreground"
-        (click)="cancel()"
-      >
-        {{ context?.cancelLabel ?? 'Cancel' }}
-      </button>
-      <button hlmBtn variant="destructive" (click)="confirm()">
-        <ng-icon name="lucideTrash2" class="mr-2" />
-        {{ context?.confirmLabel ?? 'Delete' }}
-      </button>
-    </div>
-  `,
-})
-export class DeleteConfirmationDialogComponent {
-  private readonly dialogRef = inject(BrnDialogRef);
-  readonly context =
-    injectBrnDialogContext<DeleteConfirmationContext | null>({ optional: true });
-
-  confirm() {
-    this.context?.onConfirm?.();
-    this.dialogRef.close(true);
-  }
-
-  cancel() {
-    this.dialogRef.close(false);
   }
 }
