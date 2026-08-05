@@ -93,7 +93,27 @@
           "options": {
             "buildTarget": "expense-tracker:build:testing",
             "tsConfig": "tsconfig.spec.json",
-            "providersFile": "src/test-providers.ts"
+            "providersFile": "src/test-providers.ts",
+            "coverage": true,
+            "coverageInclude": ["src/app/**/*.ts"],
+            "coverageExclude": [
+              "src/app/ui/**",
+              "src/app/models/**",
+              "src/app/testing/**",
+              "src/**/*.spec.ts",
+              "src/main.ts",
+              "src/main.server.ts",
+              "src/test-providers.ts",
+              "src/environments/**"
+            ],
+            "coverageReporters": ["html", "lcov", "text-summary"],
+            "isolate": true,
+            "coverageThresholds": {
+              "statements": 100,
+              "functions": 100,
+              "branches": 100,
+              "lines": 100
+            }
           }
         },
         "deploy": {
