@@ -69,7 +69,10 @@
       (tagAdded)="updateTransactionTag($event)"
     ></app-tag-input>
   </div>
-  <div class="sticky bottom-0 -mx-6 flex justify-end border-t bg-popover px-6 py-3 sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:col-span-2">
+  <div class="sticky bottom-0 -mx-6 flex justify-end gap-2 border-t bg-popover px-6 py-3 sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:col-span-2">
+    <button hlmBtn variant="outline" type="button" (click)="closeModal()">
+      Cancel
+    </button>
     <button
       autofocus
       hlmBtn

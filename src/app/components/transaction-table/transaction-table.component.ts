@@ -135,6 +135,7 @@ export class TransactionTableComponent {
         selectedTransaction: this.selectedTransaction,
       },
       contentClass: 'sm:max-w-4xl',
+      showCloseButton: false,
     });
   }
 

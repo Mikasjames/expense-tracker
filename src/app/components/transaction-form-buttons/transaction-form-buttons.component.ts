@@ -20,6 +20,7 @@ export class TransactionFormButtonsComponent {
     this.dialogService.open(TransactionFormComponent, {
       context: { transactionType, selectedTransaction: null },
       contentClass: 'sm:max-w-4xl',
+      showCloseButton: false,
     });
   }
 }
