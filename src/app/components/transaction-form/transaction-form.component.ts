@@ -110,7 +110,9 @@ export class TransactionFormComponent implements OnInit {
         message: 'Are you sure you want to delete this transaction?',
         onConfirm: () => this.deleteTransaction(),
       },
-      contentClass: 'sm:max-w-lg',
+      contentClass:
+        'mx-auto h-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-lg overflow-y-auto rounded-xl p-6 sm:mx-auto',
+      showCloseButton: false,
     });
   }
 
@@ -237,6 +239,6 @@ export class DeleteConfirmationDialogComponent {
   }
 
   cancel() {
-    this.dialogRef.dismiss('outside');
+    this.dialogRef.close(false);
   }
 }

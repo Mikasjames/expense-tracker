@@ -94,6 +94,7 @@ export class TagInputComponent implements OnInit, OnDestroy {
       (tagId) => {
         this.tagAdded.emit(tagId);
         this.tagForm.setValue('');
+        this.isFocused = false;
         this.tagService.getTagFromId(tagId, this.type).subscribe((tag) => {
           this.selectedTag = tag;
         });
@@ -110,6 +111,7 @@ export class TagInputComponent implements OnInit, OnDestroy {
     textarea.blur();
     this.tagAdded.emit(tag.id);
     this.tagForm.setValue('');
+    this.isFocused = false;
     this.selectedTag = tag;
     this.removeTagFromSuggestions(tag.id);
   }

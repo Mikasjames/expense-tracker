@@ -64,7 +64,7 @@
   </div>
   <div class="grid gap-2">
     <app-tag-input
-      [tagId]="selectedTransaction?.tagIds?.[0] || null"
+      [tagId]="transactionForm.controls.tagIds.value?.[0] ?? null"
       [type]="transactionType"
       (tagAdded)="updateTransactionTag($event)"
     ></app-tag-input>

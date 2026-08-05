@@ -1,12 +1,14 @@
 @if (selectedTag) {
   <span hlmBadge class="text-wrap">
     {{ selectedTag.name }}
-    <ng-icon
-      role="button"
-      name="lucideXCircle"
-      class="ms-1 cursor-pointer"
+    <button
+      type="button"
+      aria-label="Remove tag"
+      class="ms-1 inline-flex cursor-pointer items-center"
       (click)="removeExistingTag()"
-    />
+    >
+      <ng-icon name="lucideXCircle" />
+    </button>
   </span>
 }
 @if (selectedTag === null) {
